@@ -8,6 +8,10 @@
 
 As the name suggests: it does exactly what you expect a keyboard to do. No surprises, no tracking, no internet access. Just fast, reliable typing.
 
+### **Screenshots**
+
+<img width="720" height="1604" alt="26023" src="https://github.com/user-attachments/assets/c8f8dfc1-10ee-4027-bcb4-5c483f9f34dc" />
+
 
 ### **Why Expected Keyboard?**
 
