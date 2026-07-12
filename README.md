@@ -10,7 +10,8 @@ As the name suggests: it does exactly what you expect a keyboard to do. No surpr
 
 ### **Screenshots**
 
-<img width="720" height="1604" alt="Screenshot_2026-07-12-18-38-52-07_fa3ce617c21b3c32c9583047b5fe90b4" src="https://github.com/user-attachments/assets/0af04be4-cbd9-4601-b468-2ceb79e65cc0" />
+<img width="720" height="1604" alt="Screenshot_2026-07-12-19-02-39-26_820944be9aa1afa44ff6705854aac58c" src="https://github.com/user-attachments/assets/1d466738-c656-49e7-8de2-cf5cbb12dc01" />
+
 
 
 
@@ -42,10 +43,38 @@ Android will warn you that keyboards can "collect all text you type". That's tru
 ### **Installation**
 1. Download the latest `.apk` from [Releases]
 2. Install → Open app → Tap "Enable Expected Keyboard"
-3. Switch to it: Tap the keyboard icon in your nav bar while typing
+3. Switch to it: Tap the keyboard icon in your nav bar while typing.
+   
+### **Keys*
+
+SysRq → ⎚
+
+Home → ⇱
+
+Selectall → ☑
+
+PrtScn → ⎙
+
+End → ⇲
+
+Ins → ⎀
+
+PgUp → ⇞
+
+PgDn → ⇟
+
+Copy → ⎘
+
+Paste→ ⎗
+
+Tab → ⇋
+
+Clipboard → ⧉
+
+`Pg up and pg down on p key`
 
 Build from source:
 ```bash
 git clone https://github.com/yourusername/expected-keyboard.git
 cd expected-keyboard
-./gradlew installDebug
+./gradlew installDebug.
