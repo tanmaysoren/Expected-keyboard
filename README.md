@@ -10,7 +10,7 @@ As the name suggests: it does exactly what you expect a keyboard to do. No surpr
 
 ### **Screenshots**
 
-<img width="720" height="1604" alt="146981" src="https://github.com/user-attachments/assets/2f75a5f3-5d98-4091-98e7-90912e69eba8" />
+<img width="720" height="1604" alt="Screenshot_2026-07-12-18-38-52-07_fa3ce617c21b3c32c9583047b5fe90b4" src="https://github.com/user-attachments/assets/0af04be4-cbd9-4601-b468-2ceb79e65cc0" />
 
 
 
