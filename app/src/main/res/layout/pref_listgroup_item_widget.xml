@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:paddingEnd="12dp"
+    android:orientation="horizontal">
+  <Button
+      android:id="@+id/pref_listgroup_remove_btn"
+      android:layout_width="32dp"
+      android:layout_height="32dp"
+      android:layout_gravity="center"
+      android:text="✕"
+      android:textColor="#FB7185"
+      android:textSize="13sp"
+      android:textStyle="bold"
+      android:background="@drawable/glass_btn_remove"/>
+</LinearLayout>

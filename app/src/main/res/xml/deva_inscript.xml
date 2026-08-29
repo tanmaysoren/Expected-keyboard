@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="देवनागरी (हिंदी)-1" script="devanagari">
+  <row>
+    <key c="ौ" ne="₹" sw="esc" se="१" />
+    <key c="ै" ne="ऍ" sw="¶" se="२" />
+    <key c="ा" ne="ॅ" sw="ग़" se="३" />
+    <key c="ी" ne="ज्ञ" sw="ज़" se="४" />
+    <key c="ू" ne="त्र" sw="ऩ" se="५" />
+    <key c="ब" ne="क्ष" sw="÷" se="६" />
+    <key c="ह" ne="श्र" sw="×" se="७" />
+    <key c="ग" ne="ः" sw="=" se="८" />
+    <key c="द" ne="ऋ" sw="+" se="९" />
+    <key c="ज" ne="ृ" sw="-" se="०" />
+  </row>
+  <row>
+    <key shift="0.5" c="ो" nw="ओ" ne="ॉ" sw="tab" />
+    <key c="े" nw="f11" ne="ञ" sw="~" />
+    <key c="्" nw="f12" ne="़" sw="ऽ" />
+    <key c="ि" nw="home" ne="ढ" sw="॥" />
+    <key c="ु" nw="page_up" ne="ड" sw="\\" />
+    <key c="प" nw="page_down" ne="छ" sw="&lt;" />
+    <key c="र" nw="end" ne="च" sw="[" />
+    <key c="क" nw="insert" ne="क़" sw="{" />
+    <key c="त" nw="थ" ne="ख़" sw="(" />
+  </row>
+  <row>
+    <key width="1.4" role="action" c="shift" ne="capslock" />
+    <key shift="0.1" c="ट" nw="ठ" ne="ड़" sw="\#" />
+    <key c="ं" nw="ँ" sw="ॐ" se="\@" />
+    <key c="म" nw="ण" ne="य" sw="य़" />
+    <key c="न" ne="।" sw=":" se="&amp;" />
+    <key c="व" ne="ढ़" sw=";" se="." />
+    <key c="ल" nw="ळ" ne="फ़" sw="!" />
+    <key c="स" nw="श" ne="ष" sw="\?" />
+    <key shift="0.1" width="1.4" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="ಕನ್ನಡ - Kannada" script="kannada">
+  <row>
+    <key c="ಕ" ne="ಘ" sw="ಙ" se="ಗ" />
+    <key c="ಚ" ne="ಝ" sw="ಞ" se="ಜ" />
+    <key c="ಟ" ne="ಢ" sw="ಣ" se="ಡ" />
+    <key c="ತ" ne="ಧ" sw="ನ" se="ದ" />
+    <key c="ಪ" ne="ಭ" sw="ಮ" se="ಬ" />
+    <key c="ಯ" nw="ರ" ne="ವ" sw="ಱ" />
+    <key c="ಶ" ne="ಹ" sw="ಳ" se="ಸ" />
+  </row>
+  <row>
+    <key c="ಾ" />
+    <key c="ಿ" ne="f11" se="ೀ" />
+    <key c="ು" nw="f12" ne="home" se="ೂ" />
+    <key c="ೃ" nw="ಋ" ne="ೠ" sw="ಌ" />
+    <key c="ೆ" nw="page_up" ne="ಏ" se="ೇ" />
+    <key c="ೈ" nw="page_down" ne="ಒ" se="ೊ" />
+    <key c="ೋ" nw="end" ne="insert" se="ೌ" />
+  </row>
+  <row>
+    <key c="್" nw="\@" ne="&amp;" sw="zwnj" />
+    <key c="ಂ" nw="₹" ne="卐" sw="!" />
+    <key c="ಃ" w="ೲ" e="ೱ" n="ಽ" />
+    <key c="।" nw="'" ne="&quot;" sw="." />
+    <key c="೦" nw=":" ne=";" sw="-" />
+    <key c="೫" nw="೧" ne="೩" sw="೭" />
+    <key role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

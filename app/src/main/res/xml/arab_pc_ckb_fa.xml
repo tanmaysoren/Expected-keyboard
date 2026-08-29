@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Central Kurdish (سۆرانی) Persian Layout" script="arabic" numpad_script="hindu-arabic">
+  <row>
+    <key c="،" n="esc" />
+    <key c="." se="&gt;" />
+    <key c="ە" se=")" />
+    <key c="ق" n=":" ne="f11" sw="f12" />
+    <key c="ف" nw="home" ne="page_up" sw="page_down" />
+    <key c="ۆ" n="!" nw="end" ne="insert" />
+    <key c="ع" n="غ" s="_" />
+    <key c="ھ" n="٪" s="ه" />
+    <key c="خ" sw="[" ne="]" />
+    <key c="ح" sw="{" ne="}" />
+    <key c="ج" sw="backspace" n="halfspace" />
+  </row>
+  <row>
+    <key c="ش" n="١" s="ض" />
+    <key c="س" n="٢" s="ص" />
+    <key c="ی" n="٣" s="ؽ" />
+    <key c="ب" n="٤" s="ٮ" />
+    <key c="ل" n="٥" s="ڵ" />
+    <key c="ا" n="٦" s="آ" />
+    <key c="ت" n="٧" s="ط" />
+    <key c="ن" n="٨" s="-" />
+    <key c="م" n="٩" s="=" />
+    <key c="ک" n="٠" s="ك" />
+    <key c="گ" n="tab" />
+  </row>
+  <row>
+    <key c="ڕ" n="؛" />
+    <key c="ژ" n="ـ" />
+    <key c="ز" n="ظ" />
+    <key c="ر" n="ٔ" />
+    <key c="ڤ" n="ڡ" />
+    <key c="د" n="ذ" />
+    <key c="پ" n="ث" />
+    <key c="و" n="ۉ" />
+    <key c="ێ" n="ٕ" />
+    <key c="ئ" n="ء" />
+    <key c="چ" />
+  </row>
+</keyboard>

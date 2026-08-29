@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Tajiki Persian (Тоҷикӣ)" script="cyrillic">
+  <row>
+    <key c="й" n="esc" />
+    <key c="қ" n="-" s="_" />
+    <key c="у" n="\@" s="ӯ" />
+    <key c="к" n="=" ne="f11" sw="f12" />
+    <key c="е" nw="home" ne="page_up" sw="page_down" />
+    <key c="н" n="$" nw="end" ne="insert" />
+    <key c="г" n="^" s="ғ" />
+    <key c="ш" sw="(" ne=")" />
+    <key c="ҳ" sw="[" ne="]" />
+    <key c="з" sw="{" ne="}" />
+    <key c="х" n="tab" sw="backspace" />
+  </row>
+  <row>
+    <key c="ф" n="1" />
+    <key c="ҷ" n="2" />
+    <key c="в" n="3" />
+    <key c="а" n="4" />
+    <key c="п" n="5" />
+    <key c="р" n="6" />
+    <key c="о" n="7" />
+    <key c="л" n="8" />
+    <key c="д" n="9" />
+    <key c="ж" n="0" />
+    <key c="э" n="\?" sw="/" />
+  </row>
+  <row scale="11">
+    <key width="1.22" role="action" c="shift" ne="capslock" />
+    <key c="я" n="`" s=";" />
+    <key c="ч" n="*" s=":" />
+    <key c="с" n="&amp;" s="\#" />
+    <key c="м" n="|" s="\\" />
+    <key c="и" n="~" />
+    <key c="т" n="ц" />
+    <key c="ӣ" sw="&lt;" ne="&gt;" />
+    <key c="б" n="ъ" s="ы" />
+    <key c="ю" n="&quot;" s="'" />
+    <key width="1.22" role="action" c="." n="," />
+  </row>
+</keyboard>

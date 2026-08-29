@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard script="latin" name="QWERTZ (Czech)">
+  <row>
+    <key c="q" se="~" />
+    <key c="w" ne="+" sw="|" se="\\" />
+    <key c="e" ne="é" sw="^" se="ě" />
+    <key c="r" se="ř" />
+    <key c="t" sw="°" se="ť" />
+    <key c="z" se="ž" ne="f11" sw="f12" />
+    <key c="u" nw="home" ne="ú" sw="`" />
+    <key c="i" nw="page_up" ne="í" sw="(" />
+    <key c="o" nw="page_down" ne="ó" sw="/" />
+    <key c="p" nw="end" sw="=" ne="insert" />
+  </row>
+  <row>
+    <key shift="0.5" c="a" nw="tab" ne="á" sw=";" />
+    <key c="s" nw="§" se="š" />
+    <key c="d" se="ď" />
+    <key c="f" sw="[" />
+    <key c="g" sw="]" />
+    <key c="h" />
+    <key c="j" />
+    <key c="k" />
+    <key c="l" nw="&quot;" ne="'" sw="$" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="y" ne="ý" />
+    <key c="x" nw="†" sw="\#" />
+    <key c="c" sw="&amp;" se="č" />
+    <key c="v" sw="\@" />
+    <key c="b" nw="&lt;" ne="&gt;" sw="{" />
+    <key c="n" nw="\?" ne="." sw="," />
+    <key c="m" nw=":" ne="*" sw="-" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

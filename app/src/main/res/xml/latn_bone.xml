@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Bone" script="latin" embedded_number_row="true">
+  <modmap>
+    <shift a="1" b="°" />
+    <shift a="2" b="§" />
+    <shift a="3" b="ℓ" />
+    <shift a="4" b="»" />
+    <shift a="5" b="«" />
+    <shift a="6" b="$" />
+    <shift a="7" b="€" />
+    <shift a="8" b="„" />
+    <shift a="9" b="“" />
+    <shift a="0" b="”" />
+    <shift a="," b="–" />
+    <shift a="." b="•" />
+  </modmap>
+  <row>
+    <key width="0.5" c="accent_circonflexe" nw="superscript" />
+    <key c="1" ne="¹" se="₁" nw="accent_caron" />
+    <key c="2" ne="²" se="₂" nw="↻" />
+    <key c="3" ne="³" se="₃" nw="accent_dot_above" />
+    <key c="4" ne="›" se="♀" nw="accent_hook_above" />
+    <key c="5" ne="‹" se="♂" nw="accent_dot_below" />
+    <key c="6" nw="¢" sw="⚥" ne="accent_macron" />
+    <key c="7" nw="¥" sw="ϰ" ne="page_up" />
+    <key c="8" nw="‚" sw="⟨" ne="accent_trema" />
+    <key c="9" nw="‘" sw="⟩" ne="accent_ring" />
+    <key c="0" nw="’" sw="₀" ne="accent_cedille" />
+    <key width="0.5" c="accent_grave" />
+  </row>
+  <row>
+    <key c="j" se="…" n="esc" />
+    <key c="d" se="_" />
+    <key c="u" se="[" />
+    <key c="a" se="]" />
+    <key c="x" se="^" />
+    <key c="p" s="!" ne="accent_breve" />
+    <key c="h" sw="&lt;" />
+    <key c="l" sw="&gt;" ne="accent_double_aigu" />
+    <key c="m" sw="=" ne="accent_slash" n="accent_bar" />
+    <key c="w" sw="&amp;" ne="accent_tilde" />
+    <key c="ß" sw="ſ" n="accent_aigu" />
+  </row>
+  <row>
+    <key c="c" se="\\" ne="tab" />
+    <key c="t" se="/" />
+    <key c="i" ne="insert" se="{" />
+    <key c="e" se="}" />
+    <key c="o" se="*" />
+    <key c="b" s="\?" />
+    <key c="n" sw="(" />
+    <key c="r" sw=")" />
+    <key c="s" sw="-" />
+    <key c="g" sw=":" />
+    <key c="q" sw="\@" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" se="\#" />
+    <key c="f" se="$" />
+    <key c="v" se="|" />
+    <key c="ü" se="~" />
+    <key c="ä" se="`" />
+    <key c="ö" sw="+" />
+    <key c="y" sw="%" />
+    <key c="z" sw="," nw="&quot;" />
+    <key c="k" sw="." nw="'" />
+    <key width="1.5" role="action" c="backspace" sw=";" nw="delete" />
+  </row>
+</keyboard>

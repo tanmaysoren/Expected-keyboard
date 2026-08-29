@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Old Church Slavonic (Црькъвьнословѣньскъ ѩзыкъ)" script="cyrillic">
+  <row>
+    <key c="й" n="esc" />
+    <key c="ѯ" n="=" s="+" />
+    <key c="у" s="ѵ" n="!" />
+    <key c="к" n="%" ne="f11" sw="f12" />
+    <key c="е" nw="home" ne="page_up" sw="page_down" />
+    <key c="н" n="ѩ" nw="end" ne="insert" />
+    <key c="г" n="^" s="combining_payerok" />
+    <key c="ш" n="щ" s="combining_vzmet" />
+    <key c="ѳ" sw="combining_slavonic_dasia" ne="combining_slavonic_psili" />
+    <key c="з" sw="combining_grave" ne="combining_aigu" />
+    <key c="х" n="ҁ" sw="backspace" />
+  </row>
+  <row>
+    <key c="ф" n="1" se="tab" />
+    <key c="ꙉ" n="2" s="ъ" />
+    <key c="в" n="3" s="ꙑ" />
+    <key c="а" n="4" s="ь" />
+    <key c="п" n="5" />
+    <key c="р" n="6" />
+    <key c="о" n="7" s="ѡ" />
+    <key c="л" n="8" />
+    <key c="д" n="9" />
+    <key c="ж" n="0" />
+    <key c="э" n="/" s="|" />
+  </row>
+  <row scale="11">
+    <key width="1.22" role="action" c="shift" />
+    <key c="ꙗ" n="combining_breve" s=";" />
+    <key c="ч" n="combining_pokrytie" s=":" />
+    <key c="с" n="combining_inverted_breve" s="`" />
+    <key c="м" n="ѭ" />
+    <key c="и" n="combining_vertical_tilde" s="-" />
+    <key c="т" n="\?" s="\\" />
+    <key c="ц" sw="&lt;" ne="&gt;" />
+    <key c="б" sw="(" ne=")" />
+    <key c="ю" sw="{" ne="}" />
+    <key width="1.22" c="." n="," s="_" />
+  </row>
+</keyboard>

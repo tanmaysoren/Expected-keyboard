@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Shaw Imperial" script="shavian">
+  <row>
+    <key c="𐑶" se="esc" />
+    <key c="𐑬" sw="\@" />
+    <key c="𐑫" sw="\#" />
+    <key c="𐑜" />
+    <key c="𐑖" nw="f11" ne="f12" sw="%" />
+    <key c="𐑗" ne="page_up" sw="page_down" nw="home" />
+    <key c="𐑙" ne="insert" sw="&amp;" nw="end" />
+    <key c="𐑘" ne="8" sw="*" />
+    <key c="𐑡" ne="9" sw="(" se=")" />
+    <key c="𐑔" ne="0" />
+  </row>
+  <row>
+    <key c="𐑭" nw="tab" ne="𐑸" sw="`" />
+    <key c="𐑷" ne="𐑹" />
+    <key c="𐑵" ne="𐑿" />
+    <key c="𐑱" ne="𐑺" />
+    <key c="𐑳" ne="𐑻" />
+    <key c="𐑓" ne="-" sw="_" />
+    <key c="𐑞" ne="=" sw="+" />
+    <key c="𐑤" se="}" sw="{" />
+    <key c="𐑥" sw="[" se="]" />
+    <key c="𐑣" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key c="𐑪" />
+    <key c="𐑨" />
+    <key c="𐑦" nw="𐑾" ne="𐑽" />
+    <key c="𐑩" ne="𐑼" />
+    <key c="𐑧" />
+    <key c="𐑐" />
+    <key c="𐑯" />
+    <key c="𐑑" />
+    <key c="𐑮" />
+    <key c="𐑕" />
+  </row>
+  <row>
+    <key c="𐑲" />
+    <key c="𐑴" />
+    <key c="𐑰" />
+    <key c="𐑚" />
+    <key c="𐑝" ne="&lt;" sw="." />
+    <key c="𐑟" ne="&gt;" sw="," />
+    <key c="𐑒" ne="\?" sw="/" />
+    <key c="𐑢" ne=":" sw=";" />
+    <key c="𐑛" ne="&quot;" sw="'" />
+    <key role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

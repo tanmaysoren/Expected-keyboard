@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="ЙЦУКЕН (Қазақша)" script="cyrillic">
+  <row>
+    <key c="ё" />
+    <key c="ә" />
+    <key c="і" nw="f11" ne="f12" sw="home" />
+    <key c="ң" nw="end" ne="insert" />
+    <key c="ғ" />
+    <key c="ү" />
+    <key c="ұ" />
+    <key c="қ" />
+    <key c="ө" />
+    <key c="һ" />
+    <key c="ъ" />
+  </row>
+  <row>
+    <key c="й" ne="1" se="esc" />
+    <key c="ц" nw="ї" ne="2" sw="\@" />
+    <key c="у" nw="ў" ne="3" sw="\#" />
+    <key c="к" ne="4" sw="$" />
+    <key c="е" ne="5" sw="%" />
+    <key c="н" nw="є" ne="6" sw="^" />
+    <key c="г" nw="ґ" ne="7" sw="&amp;" />
+    <key c="ш" ne="8" sw="*" />
+    <key c="щ" ne="9" sw="(" se=")" />
+    <key c="з" ne="0" sw="{" se="}" />
+    <key c="х" sw="[" se="]" />
+  </row>
+  <row>
+    <key c="ф" nw="tab" ne="`" />
+    <key c="ы" />
+    <key c="в" />
+    <key c="а" />
+    <key c="п" />
+    <key c="р" />
+    <key c="о" />
+    <key c="л" nw="₽" />
+    <key c="д" ne="-" sw="_" />
+    <key c="ж" ne="=" sw="+" />
+    <key c="э" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key role="action" c="shift" ne="capslock" />
+    <key c="я" />
+    <key c="ч" />
+    <key c="с" />
+    <key c="м" />
+    <key c="и" nw="і" ne="&lt;" sw="." />
+    <key c="т" ne="&gt;" sw="," />
+    <key c="ь" ne="\?" sw="/" />
+    <key c="б" ne=":" sw=";" />
+    <key c="ю" ne="&quot;" sw="'" />
+    <key role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/pref_category_prediction">
+    <CheckBoxPreference android:key="suggestions" android:title="@string/pref_suggestions_title" android:summary="@string/pref_suggestions_summary" android:defaultValue="true"/>
+    <CheckBoxPreference android:key="autocorrect" android:title="@string/pref_autocorrect_title" android:summary="@string/pref_autocorrect_summary" android:defaultValue="true" android:dependency="suggestions"/>
+    <CheckBoxPreference android:key="space_bar_auto_complete" android:title="@string/pref_space_bar_auto_complete_title" android:summary="@string/pref_space_bar_auto_complete_summary" android:defaultValue="false" android:dependency="suggestions"/>
+    <expected.keyboard2.prefs.SlideBarPreference android:key="suggestion_font_scale" android:title="@string/pref_suggestion_font_scale_title" android:summary="@string/pref_suggestion_font_scale_summary" android:defaultValue="1.0" min="0.7" max="1.8" android:dependency="suggestions"/>
+  </PreferenceCategory>
+</PreferenceScreen>

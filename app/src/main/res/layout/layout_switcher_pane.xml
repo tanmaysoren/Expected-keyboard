@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<expected.keyboard2.layout.LayoutSwitcherPaneView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="?attr/colorKeyboard"
+    android:padding="6dp">
+
+    <!-- Top Action Toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/normal_btn_bg"
+        android:paddingHorizontal="4dp"
+        android:layout_marginBottom="4dp">
+
+        <ImageButton
+            android:id="@+id/layout_pane_btn_back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_futo_chevron_left"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:tint="?attr/colorLabel"
+            android:contentDescription="Back to Keyboard"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_futo_layout"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="6dp"
+            android:tint="?attr/colorLabel"/>
+
+        <TextView
+            android:id="@+id/layout_pane_txt_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Switch Keyboard Layout"
+            android:textColor="?attr/colorLabel"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <ImageButton
+            android:id="@+id/layout_pane_btn_close"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_futo_clear"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:tint="?attr/colorSubLabel"
+            android:contentDescription="Close"/>
+    </LinearLayout>
+
+    <!-- Quick Category Filter Chips Strip -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:scrollbars="none"
+        android:layout_marginBottom="4dp">
+
+        <LinearLayout
+            android:id="@+id/layout_pane_chips_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/chip_filter_active"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="🌟 Active"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_filter_popular"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="⚡ Popular"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_filter_all"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="🌐 All Layouts"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_filter_latin"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="🔤 Latin"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_filter_cyrillic"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="🇷🇺 Cyrillic"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_filter_indic"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="🇮🇳 Indic / Asian"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_filter_other"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="🌍 Other"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Fast Alphabet Filter Strip -->
+    <HorizontalScrollView
+        android:id="@+id/layout_pane_alphabet_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:scrollbars="none"
+        android:layout_marginBottom="4dp">
+
+        <LinearLayout
+            android:id="@+id/layout_pane_alphabet_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"/>
+    </HorizontalScrollView>
+
+    <!-- Scrollable Layouts List -->
+    <ListView
+        android:id="@+id/layout_pane_list"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:divider="@null"
+        android:dividerHeight="3dp"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:overScrollMode="never"/>
+
+</expected.keyboard2.layout.LayoutSwitcherPaneView>

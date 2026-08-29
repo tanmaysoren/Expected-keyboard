@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTY (Danish)" script="latin">
+  <row>
+    <key c="q" se="esc" />
+    <key c="w" sw="\@" />
+    <key c="e" ne="3" sw="\#" se="€" />
+    <key c="r" />
+    <key c="t" sw="f11" />
+    <key c="y" ne="home" sw="page_up" nw="f12" />
+    <key c="u" ne="end" sw="insert" nw="page_down" />
+    <key c="i" ne="8" sw="*" />
+    <key c="o" ne="9" sw="(" se=")" />
+    <key c="p" nw="0" ne="print_screen" />
+    <key c="å" />
+  </row>
+  <row>
+    <key c="a" nw="tab" ne="`" />
+    <key c="s" nw="accent_ring" ne="§" sw="ß" />
+    <key c="d" nw="accent_aigu" />
+    <key c="f" nw="accent_trema" />
+    <key c="g" ne="-" sw="_" />
+    <key c="h" ne="=" sw="+" />
+    <key c="j" sw="{" se="}" />
+    <key c="k" sw="[" se="]" />
+    <key c="l" ne="|" sw="\\" />
+    <key c="æ" />
+    <key c="ø" />
+  </row>
+  <row>
+    <key shift="0.5" width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="z" />
+    <key c="x" ne="†" />
+    <key c="c" ne="&lt;" sw="." />
+    <key c="v" ne="&gt;" sw="," />
+    <key c="b" ne="\?" sw="/" />
+    <key c="n" ne=":" sw=";" />
+    <key c="m" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

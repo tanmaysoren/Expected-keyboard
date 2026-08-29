@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<expected.keyboard2.theme.ThemeSwitcherPaneView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="?attr/colorKeyboard"
+    android:padding="6dp">
+
+    <!-- Top Action Toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/normal_btn_bg"
+        android:paddingHorizontal="4dp"
+        android:layout_marginBottom="4dp">
+
+        <ImageButton
+            android:id="@+id/theme_pane_btn_back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_futo_chevron_left"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:tint="?attr/colorLabel"
+            android:contentDescription="Back to Keyboard"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_futo_theme"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="6dp"
+            android:tint="?attr/colorLabel"/>
+
+        <TextView
+            android:id="@+id/theme_pane_txt_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Instant Theme Switcher"
+            android:textColor="?attr/colorLabel"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <ImageButton
+            android:id="@+id/theme_pane_btn_close"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_futo_clear"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:tint="?attr/colorSubLabel"
+            android:contentDescription="Close"/>
+    </LinearLayout>
+
+    <!-- Category Chips Strip -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:scrollbars="none"
+        android:layout_marginBottom="4dp">
+
+        <LinearLayout
+            android:id="@+id/theme_pane_chips_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/chip_theme_filter_all"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="🎨 All Themes"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_theme_filter_cyber"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="⚡ Cyber &amp; Glow"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_theme_filter_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="🌙 Dark &amp; OLED"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_theme_filter_light"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="☀️ Light &amp; E-Paper"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/chip_theme_filter_system"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="🪄 Dynamic Monet"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/normal_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Scrollable Themes List -->
+    <ListView
+        android:id="@+id/theme_pane_list"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:divider="@null"
+        android:dividerHeight="3dp"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:overScrollMode="never"/>
+
+</expected.keyboard2.theme.ThemeSwitcherPaneView>

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="தமிழ்" script="tamil" numpad_script="tamil">
+  <row>
+    <key width="1.1" c="ஞ" nw="௧" ne="1" sw="ஶ" />
+    <key c="ற" ne="2" sw="ஷ" se="\@" />
+    <key c="ந" ne="3" sw="ஸ" se="\#" />
+    <key width="1.2" c="ச" nw="௪" ne="4" sw="ஹ" />
+    <key c="வ" ne="5" sw="ஜ" se="%" />
+    <key c="ர" ne="6" sw="ல" se="^" />
+    <key width="1.1" c="ை" nw="௭" ne="7" sw="ஐ" />
+    <key width="1.2" c="ொ" nw="௮" ne="8" sw="ோ" />
+    <key width="0.9" c="ி" nw="௯" ne="9" sw="ீ" />
+    <key c="ு" ne="0" sw="ூ" se=")" />
+  </row>
+  <row>
+    <key shift="0.2" c="ய" />
+    <key c="ள" se="f11" />
+    <key c="ன" nw="f12" ne="home" sw="page_up" />
+    <key c="க" nw="page_down" ne="end" sw="insert" />
+    <key c="ப" ne="-" sw="_" />
+    <key c="ா" ne="=" sw="ழ" se="+" />
+    <key c="த" ne="{" sw="ம" se="}" />
+    <key c="ட" ne="[" sw="ங" se="]" />
+    <key c="்" ne="|" sw="ஃ" se="\\" />
+    <key c="இ" sw="ஈ" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="ண" />
+    <key c="ஒ" sw="ஓ" />
+    <key c="உ" ne="&lt;" sw="ஊ" se="." />
+    <key c="எ" ne="&gt;" sw="ஏ" se="," />
+    <key width="1.05" c="ெ" ne="\?" sw="ே" se="/" />
+    <key width="1.3" c="ஔ" ne=":" sw="ௌ" se=";" />
+    <key c="அ" ne="&quot;" sw="ஆ" se="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+  <modmap>
+    <shift a="௹" b="₨" />
+    <shift a="ய" b="௰" />
+    <shift a="ஒ" b="ௐ" />
+    <shift a="ள" b="௱" />
+    <shift a="ச" b="௲" />
+    <shift a="வ" b="௳" />
+    <ctrl a="ய" b="a" />
+    <ctrl a="எ" b="v" />
+    <ctrl a="உ" b="c" />
+    <ctrl a="ஒ" b="x" />
+  </modmap>
+</keyboard>

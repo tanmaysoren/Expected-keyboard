@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="देवनागरी (हिंदी)-2" script="devanagari">
+  <row scale="6.6">
+    <key shift="0.35" c="क" nw="ख" ne="घ" sw="ङ" />
+    <key c="च" nw="छ" ne="झ" sw="ञ" />
+    <key anticircle="७" indication="७" c="ट" nw="ठ" ne="ढ" sw="ण" />
+    <key anticircle="८" indication="८" c="त" nw="थ" ne="ध" sw="न" />
+    <key anticircle="९" indication="९" c="प" nw="फ" ne="भ" sw="म" />
+    <key c="र" nw="ज्ञ" ne="ल" sw="य" />
+    <key c="ह" nw="श" ne="ळ" sw="स" />
+  </row>
+  <row scale="6.6">
+    <key shift="0.35" c="ा" nw="अ" ne="आ" />
+    <key c="ि" nw="इ" />
+    <key anticircle="४" indication="४" c="ी" nw="ई" sw="f11" />
+    <key anticircle="५" indication="५" c="ु" nw="उ" ne="ऊ" se="ू" />
+    <key anticircle="६" indication="६" c="े" nw="ए" ne="ऋ" se="ृ" />
+    <key c="ै" nw="ऐ" ne="ऌ" sw="f12" />
+    <key c="ो" nw="ओ" ne="औ" sw="page_up" />
+  </row>
+  <row>
+    <key c="ऽ" se="\@" nw="end" ne="insert" />
+    <key anticircle="०" indication="०" c="ँ" nw="₹" ne="॑" sw="ॖ" />
+    <key anticircle="१" indication="१" c="ं" nw="ॐ" ne="।" sw="ः" />
+    <key anticircle="२" indication="२" c="्" nw="," ne=";" sw="!" />
+    <key anticircle="३" indication="३" c="़" nw="॰" sw="-" se="॒" />
+    <key width="2" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

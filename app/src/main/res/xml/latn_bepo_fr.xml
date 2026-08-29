@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="BEPO (Français)" script="latin">
+  <row scale="11">
+    <key c="b" se="|" />
+    <key c="é" se="è" />
+    <key c="p" />
+    <key c="o" ne="f11" se="accent_circonflexe" sw="f12" />
+    <key c="v" ne="page_up" nw="home" sw="page_down" />
+    <key c="d" ne="insert" se="}" nw="end" />
+    <key c="l" ne="7" se="(" />
+    <key c="j" ne="8" se=")" />
+    <key c="z" ne="9" se="[" />
+    <key c="w" ne="0" se="]" />
+  </row>
+  <row scale="11">
+    <key c="a" nw="tab" se="à" />
+    <key c="u" nw="$" se="ù" />
+    <key c="i" ne="insert" se="&amp;" />
+    <key c="e" nw="+" ne="accent_trema" se="€" />
+    <key c="c" nw="=" se="ç" />
+    <key c="t" nw="^" se=";" />
+    <key c="s" se="!" />
+    <key c="r" se="\?" />
+    <key c="n" nw="`" ne="'" se=":" />
+    <key c="m" ne="&quot;" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" sw="&lt;" />
+    <key c="y" se="%" />
+    <key c="x" se="\@" />
+    <key c="k" se="~" />
+    <key c="." nw="\#" se="," s="_" />
+    <key c="q" se="*" />
+    <key c="g" sw="/" se="\\" />
+    <key c="h" />
+    <key c="f" />
+    <key width="1.5" role="action" c="backspace" ne="delete" sw="&gt;" />
+  </row>
+</keyboard>

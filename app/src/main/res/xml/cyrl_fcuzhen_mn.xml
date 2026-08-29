@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="ФЦУЖЭН (Монгол)" script="cyrillic">
+  <row>
+    <key c="ф" se="esc" />
+    <key c="ц" sw="\@" />
+    <key c="у" sw="\#" />
+    <key c="ж" />
+    <key c="э" ne="f12" sw="home" nw="f11" />
+    <key c="н" ne="page_down" sw="end" nw="page_up" />
+    <key c="г" ne="7" sw="&amp;" nw="insert" />
+    <key c="ш" nw="щ" ne="8" sw="*" />
+    <key c="ү" ne="9" sw="(" se=")" />
+    <key c="з" ne="0" />
+    <key c="к" />
+  </row>
+  <row>
+    <key c="й" nw="tab" ne="`" />
+    <key c="ы" />
+    <key c="б" />
+    <key c="ө" />
+    <key c="а" />
+    <key c="х" />
+    <key c="р" ne="-" sw="_" />
+    <key c="о" ne="=" sw="+" />
+    <key c="л" sw="{" se="}" />
+    <key c="д" sw="[" se="]" />
+    <key c="п" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key role="action" c="shift" ne="capslock" />
+    <key c="я" />
+    <key c="ч" />
+    <key c="ё" nw="е" />
+    <key c="с" />
+    <key c="м" ne="&lt;" sw="." />
+    <key c="и" ne="&gt;" sw="," />
+    <key c="т" nw="₮" ne="\?" sw="/" />
+    <key c="ь" nw="ъ" ne=":" sw=";" />
+    <key c="в" nw="ю" ne="&quot;" sw="'" />
+    <key role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

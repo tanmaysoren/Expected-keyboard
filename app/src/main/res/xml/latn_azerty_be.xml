@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="AZERTY (Belgian)" script="latin">
+  <row>
+    <key c="a" se="esc" />
+    <key c="z" ne="2" sw="&amp;" se="\@" />
+    <key c="e" sw="&quot;" se="\#" />
+    <key c="r" />
+    <key c="t" ne="f11" sw="(" se=")" />
+    <key c="y" ne="home" sw="§" nw="f12" />
+    <key c="u" ne="page_down" sw="{" nw="page_up" />
+    <key c="i" ne="insert" sw="!" nw="end" />
+    <key c="o" ne="9" sw="à" />
+    <key c="p" ne="0" sw="-" nw="_" />
+  </row>
+  <row>
+    <key c="q" ne="tab" />
+    <key c="s" ne="ß" />
+    <key c="d" ne="é" />
+    <key c="f" nw="~" />
+    <key c="g" />
+    <key c="h" nw="[" ne="]" />
+    <key c="j" nw="è" ne="accent_trema" sw="accent_circonflexe" />
+    <key c="k" nw="€" ne="*" sw="$" />
+    <key c="l" ne="%" sw="ù" />
+    <key c="m" nw="£" sw="µ" />
+  </row>
+  <row>
+    <key width="2.0" role="action" c="shift" ne="capslock" />
+    <key c="w" nw="\\" ne="`" sw="&lt;" />
+    <key c="x" nw="†" />
+    <key c="c" ne="\?" sw="," />
+    <key c="v" ne="." sw=";" />
+    <key c="b" ne="/" sw=":" />
+    <key c="n" ne="+" sw="=" />
+    <key width="2.0" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

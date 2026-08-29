@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTY (Hawaiian)" script="latin">
+  <row>
+    <key c="q" se="esc" />
+    <key c="w" sw="\@" />
+    <key c="e" ne="3" sw="\#" se="ē" />
+    <key c="r" />
+    <key c="t" ne="f11" sw="f12" />
+    <key c="y" ne="page_up" sw="page_down" nw="home" />
+    <key c="u" ne="insert" sw="&amp;" nw="end" />
+    <key c="i" ne="8" sw="*" se="ī" />
+    <key c="o" ne="9" sw="(" se="ō" />
+    <key c="p" nw="0" ne="print_screen" />
+  </row>
+  <row>
+    <key shift="0.5" c="a" nw="tab" ne="`" se="ā" />
+    <key c="s" ne="§" sw="ß" />
+    <key c="d" />
+    <key c="f" />
+    <key c="g" ne="-" sw="_" />
+    <key c="h" ne="=" sw="+" />
+    <key c="j" sw="{" se="}" />
+    <key c="k" sw="[" se="]" />
+    <key c="l" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="z" />
+    <key c="x" ne="†" />
+    <key c="c" ne="&lt;" sw="." />
+    <key c="v" ne="&gt;" sw="," />
+    <key c="b" ne="\?" sw="/" />
+    <key c="n" ne=":" sw=";" />
+    <key c="m" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

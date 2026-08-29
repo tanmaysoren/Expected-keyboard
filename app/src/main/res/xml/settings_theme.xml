@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/pref_category_style">
+    <ListPreference android:key="theme" android:title="@string/pref_theme" android:summary="%s" android:defaultValue="frostedobsidian" android:entries="@array/pref_theme_entries" android:entryValues="@array/pref_theme_values"/>
+    <expected.keyboard2.prefs.IntSlideBarPreference android:key="label_brightness" android:title="@string/pref_label_brightness" android:summary="%s%%" android:defaultValue="100" min="50" max="100"/>
+    <expected.keyboard2.prefs.IntSlideBarPreference android:key="keyboard_opacity" android:title="@string/pref_keyboard_opacity" android:summary="%s%%" android:defaultValue="100" min="0" max="100"/>
+    <expected.keyboard2.prefs.IntSlideBarPreference android:key="key_opacity" android:title="@string/pref_key_opacity" android:summary="%s%%" android:defaultValue="100" min="0" max="100"/>
+    <expected.keyboard2.prefs.IntSlideBarPreference android:key="key_activated_opacity" android:title="@string/pref_key_activated_opacity" android:summary="%s%%" android:defaultValue="100" min="0" max="100"/>
+    <PreferenceScreen android:title="@string/pref_margin_bottom_title">
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="margin_bottom_portrait" android:title="@string/pref_portrait" android:summary="%sdp" android:defaultValue="7" min="0" max="250"/>
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="margin_bottom_landscape" android:title="@string/pref_landscape" android:summary="%sdp" android:defaultValue="3" min="0" max="120"/>
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="margin_bottom_portrait_unfolded" android:title="@string/pref_portrait_unfolded" android:summary="%sdp" android:defaultValue="7" min="0" max="250"/>
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="margin_bottom_landscape_unfolded" android:title="@string/pref_landscape_unfolded" android:summary="%sdp" android:defaultValue="3" min="0" max="250"/>
+    </PreferenceScreen>
+    <PreferenceScreen android:title="@string/pref_keyboard_height_title">
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="keyboard_height" android:title="@string/pref_portrait" android:summary="%s%%" android:defaultValue="25" min="10" max="100"/>
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="keyboard_height_landscape" android:title="@string/pref_landscape" android:summary="%s%%" android:defaultValue="50" min="20" max="65"/>
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="keyboard_height_unfolded" android:title="@string/pref_portrait_unfolded" android:summary="%s%%" android:defaultValue="25" min="10" max="50"/>
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="keyboard_height_landscape_unfolded" android:title="@string/pref_landscape_unfolded" android:summary="%s%%" android:defaultValue="50" min="20" max="65"/>
+    </PreferenceScreen>
+    <PreferenceScreen android:title="@string/pref_horizontal_margin_title">
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="horizontal_margin_portrait" android:title="@string/pref_portrait" android:summary="%sdp" android:defaultValue="3" min="0" max="30"/>
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="horizontal_margin_landscape" android:title="@string/pref_landscape" android:summary="%sdp" android:defaultValue="28" min="0" max="200"/>
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="horizontal_margin_portrait_unfolded" android:title="@string/pref_portrait_unfolded" android:summary="%sdp" android:defaultValue="3" min="0" max="30"/>
+      <expected.keyboard2.prefs.IntSlideBarPreference android:key="horizontal_margin_landscape_unfolded" android:title="@string/pref_landscape_unfolded" android:summary="%sdp" android:defaultValue="28" min="0" max="200"/>
+    </PreferenceScreen>
+    <expected.keyboard2.prefs.SlideBarPreference android:key="character_size" android:title="@string/pref_character_size_title" android:summary="@string/pref_character_size_summary" android:defaultValue="1.15" min="0.75" max="1.5"/>
+    <expected.keyboard2.prefs.SlideBarPreference android:key="key_vertical_margin" android:title="@string/pref_key_vertical_space" android:summary="%s%%" android:defaultValue="1.5" min="0" max="5"/>
+    <expected.keyboard2.prefs.SlideBarPreference android:key="key_horizontal_margin" android:title="@string/pref_key_horizontal_space" android:summary="%s%%" android:defaultValue="2" min="0" max="5"/>
+    <CheckBoxPreference android:key="border_config" android:title="@string/pref_border_config_title" android:defaultValue="true"/>
+    <expected.keyboard2.prefs.IntSlideBarPreference android:key="custom_border_radius" android:title="@string/pref_corners_radius_title" android:summary="%s%%" android:defaultValue="0" min="0" max="100" android:dependency="border_config"/>
+    <expected.keyboard2.prefs.SlideBarPreference android:key="custom_border_line_width" android:title="@string/pref_border_width_title" android:summary="%sdp" android:defaultValue="0" min="0" max="5" android:dependency="border_config"/>
+  </PreferenceCategory>
+</PreferenceScreen>

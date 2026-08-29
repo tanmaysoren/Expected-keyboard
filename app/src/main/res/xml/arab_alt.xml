@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Arabic Alt" script="arabic" numpad_script="hindu-arabic">
+  <row>
+    <key c="ض" sw="`" se="esc" />
+    <key c="ص" />
+    <key c="ث" />
+    <key c="ق" sw="f11" />
+    <key c="ف" ne="home" sw="page_up" nw="f12" />
+    <key c="غ" ne="end" sw="insert" nw="page_down" />
+    <key c="ع" ne="٧" sw="&amp;" />
+    <key c="ه" ne="٨" sw="*" />
+    <key c="خ" ne="٩" sw="(" />
+    <key c="ح" ne="٠" sw=")" />
+    <key c="ج" />
+  </row>
+  <row>
+    <key c="ش" se="tab" />
+    <key c="س" />
+    <key c="ي" />
+    <key c="ب" />
+    <key c="ل" />
+    <key c="ا" nw="أ" />
+    <key c="ت" />
+    <key c="ن" />
+    <key c="م" />
+    <key c="ك" />
+    <key c="ط" />
+  </row>
+  <row>
+    <key c="ذ" />
+    <key c="ء" />
+    <key c="ؤ" nw="{" />
+    <key c="ر" nw="}" />
+    <key c="ى" nw="ئ" />
+    <key c="ة" />
+    <key c="و" sw="," />
+    <key c="ز" sw="." />
+    <key c="ظ" sw="؟" />
+    <key c="د" />
+    <key width="1.0" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

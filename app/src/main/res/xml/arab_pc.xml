@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Arabic PC" script="arabic">
+  <row>
+    <key c="ض" ne="1" sw="`" se="esc" />
+    <key c="ص" sw="\@" />
+    <key c="ث" ne="3" sw="\#" se="€" />
+    <key c="ق" ne="4" sw="$" se="£" />
+    <key c="ف" sw="%" />
+    <key c="غ" sw="^" />
+    <key c="ع" ne="f11" sw="&amp;" />
+    <key c="ه" nw="f12" ne="home" sw="*" />
+    <key c="خ" nw="page_up" ne="page_down" sw="(" />
+    <key c="ح" nw="end" ne="insert" sw=")" />
+    <key c="ج" nw="&gt;" ne="-" sw="_" />
+    <key c="د" nw="&lt;" ne="=" sw="ذ" />
+  </row>
+  <row>
+    <key shift="0.5" c="ش" nw="ِ" se="tab" />
+    <key c="س" nw="ٍ" />
+    <key c="ي" nw="[" />
+    <key c="ب" nw="]" />
+    <key c="ل" nw="لأ" />
+    <key c="ا" nw="أ" />
+    <key c="ت" nw="ـ" />
+    <key c="ن" nw="،" />
+    <key c="م" nw="/" />
+    <key c="ك" nw=":" />
+    <key c="ط" nw="&quot;" />
+  </row>
+  <row>
+    <key shift="0.5" c="ئ" nw="~" />
+    <key c="ء" nw="ْ" />
+    <key c="ؤ" nw="{" />
+    <key c="ر" nw="}" />
+    <key c="لا" nw="لآ" />
+    <key c="ى" nw="آ" />
+    <key c="ة" nw="’" />
+    <key c="و" nw="," />
+    <key c="ز" nw="." />
+    <key c="ظ" nw="؟" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

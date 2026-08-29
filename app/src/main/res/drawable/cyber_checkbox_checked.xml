@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- Rounded Frosted Checkbox with Violet Gradient -->
+  <item>
+    <shape android:shape="rectangle">
+      <size android:width="22dp" android:height="22dp"/>
+      <gradient
+          android:startColor="#8B5CF6"
+          android:endColor="#6366F1"
+          android:angle="135"/>
+      <stroke android:width="1.5dp" android:color="#C4B5FD"/>
+      <corners android:radius="7dp"/>
+    </shape>
+  </item>
+  <!-- Sleek checkmark core -->
+  <item android:top="5dp" android:left="5dp" android:right="5dp" android:bottom="5dp">
+    <shape android:shape="rectangle">
+      <solid android:color="#FFFFFF"/>
+      <corners android:radius="3dp"/>
+    </shape>
+  </item>
+</layer-list>

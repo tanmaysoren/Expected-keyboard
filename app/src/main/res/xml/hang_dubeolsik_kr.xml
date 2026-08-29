@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="두벌식 (Korean)" script="hangul">
+  <row>
+    <key c="ㅂ" sw="ㅄ" se="ㅃ" />
+    <key c="ㅈ" ne="2" sw="ㄵ" se="ㅉ" />
+    <key c="ㄷ" se="ㄸ" />
+    <key c="ㄱ" ne="4" sw="ㄺ" se="ㄲ" />
+    <key c="ㅅ" ne="5" sw="ㄳ" se="ㅆ" />
+    <key c="ㅛ" />
+    <key c="ㅕ" nw="f11" ne="f12" sw="ㅖ" />
+    <key c="ㅑ" nw="home" ne="page_up" sw="page_down" />
+    <key c="ㅐ" nw="end" ne="insert" sw="ㅒ" />
+    <key c="ㅔ" nw="*" ne="0" sw="ㅙ" />
+  </row>
+  <row>
+    <key shift="0.5" c="ㅁ" ne="`" />
+    <key c="ㄴ" sw="ㄼ" />
+    <key c="ㅇ" sw="ㄻ" />
+    <key c="ㄹ" nw="-" ne="_" sw="ㄽ" />
+    <key c="ㅎ" nw="=" ne="+" sw="ㅀ" />
+    <key c="ㅗ" nw="{" ne="}" sw="ㅚ" />
+    <key c="ㅓ" nw="[" ne="]" sw="ㅘ" />
+    <key c="ㅏ" nw="(" ne=")" />
+    <key c="ㅣ" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="ㅋ" />
+    <key c="ㅌ" nw="ㄾ" sw="&lt;" se="&gt;" />
+    <key c="ㅊ" sw="." />
+    <key c="ㅍ" nw="ㄿ" sw="," />
+    <key c="ㅠ" nw="ㅞ" ne="ㅝ" sw="/" />
+    <key c="ㅜ" ne="ㅟ" sw=";" se=":" />
+    <key c="ㅡ" ne="ㅢ" sw="'" se="&quot;" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

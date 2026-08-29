@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="ქართული (MES)" script="georgian">
+  <row>
+    <key c="ქ" se="esc" />
+    <key c="წ" sw="\@" />
+    <key c="ე" ne="3" sw="\#" se="€" />
+    <key c="რ" />
+    <key c="ტ" ne="f11" sw="f12" />
+    <key c="ყ" ne="page_up" sw="page_down" nw="home" />
+    <key c="უ" ne="insert" sw="&amp;" nw="end" />
+    <key c="ი" ne="8" sw="*" />
+    <key c="ო" ne="9" sw="(" se=")" />
+    <key c="პ" ne="0" />
+    <key c="შ" />
+    <key c="ღ" />
+  </row>
+  <row>
+    <key shift="0.5" c="ა" nw="ჺ" ne="tab" />
+    <key c="ს" ne="§" sw="ß" />
+    <key c="დ" />
+    <key c="ფ" nw="ჶ" />
+    <key c="გ" nw="ჹ" ne="-" sw="_" />
+    <key c="ჰ" nw="ჱ" ne="=" sw="+" />
+    <key c="ჯ" nw="ჷ" se="}" sw="{" />
+    <key c="კ" sw="[" se="]" />
+    <key c="ლ" nw="₾" ne="|" sw="\\" />
+    <key c="თ" />
+    <key c="ჩ" nw="ჭ" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="ზ" nw="ჵ" />
+    <key c="ხ" nw="ჴ" ne="†" />
+    <key c="ც" ne="&lt;" sw="." />
+    <key c="ვ" nw="ჳ" ne="&gt;" sw="," />
+    <key c="ბ" ne="\?" sw="/" />
+    <key c="ნ" nw="ჼ" ne="`" sw=":" />
+    <key c="მ" ne="&quot;" sw="'" />
+    <key c="ძ" />
+    <key c="ჟ" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

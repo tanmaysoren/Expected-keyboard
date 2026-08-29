@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<keyboard name="QWERTY (US)" script="latin">
+  <row>
+    <key c="q" nw="f11" se="esc"/>
+    <key c="w" nw="f12" se="~"/>
+    <key c="e" nw="page_down" ne="œ" se="€"/>
+    <key c="r" ne="₹" sw="$" se="end"/>
+    <key c="t" ne="¶" sw="%" se="–"/>
+    <key c="y" ne="¥" sw="^" se="—"/>
+    <key c="u" ne="µ" sw="&amp;"/>
+    <key c="i" ne="insert" sw="*"/>
+    <key c="o" sw="page_up" se=")"/>
+    <key c="p" ne="print_screen" sw="₽" se="₱"/>
+  </row>
+  <row>
+    <key shift="0.5" c="a" nw="tab" ne="`" se="æ"/>
+    <key c="s" ne="§" sw="ß" se="›"/>
+    <key c="d" ne="‹" sw="¿" se="¦"/>
+    <key c="f" nw="home"/>
+    <key c="g" ne="-" sw="_"/>
+    <key c="h" ne="=" sw="+" se="≈"/>
+    <key c="j" se="}" sw="{"/>
+    <key c="k" sw="[" se="]"/>
+    <key c="l" ne="|" sw="\\"/>
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock"/>
+    <key c="z"/>
+    <key c="x" ne="†"/>
+    <key c="c" ne="&lt;" sw="." se="¢"/>
+    <key c="v" ne="&gt;" sw=","/>
+    <key c="b" ne="\?" sw="/" se="₿"/>
+    <key c="n" ne=":" sw=";"/>
+    <key c="m" ne="&quot;" sw="'"/>
+    <key width="1.5" role="action" c="backspace" ne="delete"/>
+  </row>
+</keyboard>

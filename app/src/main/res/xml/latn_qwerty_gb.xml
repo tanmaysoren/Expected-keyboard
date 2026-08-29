@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTY (UK)" script="latin">
+  <row>
+    <key c="q" se="esc" />
+    <key c="w" sw="\@" />
+    <key c="e" ne="3" sw="\#" se="£" />
+    <key c="r" sw="$" />
+    <key c="t" sw="f11" />
+    <key c="y" ne="home" sw="page_up" nw="f12" />
+    <key c="u" ne="end" sw="insert" nw="page_down" />
+    <key c="i" ne="8" sw="*" />
+    <key c="o" nw="accent_macron" ne="9" sw="(" />
+    <key c="p" nw="0" ne="print_screen" />
+  </row>
+  <row>
+    <key shift="0.5" c="a" nw="tab" ne="`" />
+    <key c="s" nw="accent_ring" ne="§" sw="ß" />
+    <key c="d" nw="accent_grave" sw="accent_aigu" />
+    <key c="f" nw="accent_dot_above" />
+    <key c="g" nw="accent_caron" ne="-" sw="_" />
+    <key c="h" ne="=" sw="+" />
+    <key c="j" nw="accent_trema" ne="accent_circonflexe" sw="{" />
+    <key c="k" nw="accent_double_aigu" sw="[" se="]" />
+    <key c="l" ne="|" sw="\\" se="€" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="z" />
+    <key c="x" ne="†" />
+    <key c="c" nw="accent_cedille" ne="&lt;" sw="." />
+    <key c="v" ne="&gt;" sw="," se="accent_tilde" />
+    <key c="b" ne="\?" sw="/" />
+    <key c="n" ne=":" sw=";" />
+    <key c="m" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

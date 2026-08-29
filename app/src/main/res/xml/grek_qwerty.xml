@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTY (Greek)" script="latin">
+  <row>
+    <key c=";" se="esc" />
+    <key c="ς" sw="\@" />
+    <key c="ε" ne="3" sw="\#" se="€" />
+    <key c="ρ" />
+    <key c="τ" ne="f11" sw="f12" />
+    <key c="υ" ne="page_up" sw="page_down" nw="home" />
+    <key c="θ" ne="insert" sw="&amp;" nw="end" />
+    <key c="ι" ne="8" sw="*" />
+    <key c="ο" ne="9" sw="(" se=")" />
+    <key c="π" ne="0" />
+  </row>
+  <row>
+    <key c="α" nw="tab" ne="`" />
+    <key c="σ" />
+    <key c="δ" ne="£" />
+    <key c="φ" />
+    <key c="γ" ne="-" sw="_" />
+    <key c="η" ne="=" sw="+" />
+    <key c="ξ" sw="{" se="}" />
+    <key c="κ" sw="[" se="]" />
+    <key c="λ" ne="|" sw="\\" />
+    <key c="accent_aigu" nw="accent_trema" sw="accent_grave" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="ζ" />
+    <key c="χ" />
+    <key c="ψ" ne="&lt;" sw="." />
+    <key c="ω" ne="&gt;" sw="," />
+    <key c="β" ne="\?" sw="/" />
+    <key c="ν" ne=":" />
+    <key c="μ" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

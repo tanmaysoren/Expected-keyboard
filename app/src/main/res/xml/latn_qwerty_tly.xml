@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTY (Talysh New Latin)" script="latin">
+  <row>
+    <key c="g" se="esc" />
+    <key c="ú" se="ü" />
+    <key c="e" />
+    <key c="ê" ne="f11" sw="f12" />
+    <key c="r" ne="page_up" sw="page_down" nw="home" />
+    <key c="t" ne="insert" sw="%" nw="end" />
+    <key c="y" ne="7" sw="^" />
+    <key c="u" ne="8" sw="û" />
+    <key c="i" ne="9" sw="*" />
+    <key c="o" nw="ö" ne="0" sw="(" />
+    <key c="p" sw=")" />
+    <key c="q" sw="&amp;" se="ğ" />
+  </row>
+  <row>
+    <key shift="0.5" c="á" ne="`" nw="tab" />
+    <key c="s" ne="~" />
+    <key c="d" nw="{" />
+    <key c="f" ne="}" />
+    <key c="h" ne="=" sw="+" />
+    <key c="ž" />
+    <key c="k" ne="]" sw="[" />
+    <key c="l" ne="|" sw="\\" />
+    <key c="ı" ne="-" s="_" />
+    <key c="a" se="ə" />
+    <key c="â" sw="\@" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="z" />
+    <key c="x" />
+    <key c="j" ne="&lt;" sw="." />
+    <key c="v" nw="w" ne="&gt;" sw="," />
+    <key c="b" ne="\?" sw="/" />
+    <key c="n" ne=":" sw=";" />
+    <key c="m" ne="&quot;" sw="'" />
+    <key c="c" se="ç" />
+    <key c="š" se="ş" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

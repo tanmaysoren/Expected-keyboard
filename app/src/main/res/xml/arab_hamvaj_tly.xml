@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Talysh (تالشی همواج)" script="persian">
+  <row>
+    <key c="ض" />
+    <key c="ص" sw="\@" />
+    <key c="ث" sw="\#" />
+    <key c="ق" sw="$" />
+    <key c="ف" ne="f12" sw="home" nw="f11" />
+    <key c="غ" nw="page_up" ne="page_down" sw="^" />
+    <key c="ع" ne="insert" sw="&amp;" nw="end" />
+    <key c="ه" ne="۸" sw="*" />
+    <key c="خ" ne="۹" sw="(" se=")" />
+    <key c="ح" ne="۰" />
+    <key c="ج" />
+  </row>
+  <row>
+    <key c="ش" nw="َ" ne="tab" />
+    <key c="س" nw="ُ" />
+    <key c="ی" se="ئ" />
+    <key c="ب" nw="ّ" />
+    <key c="ل" sw="ِ" se="ﻻ" />
+    <key c="ا" nw="آ" ne="-" sw="إ" />
+    <key c="ت" nw="‌_" ne="+" />
+    <key c="ن" se="ۨ" />
+    <key c="م" />
+    <key c="ک" />
+    <key c="گ" nw="ء" />
+  </row>
+  <row>
+    <key c="ظ" />
+    <key c="ط" />
+    <key c="ژ" ne="«" />
+    <key c="ز" nw="ْ" ne="»" />
+    <key c="ر" ne="." />
+    <key c="د" ne="؛" sw=":" se="ذ" />
+    <key c="پ" ne="؟" />
+    <key c="و" nw="ۋ" se="ۊ" />
+    <key c="چ" />
+    <key c="ٚ" nw="ٛ" />
+    <key role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

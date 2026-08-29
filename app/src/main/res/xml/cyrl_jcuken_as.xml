@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="ЈЦУКЕН (Всисловѣнск)" script="cyrillic">
+  <row>
+    <key c="ј" ne="1" sw="!" se="combining_payerok" />
+    <key c="ц" ne="2" sw="&quot;" se="\@" />
+    <key c="у" ne="3" sw="combining_aigu" se="combining_grave" />
+    <key c="к" ne="4" sw="$" se="combining_palatalization" />
+    <key c="е" ne="5" sw="%" se="\#" />
+    <key c="н" ne="6" sw="\?" se="^" />
+    <key c="г" ne="7" sw="(" se="&amp;" />
+    <key c="ш" ne="8" sw=")" se="«" />
+    <key c="і" ne="9" sw=":" se="»" />
+    <key c="з" ne="0" sw="{" se="}" />
+    <key c="х" nw="f11" ne="ъ" sw="[" />
+  </row>
+  <row>
+    <key c="ф" nw="f12" ne="`" sw="ꙟ" />
+    <key c="ы" nw="home" ne="ё" sw="ꙏ" />
+    <key c="в" nw="page_up" ne="ѷ" sw="ў" />
+    <key c="а" nw="page_down" ne="ѐ" sw="ѥ" />
+    <key c="п" nw="end" ne="ѓ" sw="ꙓ" />
+    <key c="р" nw="insert" ne="ꙅ" sw="ꙑ" />
+    <key c="о" nw="ѡ" ne="ꙍ" sw="ꙕ" />
+    <key c="л" nw="љ" ne="ꙃ" sw="₽" />
+    <key c="д" nw="ꙉ" ne="-" sw="_" />
+    <key c="ж" nw="җ" ne="=" sw="+" />
+    <key c="ѣ" nw="ԑ" ne="/" sw="\\" />
+  </row>
+  <row>
+    <key role="action" width="1.18" c="shift" ne="capslock" sw="tab" se="esc" />
+    <key width="0.96" c="я" nw="ꙗ" ne="ꙝ" se="combining_titlo" />
+    <key width="0.96" c="ч" nw="ћ" ne="ќ" se="combining_breve" />
+    <key width="0.96" c="с" nw="џ" ne="꙾" sw="ꙿ" />
+    <key width="0.96" c="м" nw="ꙙ" ne="ѭ" sw="*" />
+    <key width="0.96" c="и" nw="й" ne="ѝ" sw="." />
+    <key width="0.96" c="т" nw="ѿ" ne=";" sw="," />
+    <key width="0.96" c="ь" nw="ѧ" ne="&lt;" sw="⁙" />
+    <key width="0.96" c="б" nw="ђ" ne="&gt;" sw="⁘" />
+    <key width="0.96" c="ю" nw="ꙛ" ne="·" sw="⁖" />
+    <key role="action" width="1.18" c="backspace" ne="delete" />
+  </row>
+</keyboard>

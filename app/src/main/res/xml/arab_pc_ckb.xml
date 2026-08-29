@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Kurdish (کوردی) QWERTY" script="arabic" numpad_script="hindu-arabic">
+  <row>
+    <key c="ق" sw="esc" />
+    <key c="و" ne="٢" sw="\@" se="ڡ" />
+    <key c="ە" ne="٣" sw="\#" se="ۉ" />
+    <key c="ر" sw="$" />
+    <key c="ت" sw="٪" />
+    <key c="ی" sw="^" />
+    <key c="ێ" nw="f11" ne="f12" sw="&amp;" />
+    <key c="ئ" nw="home" ne="page_up" sw="*" />
+    <key c="ۆ" nw="page_down" ne="٩" sw="(" />
+    <key c="پ" nw="end" ne="insert" />
+  </row>
+  <row>
+    <key c="ا" nw="آ" ne="tab" />
+    <key c="س" nw="ص" />
+    <key c="ش" nw="ض" />
+    <key c="د" nw="ذ" se="ۮ" />
+    <key c="ف" nw="ڤ" ne="-" sw="_" />
+    <key ne="ه" c="ھ" sw="ہ" />
+    <key c="ژ" nw="ـ" se="}" sw="{" />
+    <key c="ل" nw="ڵ" se="]" sw="[" />
+    <key c="ک" ne="ك" sw="\\" />
+    <key c="گ" ne="غ" sw="/" />
+  </row>
+  <row>
+    <key c="ز" nw="ظ" />
+    <key c="خ" />
+    <key c="ج" />
+    <key c="چ" />
+    <key c="ح" ne="؟" sw="!" />
+    <key c="ع" nw="ٔ" se="ٕ" />
+    <key c="ب" nw="ٮ" />
+    <key c="ن" ne="،" sw="؛" />
+    <key c="م" ne="." sw=":" />
+    <key role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

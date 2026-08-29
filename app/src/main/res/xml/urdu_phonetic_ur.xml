@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Urdu Phonetic" script="urdu">
+  <row>
+    <key c="ق" se="esc" n="1" />
+    <key c="و" sw="\@" n="2" />
+    <key c="ع" sw="\#" n="3" />
+    <key c="ر" sw="$" n="4" />
+    <key c="ت" ne="f11" sw="%" n="5" />
+    <key c="ے" sw="page_up" nw="f12" ne="home" />
+    <key c="ئ" ne="end" sw="&amp;" nw="page_down" />
+    <key c="ی" sw="*" n="8" nw="insert" />
+    <key c="ہ" nw="'" ne="&quot;" sw="(" />
+    <key c="پ" nw="ٰ" ne="0" sw="؟" />
+  </row>
+  <row>
+    <key width="1.1" c="ا" nw="tab" ne="آ" se="أ" />
+    <key width="1.1" c="س" ne="ص" />
+    <key width="1.1" c="د" ne="ڈ" />
+    <key width="1.1" c="ف" ne="پھ" />
+    <key width="1.15" c="گ" nw="-" ne="غ" sw="_" />
+    <key width="1.1" c="ھ" nw="=" ne="ح" sw="+" />
+    <key width="1.1" c="ج" nw="}" ne="ض" sw="{" />
+    <key width="1.1" c="ک" nw="]" ne="خ" sw="[" />
+    <key width="1.15" c="ل" nw="َ" sw="." n="ُ" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="ز" ne="ذ" />
+    <key c="ش" ne="ژ" />
+    <key c="چ" ne="ث" sw="۔" se="چھ" />
+    <key c="ط" ne="ظ" sw="," />
+    <key c="ب" ne="بھ" sw="/" se="\\" />
+    <key c="ن" ne="ں" sw=";" se=":" />
+    <key c="م" w="ّ" n="ٌ" s="ٍ" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

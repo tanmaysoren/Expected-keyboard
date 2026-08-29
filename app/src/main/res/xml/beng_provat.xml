@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="বাংলা (প্রভাত)" script="bengali">
+  <row>
+    <key c="দ" ne="১" sw="!" w="esc" />
+    <key c="ূ" sw="\@" />
+    <key c="ী" sw="\#" />
+    <key c="র" sw="৳" />
+    <key c="ট" sw="%" />
+    <key c="এ" ne="f11" sw="^" />
+    <key c="ু" nw="f12" ne="home" sw="ঞ" />
+    <key c="ি" nw="page_up" ne="page_down" sw="ৎ" />
+    <key c="ও" nw="end" ne="৯" sw="(" />
+    <key c="প" nw="insert" ne="০" sw="zwj" />
+  </row>
+  <row>
+    <key shift="0.5" c="া" nw="অ" w="tab" />
+    <key c="স" nw="ষ" />
+    <key c="ড" nw="ঢ" />
+    <key c="ত" nw="থ" />
+    <key c="গ" nw="ঘ" ne="-" sw="_" />
+    <key c="হ" nw="ঃ" ne="=" sw="+" />
+    <key c="জ" nw="ঝ" sw="ে" se="ৈ" />
+    <key c="ক" nw="খ" sw="ো" se="ৌ" />
+    <key c="ল" nw="ং" ne="॥" sw="halfspace" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" />
+    <key c="য়" nw="য" />
+    <key c="শ" nw="ঢ়" />
+    <key c="চ" nw="ছ" ne="ৃ" sw="," />
+    <key c="আ" nw="ঋ" ne="ঁ" sw="।" />
+    <key c="ব" nw="ভ" ne="\?" sw="্" />
+    <key c="ন" nw="ণ" ne=":" sw=";" />
+    <key c="ম" nw="ঙ" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

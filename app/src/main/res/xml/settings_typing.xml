@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/pref_category_typing">
+    <ListPreference android:key="swipe_dist" android:title="@string/pref_swipe_dist_title" android:summary="@string/pref_swipe_dist_summary" android:defaultValue="35" android:entries="@array/pref_swipe_dist_entries" android:entryValues="@array/pref_swipe_dist_values"/>
+    <ListPreference android:key="circle_sensitivity" android:title="@string/pref_circle_sensitivity_title" android:summary="%s" android:defaultValue="2" android:entries="@array/pref_circle_sensitivity_entries" android:entryValues="@array/pref_circle_sensitivity_values"/>
+    <expected.keyboard2.prefs.IntSlideBarPreference android:key="longpress_timeout" android:title="@string/pref_long_timeout_title" android:summary="%sms" android:defaultValue="240" min="50" max="2000"/>
+    <CheckBoxPreference android:key="keyrepeat_enabled" android:title="@string/pref_keyrepeat_enabled" android:defaultValue="true"/>
+    <expected.keyboard2.prefs.IntSlideBarPreference android:key="longpress_interval" android:dependency="keyrepeat_enabled" android:title="@string/pref_long_interval_title" android:summary="%sms" android:defaultValue="5" min="5" max="100"/>
+    <CheckBoxPreference android:key="lock_double_tap" android:title="@string/pref_lock_double_tap_title" android:summary="@string/pref_lock_double_tap_summary" android:defaultValue="true"/>
+    <ListPreference android:key="physical_keyboard_behavior" android:title="@string/pref_physical_keyboard_behavior" android:summary="%s" android:defaultValue="show" android:entries="@array/pref_physical_keyboard_behavior_entries" android:entryValues="@array/pref_physical_keyboard_behavior_values"/>
+  </PreferenceCategory>
+  <PreferenceCategory android:title="@string/pref_category_behavior">
+    <CheckBoxPreference android:key="autocapitalisation" android:title="@string/pref_autocapitalisation_title" android:summary="@string/pref_autocapitalisation_summary" android:defaultValue="true"/>
+    <ListPreference android:key="change_method_key_replacement" android:title="@string/pref_change_method_key_replacement_title" android:summary="%s" android:entries="@array/pref_change_method_key_replacement_entries" android:entryValues="@array/pref_change_method_key_replacement_values" android:defaultValue="prev"/>
+    <CheckBoxPreference android:key="vibrate_custom" android:title="@string/pref_vibrate_custom" android:defaultValue="false"/>
+    <expected.keyboard2.prefs.IntSlideBarPreference android:dependency="vibrate_custom" android:key="vibrate_duration" android:title="@string/pref_vibrate_duration_title" android:summary="%sms" android:defaultValue="20" min="0" max="100"/>
+    <ListPreference android:key="number_entry_layout" android:title="@string/pref_number_entry_title" android:summary="%s" android:defaultValue="pin" android:entries="@array/pref_number_entry_entries" android:entryValues="@array/pref_number_entry_values"/>
+  </PreferenceCategory>
+</PreferenceScreen>

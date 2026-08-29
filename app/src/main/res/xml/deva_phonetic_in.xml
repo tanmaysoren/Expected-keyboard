@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="हिन्दी फोनेटिक - Hindi Phonetic" script="devanagari">
+  <modmap>
+    <shift a="ड़" b="ढ़" />
+    <shift a="क़" b="ख़" />
+    <shift a="ज्ञ" b="ञ" />
+  </modmap>
+  <row>
+    <key c="ट" ne="1" sw="!" se="esc" />
+    <key c="ड" sw="\@" />
+    <key c="े" ne="3" sw="\#" se="$" />
+    <key c="र" ne="4" sw="ृ" se="₹" />
+    <key c="त" sw="%" se="त्र" />
+    <key c="य" />
+    <key c="ु" nw="f11" ne="f12" sw="&amp;" />
+    <key c="ि" nw="home" ne="page_up" sw="*" />
+    <key c="ो" nw="page_down" ne="9" sw="(" />
+    <key c="प" nw="end" ne="insert" se="॒" />
+  </row>
+  <row>
+    <key shift="0.5" c="ा" nw="tab" sw="अ" />
+    <key c="स" nw="श्र" sw="“" se="”" />
+    <key c="द" nw="ड़" sw="‘" se="’" />
+    <key c="फ" nw="फ़" sw="़" />
+    <key c="ग" nw="ग़" ne="-" sw="_" />
+    <key c="ह" ne="=" sw="+" se="्" />
+    <key c="ज" nw="ज़" sw="{" se="}" />
+    <key c="क" nw="क़" sw="[" se="]" />
+    <key c="ल" nw="ऌ" ne="।" sw="ॢ" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="ज्ञ" ne="|" sw="\\" se="ऍ" />
+    <key c="ष" nw="क्ष" sw="ॅ" se="ॉ" />
+    <key c="च" ne="&lt;" sw="," />
+    <key c="व" ne="&gt;" sw="." />
+    <key c="ब" ne="\?" sw="/" />
+    <key c="न" nw="ङ" ne=":" sw=";" />
+    <key c="म" nw="ॐ" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

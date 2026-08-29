@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Turkish F" script="latin">
+  <modmap>
+    <shift a="i" b="İ" />
+    <shift a="ı" b="I" />
+  </modmap>
+  <row scale="11">
+    <key c="f" se="esc" />
+    <key c="g" sw="\@" />
+    <key c="ğ" sw="\#" />
+    <key c="ı" sw="₺" />
+    <key c="o" ne="f11" sw="f12" />
+    <key c="d" ne="page_up" sw="page_down" nw="home" />
+    <key c="r" ne="insert" sw="&amp;" nw="end" />
+    <key c="n" ne="8" sw="*" />
+    <key c="h" nw="q" ne="9" sw="(" />
+    <key c="p" nw="w" ne="0" sw="f11_placeholder" />\
+</row>
+  <row>
+    <key c="u" nw="tab" ne="`" sw="û" />
+    <key c="i" ne="insert" sw="î" />
+    <key c="e" ne="£" />
+    <key c="a" sw="â" />
+    <key c="ü" ne="-" sw="_" />
+    <key c="t" ne="=" sw="+" />
+    <key c="k" sw="{" se="}" />
+    <key c="m" />
+    <key c="l" sw="[" se="]" />
+    <key c="y" sw="\\" se="|" />
+    <key c="ş" nw="x" />
+  </row>
+  <row>
+    <key role="action" width="1.5" c="shift" ne="capslock" />
+    <key c="j" ne="«" />
+    <key c="ö" ne="»" />
+    <key c="v" ne="&lt;" sw="." />
+    <key c="c" ne="&gt;" sw="," />
+    <key c="ç" nw="¿" ne="\?" sw="/" />
+    <key c="z" ne=":" sw=";" />
+    <key c="s" ne="&quot;" sw="'" />
+    <key c="b" ne="×" />
+    <key role="action" width="1.5" c="backspace" ne="delete" />
+  </row>
+</keyboard>

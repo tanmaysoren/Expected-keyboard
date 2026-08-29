@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="УЕИШЩ (Български, БДС)" script="cyrillic">
+  <row>
+    <key c="у" se="esc" />
+    <key c="е" sw="\@" />
+    <key c="и" ne="3" sw="\#" se="ѝ" />
+    <key c="ш" />
+    <key c="щ" ne="f11" sw="f12" />
+    <key c="к" ne="page_up" sw="page_down" nw="home" />
+    <key c="с" ne="insert" sw="&amp;" nw="end" />
+    <key c="д" ne="8" sw="*" se="№" />
+    <key c="з" ne="9" sw="(" se=")" />
+    <key c="ц" ne="0" />
+    <key c="б" ne="€" />
+  </row>
+  <row>
+    <key c="ь" nw="tab" ne="`" />
+    <key c="я" />
+    <key c="а" />
+    <key c="о" ne="-" sw="_" />
+    <key c="ж" ne="=" sw="+" />
+    <key c="г" se="}" sw="{" />
+    <key c="т" sw="[" se="]" />
+    <key c="н" ne="|" sw="\\" />
+    <key c="в" />
+    <key c="м" />
+    <key c="ч" nw="„" ne="“" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="ю" />
+    <key c="й" />
+    <key c="ъ" nw="accent_cedille" ne="&lt;" se="&gt;" />
+    <key c="ф" ne="\?" sw="/" />
+    <key c="х" ne=":" sw=";" />
+    <key c="п" ne="&quot;" sw="'" />
+    <key c="р" sw="," />
+    <key c="л" sw="." />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard bottom_row="false">
+  <row>
+    <key c="θ" />
+    <key c="ω" ne="∨" sw="↔" se="⊂" />
+    <key c="ε" ne="∧" sw="↑" se="⊃" />
+    <key c="ρ" ne="⊥" sw="↕" se="∀" />
+    <key c="τ" se="⊷" />
+    <key c="ψ" ne="⊢" sw="≪" se="7" />
+    <key c="υ" nw="f11" ne="⟨" sw="≡" />
+    <key c="ι" nw="f12" ne="⟩" sw="≫" />
+    <key c="ο" nw="home" sw="page_down" ne="page_up" />
+    <key c="π" nw="end" sw="∘" ne="insert" />
+  </row>
+  <row>
+    <key c="α" se="ℂ" />
+    <key c="σ" sw="←" se="∂" />
+    <key c="δ" sw="↓" se="∫" />
+    <key c="φ" sw="→" se="∃" />
+    <key c="γ" sw="∋" se="∈" />
+    <key c="η" nw="⊕" se="4" />
+    <key c="ξ" nw="⊖" sw="ℕ" se="5" />
+    <key c="κ" nw="⊙" sw="ℝ" se="6" />
+    <key c="λ" nw="⊗" />
+    <key c="ϡ" nw="⌀" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="ζ" sw="⇌" se="√" />
+    <key c="χ" sw="accent_arrow_right" se="∪" />
+    <key c="ϛ" se="∩" />
+    <key c="ϟ" sw="∇" se="ℵ" />
+    <key c="β" nw="≤" sw="ℤ" se="1" />
+    <key c="ν" nw="≠" sw="ℚ" se="2" />
+    <key c="μ" nw="≥" sw="×" se="3" />
+    <key width="1.5" role="action" c="backspace" sw="delete" />
+  </row>
+  <row height="0.95">
+    <key width="1.2" role="action" c="switch_text" ne="esc" />
+    <key width="1.2" role="action" c="switch_numeric" ne="tab" />
+    <key width="1.2" role="action" c="alt" />
+    <key width="2.8" role="space_bar" c="space" nw="superscript" sw="subscript" />
+    <key width="1.2" role="action" c="0" ne="." />
+    <key width="1.2" role="action" c="compose" n="up" e="right" w="left" s="down" />
+    <key width="1.2" role="action" c="enter" nw="=" ne="action" se="toggle_floating" />
+  </row>
+</keyboard>

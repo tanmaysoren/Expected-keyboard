@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Dvorak" script="latin">
+  <row>
+    <key role="action" width="1.5" c="shift" ne="esc" se="tab" />
+    <key c="p" sw="&lt;" />
+    <key c="y" sw="&gt;" />
+    <key c="f" />
+    <key c="g" sw="f11" />
+    <key c="c" nw="f12" ne="accent_circonflexe" sw="{" />
+    <key c="r" sw="page_down" nw="home" ne="page_up" />
+    <key c="l" ne="insert" sw="+" nw="end" />
+    <key role="action" width="1.5" c="backspace" ne="delete" />
+  </row>
+  <row>
+    <key c="a" ne="1" sw="å" se="!" />
+    <key c="o" nw="accent_macron" ne="2" sw="\@" />
+    <key c="e" nw="accent_caron" ne="3" sw="\#" />
+    <key c="u" nw="æ" ne="4" sw="$" />
+    <key c="i" ne="5" sw="%" />
+    <key c="d" ne="6" sw="^" />
+    <key c="h" ne="7" sw="&amp;" />
+    <key c="t" ne="8" sw="*" />
+    <key c="n" ne="9" sw="(" se=")" />
+    <key c="s" ne="0" sw="ß" />
+  </row>
+  <row>
+    <key shift="0.5" c="q" nw="accent_tilde" ne="`" sw="~" />
+    <key c="j" nw="accent_aigu" ne="'" sw="&quot;" />
+    <key c="k" nw="ø" ne=";" sw=":" />
+    <key c="x" nw="accent_cedille" />
+    <key c="b" />
+    <key c="m" ne="/" sw="\?" />
+    <key c="w" />
+    <key c="v" />
+    <key c="z" ne="-" sw="_" />
+  </row>
+</keyboard>

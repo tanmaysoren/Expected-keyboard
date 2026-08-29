@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Colemak" script="latin">
+  <row>
+    <key shift="0.5" c="q" ne="accent_aigu" sw="accent_tilde" />
+    <key c="w" sw="~" />
+    <key c="f" sw="+" />
+    <key c="p" />
+    <key c="g" sw="\\" />
+    <key c="j" nw="f11" ne="f12" sw="home" />
+    <key c="l" nw="page_up" ne="page_down" sw="end" />
+    <key c="u" nw="accent_double_aigu" ne="accent_ring" />
+    <key c="y" nw="&quot;" ne="'" />
+  </row>
+  <row>
+    <key c="a" ne="1" se="tab" />
+    <key c="r" nw="\@" ne="2" />
+    <key c="s" nw="\#" ne="3" se="ß" />
+    <key c="t" nw="$" ne="4" se="accent_ogonek" />
+    <key c="d" nw="€" ne="5" se="accent_dot_above" />
+    <key c="h" nw="&amp;" ne="6" />
+    <key c="n" nw="*" ne="7" />
+    <key c="e" nw="accent_circonflexe" ne="8" se="^" />
+    <key c="i" nw="_" ne="9" />
+    <key c="o" nw="0" sw="accent_macron" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="z" nw="," ne="." />
+    <key c="x" nw="&gt;" ne="&lt;" />
+    <key c="c" nw="{" ne="}" sw="accent_cedille" />
+    <key c="v" nw="[" ne="]" />
+    <key c="b" nw="(" ne=")" />
+    <key c="k" nw=";" ne=":" />
+    <key c="m" nw="!" ne="\?" />
+    <key shift="0.25" width="1.25" role="action" c="backspace" nw="delete" />
+  </row>
+</keyboard>

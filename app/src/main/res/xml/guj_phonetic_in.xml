@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="ગુજરાતી ફોનેટિક - Gujarati Phonetic" script="gujarati">
+  <row>
+    <key c="ટ" ne="1" sw="!" se="esc" />
+    <key c="ડ" ne="2" sw="\@" se="\#" />
+    <key c="ે" ne="3" sw="$" se="૱" />
+    <key c="ર" ne="4" sw="ૃ" se="₹" />
+    <key c="ત" />
+    <key c="ય" />
+    <key c="ુ" nw="f11" ne="f12" sw="&amp;" />
+    <key c="િ" nw="home" ne="8" sw="*" />
+    <key c="ો" nw="page_up" ne="9" sw="(" />
+    <key c="પ" nw="page_down" ne="end" se="॒" />
+  </row>
+  <row>
+    <key shift="0.5" c="ા" nw="insert" sw="અ" />
+    <key c="સ" nw="“" se="”" />
+    <key c="દ" />
+    <key c="્" nw="ૠ" sw="ૄ" />
+    <key c="ગ" ne="-" sw="_" />
+    <key c="હ" ne="=" sw="+" />
+    <key c="જ" sw="{" se="}" />
+    <key c="ક" nw="ૢ" ne="ૡ" sw="[" />
+    <key c="લ" nw="।" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="ઞ" nw="જ્ઞ" ne="ૅ" sw="ઙ" />
+    <key c="ષ" nw="ક્ષ" ne="ૉ" sw="઼" />
+    <key c="ચ" ne="&lt;" sw="." />
+    <key c="વ" ne="&gt;" sw="," />
+    <key c="બ" ne="\?" sw="/" />
+    <key c="ન" ne=":" sw=";" />
+    <key c="મ" nw="ૐ" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

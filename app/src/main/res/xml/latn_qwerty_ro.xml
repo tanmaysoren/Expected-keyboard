@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTY (Română)" script="latin">
+  <row>
+    <key c="q" se="esc" />
+    <key c="w" sw="\@" />
+    <key c="e" ne="3" sw="\#" se="€" />
+    <key c="r" sw="$" />
+    <key c="t" sw="%" />
+    <key c="y" ne="f12" sw="home" nw="f11" />
+    <key c="u" ne="page_down" sw="end" nw="page_up" />
+    <key c="i" nw="insert" ne="8" sw="*" />
+    <key c="o" nw="accent_macron" ne="9" sw="(" />
+    <key c="p" ne="0" />
+  </row>
+  <row>
+    <key shift="0.5" c="a" nw="â" ne="ă" sw="`" />
+    <key c="s" nw="ș" ne="§" sw="ß" />
+    <key c="d" nw="accent_grave" ne="£" sw="accent_aigu" />
+    <key c="f" nw="accent_dot_above" />
+    <key c="g" nw="accent_caron" ne="-" sw="_" />
+    <key c="h" ne="=" sw="+" />
+    <key c="j" nw="accent_trema" ne="accent_circonflexe" sw="{" />
+    <key c="k" nw="accent_double_aigu" sw="[" se="]" />
+    <key c="l" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="z" />
+    <key c="x" ne="†" />
+    <key c="c" nw="accent_cedille" ne="&lt;" sw="." />
+    <key c="v" ne="&gt;" sw="," />
+    <key c="b" ne="\?" sw="/" />
+    <key c="n" nw="accent_tilde" ne=":" sw=";" />
+    <key c="m" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

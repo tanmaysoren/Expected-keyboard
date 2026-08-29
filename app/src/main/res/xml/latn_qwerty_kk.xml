@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTY (Qazaqşa)" script="latin">
+  <modmap>
+    <shift a="i" b="İ" />
+    <shift a="ı" b="I" />
+  </modmap>
+  <row>
+    <key shift="1" c="ä" />
+    <key c="ñ" />
+    <key c="ğ" ne="f11" sw="f12" se="home" />
+    <key c="ş" nw="page_down" ne="end" sw="insert" />
+    <key c="ū" />
+    <key c="ü" />
+    <key c="ı" />
+    <key c="ö" />
+  </row>
+  <row>
+    <key c="q" ne="1" se="esc" />
+    <key c="w" nw="~" ne="2" sw="\@" />
+    <key c="e" nw="!" ne="3" sw="\#" />
+    <key c="r" ne="4" sw="$" />
+    <key c="t" ne="5" sw="%" />
+    <key c="y" ne="6" sw="^" />
+    <key c="u" ne="7" sw="&amp;" />
+    <key c="i" ne="8" sw="*" />
+    <key c="o" ne="9" sw="(" />
+    <key c="p" ne="0" sw=")" />
+  </row>
+  <row>
+    <key shift="0.5" c="a" nw="tab" ne="`" />
+    <key c="s" ne="§" sw="ß" />
+    <key c="d" />
+    <key c="f" />
+    <key c="g" ne="-" sw="_" />
+    <key c="h" ne="=" sw="+" />
+    <key c="j" se="}" sw="{" />
+    <key c="k" sw="[" se="]" />
+    <key c="l" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="z" />
+    <key c="x" ne="†" />
+    <key c="c" ne="&lt;" sw="." se="ç" />
+    <key c="v" ne="&gt;" sw="," />
+    <key c="b" ne="\?" sw="/" />
+    <key c="n" ne=":" sw=";" />
+    <key c="m" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/theme_item_root"
+    android:layout_width="match_parent"
+    android:layout_height="46dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="4dp"
+    android:background="@drawable/normal_btn_bg">
+
+    <!-- Color Theme Swatch Box -->
+    <FrameLayout
+        android:id="@+id/theme_item_color_preview"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="10dp">
+
+        <View
+            android:id="@+id/theme_item_accent_dot"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <!-- Theme Name & Category Tag -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/theme_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Theme Name"
+            android:textColor="#F1F5F9"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/theme_item_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CYBER"
+            android:textColor="#64748B"
+            android:textSize="9sp"
+            android:letterSpacing="0.08"/>
+    </LinearLayout>
+
+    <!-- Glowing Checkmark when active -->
+    <ImageView
+        android:id="@+id/theme_item_check"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:src="@drawable/ic_futo_check"
+        android:tint="#00F0FF"
+        android:visibility="gone"/>
+
+</LinearLayout>

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTY (Latvian)" script="latin">
+  <row>
+    <key c="q" se="esc" />
+    <key c="w" sw="\@" />
+    <key c="e" ne="3" sw="\#" se="ē" />
+    <key c="r" sw="$" />
+    <key c="t" sw="f11" />
+    <key c="y" ne="home" sw="page_up" nw="f12" />
+    <key c="u" nw="page_down" ne="end" sw="&amp;" />
+    <key c="i" nw="insert" ne="8" sw="*" />
+    <key c="o" nw="ō" ne="9" sw="(" />
+    <key c="p" nw="0" ne="print_screen" />
+  </row>
+  <row>
+    <key shift="0.5" c="a" nw="ā" ne="`" se="tab" />
+    <key c="s" nw="š" ne="§" sw="ß" />
+    <key c="d" />
+    <key c="f" />
+    <key c="g" nw="ģ" ne="-" sw="_" />
+    <key c="h" ne="=" sw="+" />
+    <key c="j" sw="{" se="}" />
+    <key c="k" nw="ķ" sw="[" se="]" />
+    <key c="l" nw="ļ" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="z" nw="ž" />
+    <key c="x" ne="†" />
+    <key c="c" nw="č" ne="&lt;" sw="." />
+    <key c="v" ne="&gt;" sw="," />
+    <key c="b" ne="\?" sw="/" />
+    <key c="n" nw="ņ" ne=":" sw=";" />
+    <key c="m" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

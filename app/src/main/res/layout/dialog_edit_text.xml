@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="KEY IDENTIFIER"
+      android:textColor="#A78BFA"
+      android:textSize="12sp"
+      android:textStyle="bold"
+      android:layout_marginBottom="8dp"/>
+  <EditText
+      android:id="@+id/text"
+      android:hint="@string/pref_dialog_edit_text"
+      android:textColorHint="#64748B"
+      android:textColor="#F1F5F9"
+      android:background="@drawable/cyber_edittext_bg"
+      android:inputType="text"
+      android:importantForAutofill="no"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+</LinearLayout>

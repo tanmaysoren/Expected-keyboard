@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="?attr/colorKeyboard">
+
+  <expected.keyboard2.suggestions.CandidatesView
+      android:id="@+id/candidates_view"
+      style="@style/candidates_view">
+
+    <!-- Left Toggle: Switch between Suggestions & Utility Bar -->
+    <ImageButton
+        android:id="@+id/btn_tools_toggle"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:padding="6dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_futo_chevron_right"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:tint="?attr/colorLabel"
+        android:contentDescription="Utility Toolbar"/>
+
+    <!-- Suggestions Strip Container -->
+    <LinearLayout
+        android:id="@+id/suggestions_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="4dp">
+
+      <TextView android:id="@+id/candidates_emoji" style="@style/candidates_emoji"/>
+      <TextView android:id="@+id/candidates_1" style="@style/candidates_item"/>
+      <View
+          android:layout_width="1dp"
+          android:layout_height="20dp"
+          android:layout_gravity="center_vertical"
+          android:background="@drawable/suggestion_divider"/>
+      <TextView android:id="@+id/candidates_2" style="@style/candidates_item"/>
+      <View
+          android:layout_width="1dp"
+          android:layout_height="20dp"
+          android:layout_gravity="center_vertical"
+          android:background="@drawable/suggestion_divider"/>
+      <TextView android:id="@+id/candidates_3" style="@style/candidates_item"/>
+      <View
+          android:layout_width="1dp"
+          android:layout_height="20dp"
+          android:layout_gravity="center_vertical"
+          android:background="@drawable/suggestion_divider"/>
+      <TextView android:id="@+id/candidates_4" style="@style/candidates_item"/>
+      <View
+          android:layout_width="1dp"
+          android:layout_height="20dp"
+          android:layout_gravity="center_vertical"
+          android:background="@drawable/suggestion_divider"/>
+      <TextView android:id="@+id/candidates_5" style="@style/candidates_item"/>
+    </LinearLayout>
+
+    <!-- FUTO-style Utility Action Bar Container -->
+    <HorizontalScrollView
+        android:id="@+id/utility_bar_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        android:fillViewport="true"
+        android:visibility="gone">
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:orientation="horizontal"
+          android:gravity="center_vertical"
+          android:paddingHorizontal="2dp">
+
+        <!-- Clipboard Manager -->
+        <ImageButton
+            android:id="@+id/util_btn_clipboard"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_clipboard"
+            android:contentDescription="@string/util_bar_clipboard"/>
+
+        <!-- Text Edit & Cursor Navigation Pad -->
+        <ImageButton
+            android:id="@+id/util_btn_edit"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_edit"
+            android:contentDescription="@string/util_bar_edit"/>
+
+        <!-- Quick Undo -->
+        <ImageButton
+            android:id="@+id/util_btn_undo"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_undo"
+            android:contentDescription="@string/util_bar_undo"/>
+
+        <!-- Quick Redo -->
+        <ImageButton
+            android:id="@+id/util_btn_redo"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_redo"
+            android:contentDescription="@string/util_bar_redo"/>
+
+        <!-- 123 Number Row / Keypad -->
+        <ImageButton
+            android:id="@+id/util_btn_numpad"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_numpad"
+            android:contentDescription="@string/util_bar_numpad"/>
+
+        <!-- Emoji Picker -->
+        <ImageButton
+            android:id="@+id/util_btn_emoji"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_emoji"
+            android:contentDescription="@string/util_bar_emoji"/>
+
+        <!-- Language / Layout Switcher -->
+        <ImageButton
+            android:id="@+id/util_btn_layout"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_layout"
+            android:contentDescription="@string/util_bar_layout"/>
+
+        <!-- Theme Switcher -->
+        <ImageButton
+            android:id="@+id/util_btn_theme"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_theme"
+            android:contentDescription="@string/util_bar_theme"/>
+
+        <!-- Floating Mode -->
+        <ImageButton
+            android:id="@+id/util_btn_floating"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_floating"
+            android:contentDescription="@string/util_bar_floating"/>
+
+        <!-- Keyboard Settings -->
+        <ImageButton
+            android:id="@+id/util_btn_settings"
+            style="@style/utility_bar_button"
+            android:src="@drawable/ic_futo_settings"
+            android:contentDescription="@string/util_bar_settings"/>
+      </LinearLayout>
+    </HorizontalScrollView>
+
+  </expected.keyboard2.suggestions.CandidatesView>
+
+  <expected.keyboard2.Keyboard2View
+      android:id="@+id/keyboard_view"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+</LinearLayout>

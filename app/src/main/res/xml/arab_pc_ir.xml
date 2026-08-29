@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Persian PC" script="persian">
+  <row>
+    <key c="ض" se="esc" />
+    <key c="ص" sw="\@" />
+    <key c="ث" sw="\#" />
+    <key c="ق" sw="$" />
+    <key c="ف" ne="f11" sw="f12" />
+    <key c="غ" ne="page_up" nw="home" sw="^" />
+    <key c="ع" ne="end" sw="insert" nw="page_down" />
+    <key c="ه" ne="۸" sw="*" />
+    <key c="خ" ne="۹" sw="(" se=")" />
+    <key c="ح" ne="۰" />
+    <key c="ج" />
+  </row>
+  <row>
+    <key c="ش" ne="tab" />
+    <key c="س" />
+    <key c="ی" ne="ئ" />
+    <key c="ب" />
+    <key c="ل" />
+    <key c="ا" nw="آ" ne="-" sw="_" />
+    <key c="ت" nw="halfspace" ne="+" />
+    <key c="ن" />
+    <key c="م" />
+    <key c="ک" />
+    <key c="گ" />
+  </row>
+  <row>
+    <key shift="0.5" c="ظ" />
+    <key c="ط" />
+    <key c="ز" nw="«" ne="»" />
+    <key c="ر" nw="ژ" ne="." />
+    <key c="ذ" ne=":" />
+    <key c="د" ne="؛" />
+    <key c="پ" ne="؟" />
+    <key c="و" />
+    <key c="چ" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="ЯВЕРТЪ" script="cyrillic">
+  <row>
+    <key c="я" se="esc" />
+    <key c="в" ne="2" sw="\@" se="ч" />
+    <key c="е" sw="\#" se="№" />
+    <key c="р" />
+    <key c="т" ne="f11" sw="f12" />
+    <key c="ъ" ne="page_up" sw="^" nw="home" />
+    <key c="у" ne="end" sw="&amp;" nw="page_down" />
+    <key c="и" ne="8" sw="*" nw="insert" />
+    <key c="о" ne="9" sw="(" se=")" />
+    <key c="п" ne="0" />
+  </row>
+  <row>
+    <key shift="0.5" c="а" nw="tab" ne="`" />
+    <key c="с" />
+    <key c="д" />
+    <key c="ф" />
+    <key c="г" ne="-" sw="_" />
+    <key c="х" ne="=" sw="+" />
+    <key c="й" se="}" sw="{" />
+    <key c="к" ne="ш" sw="[" se="]" />
+    <key c="л" nw="щ" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="з" />
+    <key c="ь" sw="ѝ" />
+    <key c="ц" ne="&lt;" sw="." />
+    <key c="ж" ne="&gt;" sw="," />
+    <key c="б" ne="\?" sw="/" />
+    <key c="н" ne=":" sw=";" />
+    <key c="м" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

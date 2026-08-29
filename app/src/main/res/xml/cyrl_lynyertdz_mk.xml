@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="ЉЊЕРТЅ (Македонски)" script="cyrillic">
+  <row scale="11">
+    <key c="љ" se="esc" />
+    <key c="њ" sw="\@" />
+    <key c="е" ne="3" sw="\#" se="ѐ" />
+    <key c="р" />
+    <key c="т" ne="f11" sw="f12" />
+    <key c="ѕ" ne="page_up" sw="page_down" nw="home" />
+    <key c="у" ne="insert" sw="&amp;" nw="end" />
+    <key c="и" ne="8" sw="*" se="ѝ" />
+    <key c="о" ne="9" sw="(" se=")" />
+    <key c="п" ne="0" sw="[" se="]" />
+    <key c="ш" ne="€" sw="{" se="}" />
+  </row>
+  <row scale="11">
+    <key c="а" nw="tab" />
+    <key c="с" />
+    <key c="д" />
+    <key c="ф" />
+    <key c="г" />
+    <key c="х" />
+    <key c="ј" />
+    <key c="к" />
+    <key c="л" ne="|" sw="\\" />
+    <key c="ч" ne="-" sw="_" />
+    <key c="ќ" ne="=" sw="+" />
+  </row>
+  <row scale="11">
+    <key role="action" width="1.5" c="shift" ne="capslock" />
+    <key c="з" />
+    <key c="џ" />
+    <key c="ц" />
+    <key c="в" ne="&lt;" sw="." />
+    <key c="б" ne="&gt;" sw="," />
+    <key c="н" ne="\?" sw="/" />
+    <key c="м" ne=":" sw=";" />
+    <key c="ѓ" ne="`" sw="'" />
+    <key c="ж" ne="“" sw="„" />
+    <key role="action" width="1.5" c="backspace" ne="delete" />
+  </row>
+</keyboard>

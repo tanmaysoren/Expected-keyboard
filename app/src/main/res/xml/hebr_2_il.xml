@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Hebrew 2" script="hebrew">
+  <row>
+    <key c="ץ" sw="!" se="esc" />
+    <key c="ן" sw="\@" />
+    <key c="ק" sw="\#" />
+    <key c="ר" sw="$" />
+    <key c="א" sw="f11" />
+    <key c="ט" ne="home" sw="^" nw="f12" />
+    <key c="ו" ne="page_down" sw="&amp;" nw="page_up" />
+    <key c="ת" ne="insert" sw="*" nw="end" />
+    <key c="ם" ne="9" sw="b(" se="lrm" />
+    <key width="1.333" c="פ" ne="0" sw="b)" se="rlm" />
+  </row>
+  <row>
+    <key width="1.333" c="ש" ne="`" nw="tab" sw="sindot_placeholder" />
+    <key c="ד" nw="~" />
+    <key c="ג" nw="geresh" ne="gershayim" />
+    <key c="כ" />
+    <key c="ע" />
+    <key c="י" ne="-" sw="_" se="maqaf" />
+    <key c="ח" ne="=" sw="+" />
+    <key c="ל" ne="b[" sw="b{" />
+    <key c="ך" ne="b]" sw="b}" />
+    <key c="ף" ne="'" sw="&quot;" nw=":" />
+  </row>
+  <row>
+    <key c="\\" nw="|" ne="shift" sw="capslock" />
+    <key c="ז" />
+    <key c="ס" />
+    <key c="ב" />
+    <key c="ה" />
+    <key c="נ" />
+    <key c="מ" nw="blt" ne="," />
+    <key c="צ" nw="bgt" ne="." />
+    <key c="/" nw="\?" />
+    <key role="action" width="1.333" c="backspace" ne="delete" />
+  </row>
+</keyboard>

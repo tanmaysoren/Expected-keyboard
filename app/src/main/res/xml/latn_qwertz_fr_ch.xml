@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTZ (Swiss French)" script="latin">
+  <row>
+    <key c="q" se="esc" />
+    <key c="w" ne="2" sw="&quot;" se="\@" />
+    <key c="e" sw="\#" se="€" />
+    <key c="r" />
+    <key c="t" sw="f11" />
+    <key c="z" ne="home" sw="page_up" nw="f12" />
+    <key c="u" nw="page_down" ne="7" sw="{" />
+    <key c="i" ne="insert" sw="[" nw="end" />
+    <key c="o" nw="œ" ne="9" sw="(" />
+    <key c="p" ne="0" sw="=" se="\?" />
+    <key c="è" ne="ü" sw="!" />
+  </row>
+  <row>
+    <key c="a" nw="æ" ne="tab" />
+    <key c="s" nw="`" sw="ß" se="£" />
+    <key c="d" />
+    <key c="f" nw="~" />
+    <key c="g" />
+    <key c="h" sw="+" />
+    <key c="j" sw="*" />
+    <key c="k" sw="/" />
+    <key c="l" nw="'" sw="\\" />
+    <key c="é" nw="ë" ne="ö" />
+    <key c="à" nw="ï" ne="ä" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="y" nw="&gt;" ne="|" sw="&lt;" />
+    <key c="x" />
+    <key c="c" sw="ç" />
+    <key c="v" />
+    <key c="b" nw=";" sw="," />
+    <key c="n" nw=":" sw="." />
+    <key c="m" nw="_" sw="-" />
+    <key c="ê" nw="â" ne="î" sw="ô" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

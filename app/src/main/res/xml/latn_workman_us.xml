@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="WORKMAN (US)" script="latin">
+  <row>
+    <key c="q" se="esc" />
+    <key c="d" sw="\@" />
+    <key c="r" ne="3" sw="\#" se="€" />
+    <key c="w" />
+    <key c="b" ne="f11" sw="f12" />
+    <key c="j" ne="page_up" sw="page_down" nw="home" />
+    <key c="f" ne="insert" sw="&amp;" nw="end" />
+    <key c="u" ne="8" sw="*" />
+    <key c="p" ne="9" sw="(" se=")" />
+    <key c=";" ne="0" sw=":" />
+  </row>
+  <row>
+    <key shift="0" c="a" nw="tab" ne="`" />
+    <key c="s" ne="§" sw="ß" />
+    <key c="h" />
+    <key c="t" />
+    <key c="g" />
+    <key c="y" ne="-" sw="_" />
+    <key c="n" ne="=" sw="+" />
+    <key c="e" se="}" sw="{" />
+    <key c="o" sw="[" se="]" />
+    <key c="i" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" ne="capslock" />
+    <key c="z" />
+    <key c="x" ne="†" />
+    <key c="m" />
+    <key c="c" ne="&lt;" sw="." />
+    <key c="v" ne="&gt;" sw="," />
+    <key c="k" ne="\?" sw="/" />
+    <key c="l" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

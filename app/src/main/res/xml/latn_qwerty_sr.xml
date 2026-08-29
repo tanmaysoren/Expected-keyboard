@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="QWERTY (Srpski, latinica)" script="latin">
+  <modmap>
+    <fn a="a" b="â" />
+    <fn a="o" b="ô" />
+    <fn a="e" b="æ" />
+    <fn a="€" b="œ" />
+    <fn a="cursor_left" b="home" />
+    <fn a="cursor_right" b="end" />
+    <fn a="word_left" b="home" />
+    <fn a="word_right" b="end" />
+  </modmap>
+  <row>
+    <key c="q" ne="1" se="esc" />
+    <key c="w" nw="~" ne="2" sw="\@" />
+    <key c="e" nw="!" ne="3" sw="\#" />
+    <key c="r" ne="4" sw="$" se="£" />
+    <key c="t" ne="5" sw="%" n="f11" />
+    <key c="y" ne="6" sw="^" nw="f12" />
+    <key c="u" ne="7" sw="&amp;" nw="page_down" />
+    <key c="i" ne="8" sw="*" />
+    <key c="o" ne="9" sw="(" se=")" />
+    <key c="p" nw="0" ne="print_screen" />
+  </row>
+  <row>
+    <key c="a" nw="tab" ne="`" sw="selectAll" />
+    <key c="s" ne="§" sw="ß" nw="š" />
+    <key c="d" nw="đ" />
+    <key c="f" />
+    <key c="g" ne="-" sw="_" />
+    <key c="h" ne="=" sw="+" />
+    <key c="j" sw="{" se="}" />
+    <key c="k" sw="[" se="]" />
+    <key c="l" ne="|" sw="\\" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" nw="superscript" ne="capslock" sw="subscript" />
+    <key c="z" nw="ž" />
+    <key c="x" ne="†" />
+    <key c="c" nw="ć" ne="&lt;" sw="." />
+    <key c="v" ne="&gt;" sw="," />
+    <key c="b" ne="\?" sw="/" />
+    <key c="n" ne=":" sw=";" />
+    <key c="m" ne="&quot;" sw="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>

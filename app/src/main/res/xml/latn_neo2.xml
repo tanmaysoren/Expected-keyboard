@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="Neo 2" bottom_row="false" script="latin">
+  <row>
+    <key c="x" se="…" />
+    <key c="v" se="_" />
+    <key c="l" se="[" />
+    <key c="c" se="]" />
+    <key c="w" ne="f12" nw="f11" sw="insert" />
+    <key c="k" ne="6" se="!" />
+    <key c="h" ne="7" se="&lt;" />
+    <key c="g" ne="8" se="&gt;" />
+    <key c="f" ne="9" se="=" />
+    <key c="q" ne="0" se="&amp;" />
+    <key c="ß" nw="—" />
+  </row>
+  <row>
+    <key c="u" nw="tab" se="\\" />
+    <key c="i" ne="insert" se="/" />
+    <key c="a" se="{" />
+    <key c="e" se="}" />
+    <key c="o" se="*" />
+    <key c="s" se="\?" />
+    <key c="n" se="(" />
+    <key c="r" se=")" />
+    <key c="t" se="-" />
+    <key c="d" se=":" />
+    <key c="y" sw="\@" />
+  </row>
+  <row>
+    <key width="1.5" role="action" c="shift" nw="esc" ne="capslock" />
+    <key c="ü" se="\#" />
+    <key c="ö" se="$" />
+    <key c="ä" se="|" />
+    <key c="p" se="~" />
+    <key c="z" se="`" />
+    <key c="b" se="+" />
+    <key c="m" se="%" />
+    <key c="." nw="," ne="insert" sw="&quot;" se="'" />
+    <key width="1.5" role="action" c="backspace" ne="delete" />
+  </row>
+  <row height="0.95">
+    <key width="1.7" role="action" c="ctrl" nw="switch_greekmath" ne="meta" se="switch_numeric" />
+    <key width="1.1" role="action" c="alt" ne="change_method" sw="switch_emoji" se="config" />
+    <key width="4.4" role="space_bar" c="space" n="switch_forward" s="switch_backward" w="word_left" e="word_right" />
+    <key width="1.1" role="action" c="compose" n="up" e="right" w="left" s="down" nw="home" ne="page_up" sw="end" se="page_down" />
+    <key c="j" se=";" />
+    <key width="1.7" role="action" c="enter" ne="action" se="toggle_floating" />
+  </row>
+</keyboard>

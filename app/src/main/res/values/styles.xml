@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Candidates view -->
+  <style name="candidates_view">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:gravity">end|center_vertical</item>
+    <item name="android:paddingEnd">6dp</item>
+    <item name="android:paddingStart">2dp</item>
+    <item name="android:background">@drawable/candidates_background</item>
+  </style>
+  <style name="candidates_item">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:layout_marginStart">2dp</item>
+    <item name="android:layout_marginEnd">2dp</item>
+    <item name="android:layout_marginTop">@dimen/candidates_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/candidates_margin_vertical</item>
+    <item name="android:paddingStart">8dp</item>
+    <item name="android:paddingEnd">8dp</item>
+    <item name="android:paddingTop">6dp</item>
+    <item name="android:paddingBottom">6dp</item>
+    <item name="android:gravity">center</item>
+    <item name="android:background">@drawable/suggestions_item_background</item>
+    <item name="android:textColor">?attr/colorLabel</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:ellipsize">end</item>
+    <item name="android:singleLine">true</item>
+  </style>
+  <style name="candidates_emoji">
+    <item name="android:layout_width">42dp</item>
+    <item name="android:layout_height">42dp</item>
+    <item name="android:layout_weight">0</item>
+    <item name="android:layout_marginStart">4dp</item>
+    <item name="android:layout_marginEnd">4dp</item>
+    <item name="android:padding">@dimen/candidates_suggestions_padding</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textSize">22sp</item>
+  </style>
+  <style name="change_dictionary">
+    <item name="android:layout_width">@dimen/candidates_btn_width</item>
+    <item name="android:layout_height">@dimen/candidates_btn_width</item>
+    <item name="android:layout_weight">0</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:padding">@dimen/candidates_suggestions_padding</item>
+    <item name="android:background">@drawable/btn_change_dictionary</item>
+    <item name="android:gravity">center</item>
+  </style>
+  <style name="utility_bar_button">
+    <item name="android:layout_width">38dp</item>
+    <item name="android:layout_height">38dp</item>
+    <item name="android:layout_marginHorizontal">2dp</item>
+    <item name="android:padding">8dp</item>
+    <item name="android:scaleType">fitCenter</item>
+    <item name="android:background">@drawable/utility_button_background</item>
+    <item name="android:tint">?attr/colorLabel</item>
+  </style>
+  <style name="candidates_status">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textColor">?attr/colorLabel</item>
+  </style>
+  <!-- Emoji pane -->
+  <style name="emojiTypeButton">
+    <item name="android:padding">1px</item>
+    <item name="android:gravity">center</item>
+    <item name="android:minHeight">18dp</item>
+    <item name="android:background">?attr/emoji_button_bg</item>
+    <item name="android:textColor">?attr/emoji_key_text</item>
+    <item name="android:textSize">18dp</item>
+  </style>
+  <style name="emojiGridButton">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textSize">@dimen/emoji_text_size</item>
+    <item name="android:textColor">?attr/emoji_color</item>
+  </style>
+  <!-- Clipboard pane -->
+  <style name="clipboardEntry">
+    <item name="android:layout_weight">1</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginHorizontal">14dp</item>
+    <item name="android:layout_marginVertical">14dp</item>
+    <item name="android:textSize">16dp</item>
+    <item name="android:textColor">?attr/colorLabel</item>
+  </style>
+  <style name="clipboardHeading">
+    <item name="android:layout_marginHorizontal">6dp</item>
+    <item name="android:layout_marginTop">14dp</item>
+    <item name="android:layout_marginBottom">0dp</item>
+    <item name="android:textSize">14dp</item>
+    <item name="android:fontWeight">700</item>
+    <item name="android:textColor">?attr/colorSubLabel</item>
+  </style>
+  <style name="clipboardEntryButtons">
+    <item name="android:orientation">horizontal</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:layout_marginRight">12dp</item>
+  </style>
+  <style name="clipboardEntryButton">
+    <item name="android:layout_width">24dp</item>
+    <item name="android:layout_height">24dp</item>
+    <item name="android:layout_marginHorizontal">2dp</item>
+    <item name="android:backgroundTint">?attr/colorLabel</item>
+    <item name="android:backgroundTintMode">src_in</item>
+  </style>
+
+  <!-- ============================================== -->
+  <!-- DARK GLASSMORPHISM / FROSTED OBSIDIAN THEME & STYLES -->
+  <!-- ============================================== -->
+
+  <!-- App Theme (Frosted Obsidian & Electric Indigo/Violet) -->
+  <style name="appTheme" parent="@android:style/Theme.Material">
+    <item name="android:windowBackground">@drawable/cyber_app_bg</item>
+    <item name="android:colorBackground">#0B0D14</item>
+    <item name="android:colorPrimary">#8B5CF6</item>
+    <item name="android:colorPrimaryDark">#07080D</item>
+    <item name="android:colorAccent">#8B5CF6</item>
+    <item name="android:colorControlActivated">#8B5CF6</item>
+    <item name="android:colorControlHighlight">#268B5CF6</item>
+    <item name="android:colorControlNormal">#64748B</item>
+    <item name="android:colorButtonNormal">#1E2235</item>
+    <item name="android:textColorPrimary">#F1F5F9</item>
+    <item name="android:textColorSecondary">#94A3B8</item>
+    <item name="android:textColorTertiary">#C4B5FD</item>
+    <item name="android:listChoiceIndicatorMultiple">@drawable/cyber_checkbox_selector</item>
+    <item name="android:listChoiceIndicatorSingle">@drawable/cyber_checkbox_selector</item>
+    <item name="android:editTextColor">#F1F5F9</item>
+    <item name="android:seekBarStyle">@style/CyberSeekBar</item>
+    <item name="android:alertDialogTheme">@style/CyberAlertDialog</item>
+    <item name="android:dialogTheme">@style/CyberDialog</item>
+  </style>
+
+  <!-- Settings Activity Theme -->
+  <style name="settingsTheme" parent="appTheme">
+    <item name="android:fitsSystemWindows">true</item>
+    <item name="android:listSeparatorTextViewStyle">@style/CyberPreferenceCategory</item>
+  </style>
+
+  <!-- Glassmorphism Preference Category Header -->
+  <style name="CyberPreferenceCategory">
+    <item name="android:textColor">#A78BFA</item>
+    <item name="android:textSize">12sp</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:paddingTop">16dp</item>
+    <item name="android:paddingBottom">6dp</item>
+    <item name="android:paddingStart">18dp</item>
+    <item name="android:paddingEnd">18dp</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:letterSpacing">0.08</item>
+  </style>
+
+  <!-- Glassmorphism SeekBar Style -->
+  <style name="CyberSeekBar" parent="@android:style/Widget.Material.SeekBar">
+    <item name="android:progressDrawable">@drawable/cyber_seekbar_progress</item>
+    <item name="android:thumb">@drawable/cyber_seekbar_thumb</item>
+    <item name="android:minHeight">28dp</item>
+    <item name="android:maxHeight">28dp</item>
+    <item name="android:splitTrack">false</item>
+    <item name="android:paddingStart">12dp</item>
+    <item name="android:paddingEnd">12dp</item>
+  </style>
+
+  <!-- Glassmorphic Dialog Themes -->
+  <style name="CyberSectionDialogTheme" parent="@android:style/Theme.Material.Dialog">
+    <item name="android:windowBackground">@drawable/cyber_dialog_bg</item>
+    <item name="android:colorBackground">#121522</item>
+    <item name="android:colorPrimary">#8B5CF6</item>
+    <item name="android:colorPrimaryDark">#07080D</item>
+    <item name="android:colorAccent">#8B5CF6</item>
+    <item name="android:colorControlActivated">#8B5CF6</item>
+    <item name="android:colorControlHighlight">#268B5CF6</item>
+    <item name="android:colorControlNormal">#64748B</item>
+    <item name="android:colorButtonNormal">#1E2235</item>
+    <item name="android:textColorPrimary">#F1F5F9</item>
+    <item name="android:textColorSecondary">#94A3B8</item>
+    <item name="android:textColorTertiary">#C4B5FD</item>
+    <item name="android:listChoiceIndicatorMultiple">@drawable/cyber_checkbox_selector</item>
+    <item name="android:listChoiceIndicatorSingle">@drawable/cyber_checkbox_selector</item>
+    <item name="android:editTextColor">#F1F5F9</item>
+    <item name="android:listSeparatorTextViewStyle">@style/CyberPreferenceCategory</item>
+    <item name="android:seekBarStyle">@style/CyberSeekBar</item>
+    <item name="android:alertDialogTheme">@style/CyberAlertDialog</item>
+    <item name="android:dialogTheme">@style/CyberDialog</item>
+    <item name="android:windowIsFloating">true</item>
+    <item name="android:windowCloseOnTouchOutside">true</item>
+    <item name="android:windowElevation">16dp</item>
+  </style>
+
+  <style name="CyberAlertDialog" parent="@android:style/Theme.Material.Dialog.Alert">
+    <item name="android:windowBackground">@drawable/cyber_dialog_bg</item>
+    <item name="android:colorBackground">#121522</item>
+    <item name="android:colorAccent">#8B5CF6</item>
+    <item name="android:textColorPrimary">#F1F5F9</item>
+    <item name="android:textColorSecondary">#94A3B8</item>
+    <item name="android:textColor">#F1F5F9</item>
+    <item name="android:listChoiceIndicatorMultiple">@drawable/cyber_checkbox_selector</item>
+    <item name="android:listChoiceIndicatorSingle">@drawable/cyber_checkbox_selector</item>
+    <item name="android:buttonBarPositiveButtonStyle">@style/CyberDialogButtonPositive</item>
+    <item name="android:buttonBarNegativeButtonStyle">@style/CyberDialogButtonNegative</item>
+    <item name="android:buttonBarNeutralButtonStyle">@style/CyberDialogButtonNeutral</item>
+    <item name="android:seekBarStyle">@style/CyberSeekBar</item>
+  </style>
+
+  <style name="CyberDialog" parent="@android:style/Theme.Material.Dialog">
+    <item name="android:windowBackground">@drawable/cyber_dialog_bg</item>
+    <item name="android:colorBackground">#121522</item>
+    <item name="android:colorAccent">#8B5CF6</item>
+    <item name="android:textColorPrimary">#F1F5F9</item>
+    <item name="android:textColorSecondary">#94A3B8</item>
+    <item name="android:buttonBarPositiveButtonStyle">@style/CyberDialogButtonPositive</item>
+    <item name="android:buttonBarNegativeButtonStyle">@style/CyberDialogButtonNegative</item>
+    <item name="android:buttonBarNeutralButtonStyle">@style/CyberDialogButtonNeutral</item>
+    <item name="android:seekBarStyle">@style/CyberSeekBar</item>
+  </style>
+
+  <style name="CyberDialogButtonPositive" parent="@android:style/Widget.Material.Button.Borderless">
+    <item name="android:textColor">#A78BFA</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:paddingHorizontal">16dp</item>
+  </style>
+
+  <style name="CyberDialogButtonNegative" parent="@android:style/Widget.Material.Button.Borderless">
+    <item name="android:textColor">#94A3B8</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:paddingHorizontal">16dp</item>
+  </style>
+
+  <style name="CyberDialogButtonNeutral" parent="@android:style/Widget.Material.Button.Borderless">
+    <item name="android:textColor">#F43F5E</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:paddingHorizontal">16dp</item>
+  </style>
+
+  <!-- Launcher Activity Styles -->
+  <style name="paragraph">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginVertical">8dp</item>
+    <item name="android:layout_marginHorizontal">20dp</item>
+    <item name="android:textColor">#94A3B8</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:lineSpacingExtra">3dp</item>
+  </style>
+
+  <style name="anim">
+    <item name="android:adjustViewBounds">true</item>
+    <item name="android:layout_height">86dp</item>
+    <item name="android:layout_width">86dp</item>
+    <item name="android:padding">6dp</item>
+  </style>
+
+  <style name="anim_text">
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginStart">14dp</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:layout_width">0dp</item>
+    <item name="android:textColor">#F1F5F9</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="anim_box">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginHorizontal">18dp</item>
+    <item name="android:layout_marginVertical">6dp</item>
+    <item name="android:background">@drawable/cyber_card_bg</item>
+    <item name="android:padding">14dp</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:orientation">horizontal</item>
+  </style>
+
+  <!-- Dictionaries Activity Styles -->
+  <style name="dictionary_list_view">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginHorizontal">16dp</item>
+    <item name="android:layout_marginVertical">12dp</item>
+  </style>
+
+  <style name="dictionary_download_item">
+    <item name="android:orientation">horizontal</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:background">@drawable/cyber_card_bg</item>
+    <item name="android:layout_marginVertical">4dp</item>
+    <item name="android:paddingHorizontal">16dp</item>
+    <item name="android:paddingVertical">14dp</item>
+  </style>
+
+  <style name="dictionary_download_locale">
+    <item name="android:layout_weight">1</item>
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">15sp</item>
+    <item name="android:textColor">#F1F5F9</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="dictionary_download_size">
+    <item name="android:layout_weight">0</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginEnd">12dp</item>
+    <item name="android:textSize">12sp</item>
+    <item name="android:textColor">#C4B5FD</item>
+    <item name="android:background">@drawable/cyber_badge_bg</item>
+    <item name="android:paddingHorizontal">8dp</item>
+    <item name="android:paddingVertical">3dp</item>
+  </style>
+
+  <style name="dictionary_download_button">
+    <item name="android:layout_width">36dp</item>
+    <item name="android:layout_height">36dp</item>
+    <item name="android:padding">6dp</item>
+    <item name="android:background">@drawable/cyber_btn_cyan</item>
+    <item name="android:tint">#FFFFFF</item>
+    <item name="android:scaleType">fitCenter</item>
+  </style>
+
+</resources>

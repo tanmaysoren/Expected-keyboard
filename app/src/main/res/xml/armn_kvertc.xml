@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<keyboard name="ՔՎԸՐՏՃ" script="armenian">
+  <row>
+    <key c="ձ" sw="՛" />
+    <key c="յ" sw="/" />
+    <key c="խ" sw="՟" />
+    <key c="ծ" ne="4" sw="(" se=")" />
+    <key c="փ" sw="_" />
+    <key c="ֆ" ne="6" sw="«" se="»" />
+    <key c="ղ" nw="f11" ne="f12" sw="—" />
+    <key c="ռ" nw="home" ne="page_up" sw="՚" />
+    <key c="օ" nw="page_down" ne="end" sw=";" />
+    <key c="ջ" nw="insert" ne="0" sw="ՙ" />
+  </row>
+  <row>
+    <key c="ք" se="esc" />
+    <key c="վ" />
+    <key c="ը" />
+    <key c="ր" />
+    <key c="տ" />
+    <key c="ճ" />
+    <key c="ւ" se="֏" />
+    <key c="ի" />
+    <key c="ո" />
+    <key c="պ" />
+  </row>
+  <row>
+    <key c="ա" nw="tab" />
+    <key c="ս" />
+    <key c="դ" />
+    <key c="հ" />
+    <key c="գ" />
+    <key c="է" />
+    <key c="թ" />
+    <key c="կ" />
+    <key c="լ" />
+    <key c="ե" ne="և" se=":" />
+  </row>
+  <row>
+    <key role="action" c="shift" ne="capslock" />
+    <key c="ց" />
+    <key c="զ" />
+    <key c="չ" />
+    <key c="ժ" />
+    <key c="բ" />
+    <key c="ն" />
+    <key c="մ" />
+    <key c="շ" se="." />
+    <key role="action" c="backspace" ne="delete" />
+  </row>
+</keyboard>
