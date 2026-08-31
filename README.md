@@ -113,7 +113,7 @@ sdkmanager "platforms;android-36" "build-tools;36.1.0" "platform-tools"
 
 ## Privacy & License
 
-This project is open-source and offline-first. No API keys required — `.env.example` is intentionally empty. See source for license.
+This project is open-source and offline-first.  `.env.example` is intentionally empty. See source for license.
 
 ## App Info
 
