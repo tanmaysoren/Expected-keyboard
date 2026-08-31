@@ -3,6 +3,7 @@ package expected.keyboard2;
 import android.view.KeyEvent;
 import java.util.HashMap;
 
+@SuppressWarnings("unchecked")
 public final class KeyValue implements Comparable<KeyValue>
 {
   public static enum Event

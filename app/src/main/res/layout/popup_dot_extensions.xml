@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/popup_dot_bg"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="6dp"
+    android:elevation="8dp">
+
+    <!-- Extensions will be added dynamically -->
+    <LinearLayout
+        android:id="@+id/popup_extensions_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical" />
+
+</LinearLayout>

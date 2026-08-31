@@ -20,6 +20,7 @@ import org.json.JSONException;
 
 /** Allows to enter custom keys to be added to the keyboard. This shows up at
     the top of the "Add keys to the keyboard" option. */
+@SuppressWarnings("deprecation")
 public class CustomExtraKeysPreference extends ListGroupPreference<String>
 {
   /** This pref stores a list of strings encoded as JSON. */

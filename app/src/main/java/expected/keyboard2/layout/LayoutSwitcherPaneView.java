@@ -199,7 +199,7 @@ public class LayoutSwitcherPaneView extends LinearLayout
   {
     if (name == null) return false;
     String n = name.toLowerCase(Locale.ROOT);
-    return n.equals("system") || n.contains("qwerty_us") || n.contains("qwerty_uk") || n.contains("colemak")
+    return n.contains("qwerty_us") || n.contains("qwerty_uk") || n.contains("colemak")
         || n.contains("dvorak") || n.contains("azerty") || n.contains("qwertz_de") || n.contains("spanish")
         || n.contains("french") || n.contains("german") || n.contains("russian") || n.contains("hindi")
         || n.contains("arabic") || n.contains("japanese") || n.contains("korean") || n.contains("portuguese");
@@ -233,10 +233,6 @@ public class LayoutSwitcherPaneView extends LinearLayout
       addedNames.add(name);
 
       String display = (i < layoutDisplayNames.length) ? layoutDisplayNames[i] : name;
-      if ("system".equals(name))
-      {
-        display = "System Layout (Default)";
-      }
       String category = determineCategory(name);
 
       // Check if in active list
@@ -249,7 +245,7 @@ public class LayoutSwitcherPaneView extends LinearLayout
         {
           KeyboardData kd = activeLayouts.get(a);
           String rName = (kd != null && kd.resourceName != null) ? kd.resourceName : null;
-          String aName = (kd != null && kd.name != null) ? kd.name : "system";
+          String aName = (kd != null && kd.name != null) ? kd.name : "latn_qwerty_us";
           if (name.equals(rName) || name.equals(aName))
           {
             inActive = true;
@@ -270,16 +266,12 @@ public class LayoutSwitcherPaneView extends LinearLayout
       {
         KeyboardData kd = activeLayouts.get(a);
         String rName = (kd != null && kd.resourceName != null) ? kd.resourceName : null;
-        String aName = (kd != null && kd.name != null) ? kd.name : "system";
+        String aName = (kd != null && kd.name != null) ? kd.name : "latn_qwerty_us";
         String primaryKey = (rName != null) ? rName : aName;
         if (!addedNames.contains(primaryKey))
         {
           addedNames.add(primaryKey);
           String display = (kd != null && kd.name != null) ? kd.name : primaryKey;
-          if ("system".equals(primaryKey))
-          {
-            display = "System Layout (Default)";
-          }
           allLayoutItems.add(new LayoutItem(primaryKey, display, determineCategory(primaryKey), true, (a == currentActiveIdx), a));
         }
       }

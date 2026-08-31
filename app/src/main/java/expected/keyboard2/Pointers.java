@@ -238,9 +238,9 @@ public final class Pointers implements Handler.Callback
   private KeyValue getNearestKeyAtDirection(Pointer ptr, int direction)
   {
     KeyValue k;
-    // [i] is [0, -1, +1, ..., -3, +3], scanning 43% of the circle's area,
-    // centered on the initial swipe direction.
-    for (int i = 0; i > -4; i = (~i>>31) - i)
+    // [i] is [0, -1, +1, ..., -4, +4], scanning 56% of the circle's area,
+    // centered on the initial swipe direction — more forgiving for navigation arrows.
+    for (int i = 0; i > -5; i = (~i>>31) - i)
     {
       int d = (direction + i + 16) % 16;
       // Don't make the difference between a key that doesn't exist and a key
@@ -257,6 +257,13 @@ public final class Pointers implements Handler.Callback
         return k;
       }
     }
+    return null;
+  }
+
+  private KeyValue findNavKey(KeyboardData.Key k, String primary, String secondary) {
+    if (k == null) return null;
+    for (int i = 0; i < 9; i++) if (k.keys[i] != null && primary.equals(k.keys[i].getString())) return k.keys[i];
+    if (secondary != null) for (int i = 0; i < 9; i++) if (k.keys[i] != null && secondary.equals(k.keys[i].getString())) return k.keys[i];
     return null;
   }
 
@@ -278,7 +285,24 @@ public final class Pointers implements Handler.Callback
     float dy = y - ptr.downY;
 
     float dist = Math.abs(dx) + Math.abs(dy);
-    if (dist < _config.swipe_dist_px)
+    float threshold = _config.swipe_dist_px;
+    // Fat-finger fix: navigation arrows (space+dpad) — ultra-sensitive little swipe, bigger hitbox
+    if (ptr.key != null) {
+      boolean isNav = false;
+      boolean isDpad = false;
+      for (int k = 1; k < 9; k++) {
+        if (ptr.key.keys[k] != null) {
+          String s = ptr.key.keys[k].getString();
+          if ("word_left".equals(s) || "word_right".equals(s) || "left".equals(s) || "right".equals(s) || "up".equals(s) || "down".equals(s)) {
+            isNav = true;
+            if (ptr.key.keys[0]==null) isDpad=true; // dpad has no center => even more sensitive
+            break;
+          }
+        }
+      }
+      if (isNav) threshold *= isDpad ? 0.12f : 0.30f;
+    }
+    if (dist < threshold)
     {
       // Pointer is still on the center.
       if (ptr.gesture == null || !ptr.gesture.is_in_progress())
@@ -289,11 +313,42 @@ public final class Pointers implements Handler.Callback
       ptr.flags = 0;
 
     }
-    else
-    { // Pointer is on a quadrant.
-      // See [getKeyAtDirection()] for the meaning. The starting point on the
-      // circle is the top direction.
-      double a = Math.atan2(dy, dx) + Math.PI;
+      else
+      { // Pointer is on a quadrant.
+        // Special forgiving handling for navigation arrows next to spacebar — use dominant axis
+        if (ptr.key != null) {
+          boolean hasNav = false;
+          for (int k = 1; k < 9; k++) {
+            if (ptr.key.keys[k] != null) {
+              String s = ptr.key.keys[k].getString();
+              if ("left".equals(s) || "right".equals(s) || "up".equals(s) || "down".equals(s) || "word_left".equals(s) || "word_right".equals(s)) { hasNav = true; break; }
+            }
+          }
+          if (hasNav) {
+            KeyValue navKv = null;
+            if (Math.abs(dx) > Math.abs(dy)) {
+              // Horizontal dominant
+              navKv = dx < 0 ? findNavKey(ptr.key, "left", null) : findNavKey(ptr.key, "right", null);
+            } else {
+              // Vertical dominant
+              navKv = dy < 0 ? findNavKey(ptr.key, "up", null) : findNavKey(ptr.key, "down", null);
+            }
+            if (navKv != null) {
+              // Never apply fn/modifiers to navigation pad — keep pure left/right/up/down, remove home/end completely
+              KeyValue modNav = _handler.modifyKey(navKv, Pointers.Modifiers.EMPTY);
+              if (modNav != null && !modNav.equals(ptr.value)) {
+                if (ptr.gesture == null) ptr.gesture = new Gesture(0);
+                ptr.value = modNav;
+                ptr.flags = pointer_flags_of_kv(modNav);
+                _handler.onPointerDown(modNav, true);
+                return;
+              }
+            }
+          }
+        }
+        // See [getKeyAtDirection()] for the meaning. The starting point on the
+        // circle is the top direction.
+        double a = Math.atan2(dy, dx) + Math.PI;
       // a is between 0 and 2pi, 0 is pointing to the left
       // add 12 to align 0 to the top
       int direction = ((int)(a * 8 / Math.PI) + 12) % 16;
@@ -465,6 +520,9 @@ public final class Pointers implements Handler.Callback
     }
     // Special keys
     if (kv.hasFlagsAny(KeyValue.FLAG_SPECIAL))
+      return;
+    // Dot extension key is non-repeatable - shows popup instead
+    if (kv.getKind() == KeyValue.Kind.Char && ".".equals(kv.getString()))
       return;
     // For every other keys, key-repeat
     if (_config.keyrepeat_enabled)

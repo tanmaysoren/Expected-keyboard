@@ -17,11 +17,12 @@ import expected.keyboard2.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@SuppressWarnings("deprecation")
 public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Layout>
 {
   static final String KEY = "layouts";
   static final List<Layout> DEFAULT =
-    Collections.singletonList((Layout)new SystemLayout());
+    Collections.singletonList((Layout)new NamedLayout("latn_qwerty_us"));
   static final ListGroupPreference.Serializer<Layout> SERIALIZER =
     new Serializer();
 
@@ -40,7 +41,7 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
   static List<String> _unsafe_layout_ids_str = null;
   static TypedArray _unsafe_layout_ids_res = null;
 
-  /** Layout internal names. Contains "system" and "custom". */
+  /** Layout internal names. Contains "custom". System removed. */
   public static List<String> get_layout_names(Resources res)
   {
     if (_unsafe_layout_ids_str == null)
@@ -52,8 +53,9 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
   /** Layout resource id for a layout name. [-1] if not found. */
   public static int layout_id_of_name(Resources res, String name)
   {
-    if (name == null || name.isEmpty() || "system".equals(name) || "custom".equals(name))
+    if (name == null || name.isEmpty() || "custom".equals(name))
       return -1;
+    if ("system".equals(name)) name = "latn_qwerty_us";
 
     // 1. Direct XML resource identifier lookup (fast, resilient, always works)
     try
@@ -86,7 +88,7 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
     return -1;
   }
 
-  /** [null] for the "system" layout. */
+  /** System layout removed - qwerty_us is default. */
   public static List<KeyboardData> load_from_preferences(Resources res, SharedPreferences prefs)
   {
     List<KeyboardData> layouts = new ArrayList<KeyboardData>();
@@ -95,6 +97,7 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
       if (l instanceof NamedLayout)
       {
         String name = ((NamedLayout)l).name;
+        if ("system".equals(name)) name = "latn_qwerty_us";
         KeyboardData kd = layout_of_string(res, name);
         if (kd != null)
         {
@@ -104,8 +107,21 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
       }
       else if (l instanceof CustomLayout)
         layouts.add(((CustomLayout)l).parsed);
-      else // instanceof SystemLayout
-        layouts.add(null);
+      else // instanceof SystemLayout - legacy, migrate to qwerty_us
+      {
+        KeyboardData kd = layout_of_string(res, "latn_qwerty_us");
+        if (kd != null) {
+          kd.resourceName = "latn_qwerty_us";
+          layouts.add(kd);
+        }
+      }
+    }
+    if (layouts.isEmpty()) {
+      KeyboardData kd = layout_of_string(res, "latn_qwerty_us");
+      if (kd != null) {
+        kd.resourceName = "latn_qwerty_us";
+        layouts.add(kd);
+      }
     }
     return layouts;
   }
@@ -131,15 +147,16 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
       for (KeyboardData kd : list)
       {
         if (kd == null)
-          layouts.add(new SystemLayout());
+          layouts.add(new NamedLayout("latn_qwerty_us"));
         else if (kd.resourceName != null && !kd.resourceName.isEmpty() && !"system".equals(kd.resourceName))
           layouts.add(new NamedLayout(kd.resourceName));
         else if (kd.name != null && !kd.name.isEmpty() && !"system".equals(kd.name))
           layouts.add(new NamedLayout(kd.name));
         else
-          layouts.add(new SystemLayout());
+          layouts.add(new NamedLayout("latn_qwerty_us"));
       }
     }
+    if (layouts.isEmpty()) layouts.add(new NamedLayout("latn_qwerty_us"));
     save_to_preferences(editor, layouts);
     editor.apply();
   }
@@ -147,6 +164,7 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
   public static KeyboardData layout_of_string(Resources res, String name)
   {
     if (name == null) return null;
+    if ("system".equals(name)) name = "latn_qwerty_us";
     KeyboardData cached = s_layoutCache.get(name);
     if (cached != null) return cached;
     int id = layout_id_of_name(res, name);
@@ -177,6 +195,7 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
     if (l instanceof NamedLayout)
     {
       String lname = ((NamedLayout)l).name;
+      if ("system".equals(lname)) lname = "latn_qwerty_us";
       int value_i = get_layout_names(getContext().getResources()).indexOf(lname);
       return value_i < 0 ? lname : _layout_display_names[value_i];
     }
@@ -190,8 +209,8 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
       else
         return getContext().getString(R.string.pref_layout_e_custom);
     }
-    else // instanceof SystemLayout
-      return getContext().getString(R.string.pref_layout_e_system);
+    else // instanceof SystemLayout - legacy, show qwerty_us
+      return "QWERTY (US)";
   }
 
   @Override
@@ -229,13 +248,11 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
           String name = get_layout_names(getContext().getResources()).get(which);
           switch (name)
           {
-            case "system":
-              callback.select(new SystemLayout());
-              break;
             case "custom":
               select_custom(callback, read_initial_custom_layout());
               break;
             default:
+              if ("system".equals(name)) name = "latn_qwerty_us";
               callback.select(new NamedLayout(name));
               break;
           }
@@ -342,7 +359,7 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
   }
 
   /** Named layouts are serialized to strings and custom layouts to JSON
-      objects with a [kind] field. */
+       objects with a [kind] field. System removed. */
   public static class Serializer implements ListGroupPreference.Serializer<Layout>
   {
     public Layout load_item(Object obj) throws JSONException
@@ -351,14 +368,15 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
       {
         String name = (String)obj;
         if (name.equals("system"))
-          return new SystemLayout();
+          return new NamedLayout("latn_qwerty_us");
         return new NamedLayout(name);
       }
       JSONObject obj_ = (JSONObject)obj;
       switch (obj_.getString("kind"))
       {
         case "custom": return CustomLayout.parse(obj_.getString("xml"));
-        case "system": default: return new SystemLayout();
+        case "system": return new NamedLayout("latn_qwerty_us");
+        default: return new NamedLayout("latn_qwerty_us");
       }
     }
 
@@ -369,7 +387,7 @@ public class LayoutsPreference extends ListGroupPreference<LayoutsPreference.Lay
       if (v instanceof CustomLayout)
         return new JSONObject().put("kind", "custom")
           .put("xml", ((CustomLayout)v).xml);
-      return new JSONObject().put("kind", "system");
+      return "latn_qwerty_us";
     }
   }
 }

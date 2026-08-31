@@ -16,6 +16,7 @@ import org.json.JSONException;
 /** A list of preferences where the users can add items to the end and modify
     and remove items. Backed by a string list. Implement user selection in
     [select()]. */
+@SuppressWarnings("deprecation")
 public abstract class ListGroupPreference<E> extends PreferenceGroup
 {
   boolean _attached = false;

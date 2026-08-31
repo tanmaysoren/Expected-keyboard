@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <!-- DO NOT EDIT. This file is generated, run 'gradle genLayoutsList'. -->
+  <!-- System layout removed - qwerty_us is now default -->
   <string-array name="pref_layout_values">
-    <item>system</item>
     <item>latn_qwerty_us</item>
     <item>latn_colemak</item>
     <item>latn_dvorak</item>
@@ -96,7 +95,6 @@
     <item>custom</item>
   </string-array>
   <string-array name="pref_layout_entries">
-    <item>@string/pref_layout_e_system</item>
     <item>QWERTY (US)</item>
     <item>Colemak</item>
     <item>Dvorak</item>
@@ -190,7 +188,6 @@
     <item>@string/pref_layout_e_custom</item>
   </string-array>
   <integer-array name="layout_ids">
-    <item>-1</item>
     <item>@xml/latn_qwerty_us</item>
     <item>@xml/latn_colemak</item>
     <item>@xml/latn_dvorak</item>

@@ -397,6 +397,13 @@ public final class KeyModifier
   /** Modify a key affected by a round-trip or a clockwise circle gesture. */
   private static KeyValue apply_gesture(KeyValue k)
   {
+    // Fix: navigation arrows (dpad) should stay as simple up/down/left/right, never become home/end/pgup/pgdown via roundtrip gesture
+    if (k != null && k.getKind() == KeyValue.Kind.Keyevent) {
+      int code = k.getKeyevent();
+      if (code == android.view.KeyEvent.KEYCODE_DPAD_LEFT || code == android.view.KeyEvent.KEYCODE_DPAD_RIGHT || code == android.view.KeyEvent.KEYCODE_DPAD_UP || code == android.view.KeyEvent.KEYCODE_DPAD_DOWN) {
+        return k;
+      }
+    }
     KeyValue modified = apply_shift(k);
     if (_modmap != null)
     {

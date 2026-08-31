@@ -60,6 +60,26 @@
       <TextView android:id="@+id/candidates_5" style="@style/candidates_item"/>
     </LinearLayout>
 
+    <!-- Terminal Commands Scrollable Container -->
+    <HorizontalScrollView
+        android:id="@+id/terminal_suggestions_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        android:fillViewport="false"
+        android:visibility="gone">
+
+      <LinearLayout
+          android:id="@+id/terminal_suggestions_inner"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:orientation="horizontal"
+          android:gravity="center_vertical"
+          android:paddingHorizontal="4dp">
+      </LinearLayout>
+    </HorizontalScrollView>
+
     <!-- FUTO-style Utility Action Bar Container -->
     <HorizontalScrollView
         android:id="@+id/utility_bar_container"
@@ -119,9 +139,9 @@
             android:src="@drawable/ic_futo_emoji"
             android:contentDescription="@string/util_bar_emoji"/>
 
-        <!-- Language / Layout Switcher -->
+        <!-- Language Switcher (popup) -->
         <ImageButton
-            android:id="@+id/util_btn_layout"
+            android:id="@+id/util_btn_language"
             style="@style/utility_bar_button"
             android:src="@drawable/ic_futo_layout"
             android:contentDescription="@string/util_bar_layout"/>

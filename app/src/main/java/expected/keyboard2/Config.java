@@ -34,8 +34,7 @@ public final class Config
   public final float labelTextSize;
   public final float sublabelTextSize;
 
-  // From preferences
-  /** [null] represent the [system] layout. */
+  // From preferences - default is qwerty_us, no system layout
   public List<KeyboardData> layouts;
   public boolean show_numpad = false;
   // From the 'numpad_layout' option, also apply to the numeric pane.
@@ -45,6 +44,9 @@ public final class Config
   public float swipe_dist_px;
   public float slide_step_px;
   public boolean suggestions_enabled;
+  public boolean show_suggestion_bar; // persistent bar toggle
+  public java.util.Set<String> terminal_commands; // custom commands for terminal apps
+  public java.util.Set<String> custom_emails; // custom emails for login fields
   // Let the system handle vibration when false.
   public boolean vibrate_custom;
   // Control the vibration if [vibrate_custom] is true.
@@ -133,12 +135,14 @@ public final class Config
     String show_numpad_s = _prefs.getString("show_numpad", "never");
     show_numpad = "always".equals(show_numpad_s);
     int keyboardHeightPercent;
+    // Floating mode should not use landscape scaling — keys were too big
+    boolean isFloatingForScale = isFloatingMode();
     if (orientation_landscape)
     {
       if ("landscape".equals(show_numpad_s))
         show_numpad = true;
       keyboardHeightPercent = _prefs.getInt(foldable_unfolded ? "keyboard_height_landscape_unfolded" : "keyboard_height_landscape", 50);
-      characterSizeScale = 1.25f;
+      characterSizeScale = isFloatingForScale ? 1.0f : 1.25f;
     }
     else
     {
@@ -150,6 +154,23 @@ public final class Config
     add_number_row = !number_row.equals("no_number_row");
     number_row_symbols = number_row.equals("symbols");
     suggestions_enabled = _prefs.getBoolean("suggestions", true);
+    show_suggestion_bar = _prefs.getBoolean("show_suggestion_bar", true);
+    // Load terminal custom commands (default: common shell commands)
+    java.util.Set<String> defaultCmds = new java.util.HashSet<>();
+    defaultCmds.add("ls"); defaultCmds.add("ls -la"); defaultCmds.add("cd"); defaultCmds.add("pwd");
+    defaultCmds.add("git status"); defaultCmds.add("git log"); defaultCmds.add("git pull"); defaultCmds.add("git push");
+    defaultCmds.add("clear"); defaultCmds.add("exit"); defaultCmds.add("vim"); defaultCmds.add("nano");
+    defaultCmds.add("cat"); defaultCmds.add("grep"); defaultCmds.add("find"); defaultCmds.add("ps aux");
+    defaultCmds.add("top"); defaultCmds.add("kill"); defaultCmds.add("chmod +x"); defaultCmds.add("mkdir");
+    defaultCmds.add("rm -rf"); defaultCmds.add("cp -r"); defaultCmds.add("mv");
+    terminal_commands = _prefs.getStringSet("terminal_commands", defaultCmds);
+    // Ensure mutable copy
+    if (terminal_commands != null) terminal_commands = new java.util.HashSet<>(terminal_commands);
+    // Load custom emails for login fields
+    java.util.Set<String> defaultEmails = new java.util.HashSet<>();
+    // No default emails - user adds their own
+    custom_emails = _prefs.getStringSet("custom_emails", defaultEmails);
+    if (custom_emails != null) custom_emails = new java.util.HashSet<>(custom_emails);
     autocorrect_enabled = _prefs.getBoolean("autocorrect", true);
     // The baseline for the swipe distance correspond to approximately the
     // width of a key in portrait mode, as most layouts have 10 columns.
@@ -397,7 +418,7 @@ public final class Config
         // Primary, secondary and custom layout options are merged into the new
         // Layouts option. This also sets the default value.
         List<LayoutsPreference.Layout> l = new ArrayList<LayoutsPreference.Layout>();
-        l.add(migrate_layout(prefs.getString("layout", "system")));
+        l.add(migrate_layout(prefs.getString("layout", "latn_qwerty_us")));
         String snd_layout = prefs.getString("second_layout", "none");
         if (snd_layout != null && !snd_layout.equals("none"))
           l.add(migrate_layout(snd_layout));
@@ -439,7 +460,7 @@ public final class Config
   private static LayoutsPreference.Layout migrate_layout(String name)
   {
     if (name == null || name.equals("system"))
-      return new LayoutsPreference.SystemLayout();
+      return new LayoutsPreference.NamedLayout("latn_qwerty_us");
     return new LayoutsPreference.NamedLayout(name);
   }
 }

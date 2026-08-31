@@ -16,6 +16,7 @@ import expected.keyboard2.*;
 
 /** This class implements the "extra keys" preference but also defines the
     possible extra keys. */
+@SuppressWarnings("deprecation")
 public class ExtraKeysPreference extends PreferenceCategory
 {
   /** Array of the keys that can be selected. */
@@ -23,7 +24,6 @@ public class ExtraKeysPreference extends PreferenceCategory
   {
     "alt",
     "meta",
-    "compose",
     "switch_clipboard",
     "€",
     "ß",

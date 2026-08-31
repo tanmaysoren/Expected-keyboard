@@ -5,6 +5,11 @@
     <CheckBoxPreference android:key="autocorrect" android:title="@string/pref_autocorrect_title" android:summary="@string/pref_autocorrect_summary" android:defaultValue="true" android:dependency="suggestions"/>
     <CheckBoxPreference android:key="space_bar_auto_complete" android:title="@string/pref_space_bar_auto_complete_title" android:summary="@string/pref_space_bar_auto_complete_summary" android:defaultValue="false" android:dependency="suggestions"/>
     <expected.keyboard2.prefs.SlideBarPreference android:key="suggestion_font_scale" android:title="@string/pref_suggestion_font_scale_title" android:summary="@string/pref_suggestion_font_scale_summary" android:defaultValue="1.0" min="0.7" max="1.8" android:dependency="suggestions"/>
+    <CheckBoxPreference android:key="show_suggestion_bar" android:title="@string/pref_show_suggestion_bar_title" android:summary="@string/pref_show_suggestion_bar_summary" android:defaultValue="true"/>
+    <expected.keyboard2.prefs.TerminalCommandsPreference android:key="terminal_commands_pref" android:title="@string/pref_terminal_commands_title" android:summary="@string/pref_terminal_commands_summary"/>
+    <expected.keyboard2.prefs.LearnedWordsPreference android:key="learned_words_pref" android:title="@string/pref_learned_words_title" android:summary="@string/pref_learned_words_summary"/>
+    <expected.keyboard2.prefs.CustomExtensionsPreference android:key="custom_extensions_pref" android:title="@string/pref_custom_extensions_title" android:summary="@string/pref_custom_extensions_summary"/>
+    <expected.keyboard2.prefs.CustomEmailsPreference android:key="custom_emails_pref" android:title="@string/pref_custom_emails_title" android:summary="@string/pref_custom_emails_summary"/>
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/pref_category_layout">
     <expected.keyboard2.prefs.LayoutsPreference/>

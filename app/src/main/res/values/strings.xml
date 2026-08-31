@@ -96,6 +96,16 @@
     <string name="pref_swipe_dist_e_very_far">Very far</string>
     <string name="pref_suggestion_font_scale_title">Suggestion text size</string>
     <string name="pref_suggestion_font_scale_summary">Adjust font size for prediction bar (%.2fx)</string>
+    <string name="pref_show_suggestion_bar_title">Show suggestion bar</string>
+    <string name="pref_show_suggestion_bar_summary">Keep bar always visible (never disappears until disabled)</string>
+    <string name="pref_terminal_commands_title">Terminal commands</string>
+    <string name="pref_terminal_commands_summary">Custom commands for Termux / terminal apps</string>
+    <string name="pref_learned_words_title">Learned words</string>
+    <string name="pref_learned_words_summary">View, delete, and block learned words</string>
+    <string name="pref_custom_extensions_title">Custom extensions (. key)</string>
+    <string name="pref_custom_extensions_summary">Add, edit extensions for the dot popup</string>
+    <string name="pref_custom_emails_title">Custom emails</string>
+    <string name="pref_custom_emails_summary">Emails shown in login/email fields</string>
     <string name="pref_key_horizontal_space">Horizontal spacing between the keys</string>
     <string name="pref_key_vertical_space">Vertical spacing between the keys</string>
     <string name="pref_border_config_title">Customize borders</string>

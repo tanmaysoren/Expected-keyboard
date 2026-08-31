@@ -55,6 +55,13 @@ public class Keyboard2View extends View
 
   private static RectF _tmpRect = new RectF();
 
+  private DotExtensionPopup _dotExtensionPopup;
+  private android.os.Handler _dotHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+  private Runnable _dotLongPressRunnable;
+  private KeyboardData.Key _dotPressedKey;
+  private Rect _dotKeyRect = new Rect();
+  private boolean _dotPopupActive = false;
+
   enum Vertical
   {
     TOP,
@@ -200,15 +207,133 @@ public class Keyboard2View extends View
     _config.handler.mods_changed(_mods);
   }
 
+  private Rect getKeyRect(KeyboardData.Key target) {
+    if (_keyboard == null || target == null) return null;
+    float y = _tc.margin_top;
+    for (KeyboardData.Row row : _keyboard.rows) {
+      y += row.shift * _tc.row_height;
+      float x = _marginLeft + _tc.margin_left;
+      float keyH = row.height * _tc.row_height - _tc.vertical_margin;
+      for (KeyboardData.Key k : row.keys) {
+        x += k.shift * _keyWidth;
+        float keyW = _keyWidth * k.width - _tc.horizontal_margin;
+        if (k == target) {
+          Rect r = new Rect((int)x, (int)y, (int)(x+keyW), (int)(y+keyH));
+          return r;
+        }
+        x += _keyWidth * k.width;
+      }
+      y += row.height * _tc.row_height;
+    }
+    return null;
+  }
+
+  private boolean isDotKey(KeyboardData.Key k) {
+    if (k == null || k.keys[0] == null) return false;
+    String s = k.keys[0].getString();
+    return ".".equals(s);
+  }
+
+  private void showDotPopup(KeyboardData.Key key) {
+    if (key == null || !isDotKey(key)) return;
+    Rect r = getKeyRect(key);
+    if (r == null) return;
+    _dotKeyRect.set(r);
+    java.util.List<String> exts = DotExtensionPopup.loadExtensions(getContext());
+    // Ensure popup shows at least default extensions if custom empty
+    if (_dotExtensionPopup == null) _dotExtensionPopup = new DotExtensionPopup(getContext());
+    if (_dotExtensionPopup.isShowing()) _dotExtensionPopup.dismiss();
+    _dotExtensionPopup.setOnDismiss(() -> {
+      _dotPopupActive = false;
+      _dotPressedKey = null;
+      _dotLongPressRunnable = null;
+      invalidate();
+    });
+    _dotExtensionPopup.show(this, _dotKeyRect, exts, ext -> {
+      // Insert extension directly at cursor without replacing the typed word
+      try {
+        android.view.inputmethod.InputConnection ic = null;
+        if (_config != null && _config.handler instanceof KeyEventHandler) {
+          KeyEventHandler kh = (KeyEventHandler) _config.handler;
+          if (kh.getReceiver() != null) ic = kh.getReceiver().getCurrentInputConnection();
+        }
+        if (ic == null) {
+          android.content.Context ctx = getContext();
+          while (ctx instanceof android.content.ContextWrapper) {
+            if (ctx instanceof android.inputmethodservice.InputMethodService) {
+              ic = ((android.inputmethodservice.InputMethodService) ctx).getCurrentInputConnection();
+              break;
+            }
+            ctx = ((android.content.ContextWrapper) ctx).getBaseContext();
+          }
+        }
+        if (ic != null) {
+          ic.beginBatchEdit();
+          ic.commitText(ext, 1);
+          ic.endBatchEdit();
+        } else if (_config != null && _config.handler != null) {
+          _config.handler.suggestion_entered(ext);
+        }
+      } catch (Exception e) {
+        if (_config != null && _config.handler != null) _config.handler.suggestion_entered(ext);
+      }
+      _dotPopupActive = false;
+      _dotPressedKey = null;
+      _pointers.onTouchCancel();
+      invalidate();
+    });
+    _dotPopupActive = true;
+    _pointers.onTouchCancel();
+    invalidate();
+  }
+
   @Override
   public boolean onTouch(View v, MotionEvent event)
   {
     int p;
-    switch (event.getActionMasked())
+    int action = event.getActionMasked();
+    // If popup is active, handle drag selection and auto-commit
+    if (_dotPopupActive && _dotExtensionPopup != null && _dotExtensionPopup.isShowing()) {
+      if (action == MotionEvent.ACTION_MOVE) {
+        // Update selection based on finger X (raw)
+        float rawX = event.getRawX();
+        _dotExtensionPopup.updateSelectionForRawX(rawX);
+        return true;
+      } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
+        // Commit selected extension on release
+        _dotExtensionPopup.commitSelected();
+        return true;
+      } else if (action == MotionEvent.ACTION_CANCEL) {
+        _dotExtensionPopup.dismiss();
+        _dotPopupActive = false;
+        _dotPressedKey = null;
+        return true;
+      }
+    }
+
+    switch (action)
     {
       case MotionEvent.ACTION_UP:
       case MotionEvent.ACTION_POINTER_UP:
-        _pointers.onTouchUp(event.getPointerId(event.getActionIndex()));
+        // Cancel dot long press if still pending
+        if (_dotLongPressRunnable != null) {
+          _dotHandler.removeCallbacks(_dotLongPressRunnable);
+          _dotLongPressRunnable = null;
+        }
+        if (_dotPopupActive && _dotPressedKey != null) {
+          // If popup was not shown, this was a normal dot tap — let it through
+          if (_dotExtensionPopup == null || !_dotExtensionPopup.isShowing()) {
+            _pointers.onTouchUp(event.getPointerId(event.getActionIndex()));
+          } else {
+            // Popup is showing, don't send key up to pointers
+          }
+          // Don't reset _dotPopupActive here; popup handles its own dismiss
+        } else {
+          _pointers.onTouchUp(event.getPointerId(event.getActionIndex()));
+        }
+        if (!_dotPopupActive) {
+          _dotPressedKey = null;
+        }
         break;
       case MotionEvent.ACTION_DOWN:
       case MotionEvent.ACTION_POINTER_DOWN:
@@ -216,14 +341,51 @@ public class Keyboard2View extends View
         float tx = event.getX(p);
         float ty = event.getY(p);
         KeyboardData.Key key = getKeyAtPosition(tx, ty);
-        if (key != null)
+        if (key != null) {
+          // Check for dot key long-press popup
+          if (isDotKey(key)) {
+            _dotPressedKey = key;
+            Rect r = getKeyRect(key);
+            if (r != null) _dotKeyRect.set(r);
+            // Cancel previous
+            if (_dotLongPressRunnable != null) _dotHandler.removeCallbacks(_dotLongPressRunnable);
+            _dotLongPressRunnable = () -> showDotPopup(key);
+            _dotHandler.postDelayed(_dotLongPressRunnable, 60);
+          }
           _pointers.onTouchDown(tx, ty, event.getPointerId(p), key);
+        }
         break;
       case MotionEvent.ACTION_MOVE:
-        for (p = 0; p < event.getPointerCount(); p++)
-          _pointers.onTouchMove(event.getX(p), event.getY(p), event.getPointerId(p));
+        for (p = 0; p < event.getPointerCount(); p++) {
+          float mx = event.getX(p);
+          float my = event.getY(p);
+          // If dot popup pending and finger moved far, cancel popup
+          if (_dotPressedKey != null && _dotLongPressRunnable != null) {
+            KeyboardData.Key cur = getKeyAtPosition(mx, my);
+            if (cur != _dotPressedKey) {
+              _dotHandler.removeCallbacks(_dotLongPressRunnable);
+              _dotLongPressRunnable = null;
+              _dotPressedKey = null;
+            }
+          }
+          _pointers.onTouchMove(mx, my, event.getPointerId(p));
+          // If popup active, also forward to popup for drag
+          if (_dotPopupActive && _dotExtensionPopup != null && _dotExtensionPopup.isShowing()) {
+            // Find extension under finger's X relative to popup
+            // The popup's container will handle via its own onTouch, but we can simulate
+          }
+        }
         break;
       case MotionEvent.ACTION_CANCEL:
+        if (_dotLongPressRunnable != null) {
+          _dotHandler.removeCallbacks(_dotLongPressRunnable);
+          _dotLongPressRunnable = null;
+        }
+        if (_dotExtensionPopup != null && _dotExtensionPopup.isShowing()) {
+          _dotExtensionPopup.dismiss();
+          _dotPopupActive = false;
+        }
+        _dotPressedKey = null;
         _pointers.onTouchCancel();
         break;
       default:
@@ -413,14 +575,20 @@ public class Keyboard2View extends View
             case Normal: tc_key = _tc.key; break;
           }
         drawKeyFrame(canvas, x, y, keyW, keyH, tc_key);
-        if (k.keys[0] != null)
-          drawLabel(canvas, k.keys[0], keyW / 2f + x, y, keyH, isKeyDown, tc_key);
-        for (int i = 1; i < 9; i++)
-        {
-          if (k.keys[i] != null)
-            drawSubLabel(canvas, k.keys[i], x, y, keyW, keyH, i, isKeyDown, tc_key);
+        // Dpad triangle key — full-space triangle zones as in screenshot (red X + arrows inside each triangle)
+        boolean isDpad = k.keys[0]==null && k.keys[5]!=null && k.keys[6]!=null && k.keys[7]!=null && k.keys[8]!=null;
+        if (isDpad) {
+          drawDpadTriangles(canvas, x, y, keyW, keyH, isKeyDown);
+        } else {
+          if (k.keys[0] != null)
+            drawLabel(canvas, k.keys[0], keyW / 2f + x, y, keyH, isKeyDown, tc_key);
+          for (int i = 1; i < 9; i++)
+          {
+            if (k.keys[i] != null)
+              drawSubLabel(canvas, k.keys[i], x, y, keyW, keyH, i, isKeyDown, tc_key);
+          }
+          drawIndication(canvas, k, x, y, keyW, keyH, _tc);
         }
-        drawIndication(canvas, k, x, y, keyW, keyH, _tc);
         x += _keyWidth * k.width;
       }
       y += row.height * _tc.row_height;
@@ -724,6 +892,24 @@ public class Keyboard2View extends View
     p.setTextSize(_subLabelSize);
     canvas.drawText(k.indication, 0, k.indication.length(),
         x + keyW / 2f, (keyH - p.ascent() - p.descent()) * 4/5 + y, p);
+  }
+
+  private void drawDpadTriangles(Canvas canvas, float x, float y, float keyW, float keyH, boolean isKeyDown)
+  {
+    // No center tap — keys[0]==null already, no red X as requested; only 4 triangle arrows
+    // Draw arrows centered inside each triangle - full triangle hitbox via Pointers dominant axis (0.12 threshold) with auto-swipable across all 4 dirs
+    float baseSize = Math.min(keyW, keyH) * 0.32f;
+    int col = isKeyDown ? _theme.activatedColor : _theme.labelColor;
+    Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+    p.setColor(col);
+    p.setTextAlign(Paint.Align.CENTER);
+    p.setTextSize(baseSize);
+    float cx = x + keyW/2f, cy = y + keyH/2f;
+    // left triangle center
+    canvas.drawText("←", x + keyW*0.22f, cy - (p.ascent()+p.descent())/2f, p);
+    canvas.drawText("→", x + keyW*0.78f, cy - (p.ascent()+p.descent())/2f, p);
+    canvas.drawText("↑", cx, y + keyH*0.22f - (p.ascent()+p.descent())/2f, p);
+    canvas.drawText("↓", cx, y + keyH*0.78f - (p.ascent()+p.descent())/2f, p);
   }
 
   private float scaleTextSize(KeyValue k, boolean main_label)

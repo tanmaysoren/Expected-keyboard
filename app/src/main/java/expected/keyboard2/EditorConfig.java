@@ -17,6 +17,9 @@ public final class EditorConfig
   public int actionId;
   /** Whether selection mode turns on automatically when text is selected. */
   public boolean selection_mode_enabled = true;
+  /** Whether this is an email/phone/login field (for custom email suggestions) */
+  public boolean is_email_field = false;
+  public boolean is_phone_field = false;
   /** Whether the numeric layout should be shown by default. */
   public boolean numeric_layout = false;
   /** Workaround some apps which answers to [getExtractedText] but do not react
@@ -49,6 +52,18 @@ public final class EditorConfig
     /* Selection mode.
        Editors with [TYPE_NULL] are for example Termux and Emacs. */
     selection_mode_enabled = inputType != InputType.TYPE_NULL;
+    // Email / phone detection for custom email suggestions
+    is_email_field = false;
+    is_phone_field = false;
+    if (inputType == InputType.TYPE_CLASS_TEXT) {
+      int variation = info.inputType & InputType.TYPE_MASK_VARIATION;
+      if (variation == InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+          || variation == InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS) {
+        is_email_field = true;
+      }
+    } else if (inputType == InputType.TYPE_CLASS_PHONE) {
+      is_phone_field = true;
+    }
     enter_key_replacement = null;
     /* Action key. Looks at [info.actionLabel] first. */
     if (info.actionLabel != null)

@@ -244,13 +244,21 @@ public class Keyboard2 extends InputMethodService
 
   private void refresh_candidates_view()
   {
-    boolean should_show =
-      _config.suggestions_enabled
-      && _config.editor_config.should_show_candidates_view
-      && !_config.split_layout;
-    if (should_show)
-    {
-      _candidates_view.refresh_config(_config);
+    // New logic: separate bar persistence from texts
+    // show_suggestion_bar controls container visibility (never disappears when enabled)
+    // suggestions_enabled controls whether texts/predictions are queried
+    boolean barEnabled = _config.show_suggestion_bar;
+    boolean should_show;
+    if (!barEnabled) {
+      should_show = false;
+    } else {
+      // When bar is enabled, keep it persistently visible (fixes terminal -> normal bug)
+      // This overrides the editor_config and split_layout hiding
+      should_show = true;
+    }
+    // Always refresh config to reset toggle state and ensure suggestions re-enabled after terminal
+    _candidates_view.refresh_config(_config);
+    if (should_show) {
       _keyeventhandler.dictionary_changed();
     }
     _candidates_view.setVisibility(should_show ? View.VISIBLE : View.GONE);
@@ -833,27 +841,9 @@ public class Keyboard2 extends InputMethodService
     public void switch_to_layout_name(String layoutName)
     {
       if (layoutName == null) return;
+      if ("system".equals(layoutName)) layoutName = "latn_qwerty_us";
       clearLayoutCaches();
       _layoutPane = null;
-
-      if ("system".equals(layoutName))
-      {
-        // System / default layout
-        if (_localeTextLayout != null && _config.layouts != null && !_config.layouts.isEmpty())
-        {
-          _config.layouts.set(_config.get_current_layout(), _localeTextLayout);
-          setTextLayout(_config.get_current_layout());
-          expected.keyboard2.prefs.LayoutsPreference.save_keyboard_data_to_preferences(Config.globalPrefs().edit(), _config.layouts);
-        }
-        if (_keyboard_layout_view != null)
-        {
-          _keyboard_layout_view.setKeyboard(current_layout());
-          _keyboard_layout_view.requestLayout();
-          _keyboard_layout_view.invalidate();
-        }
-        setInputView(_keyboard_container_view);
-        return;
-      }
 
       // Check if already in active layouts
       if (_config.layouts != null)
