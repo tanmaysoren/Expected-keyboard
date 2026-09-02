@@ -28,7 +28,7 @@ No ads, no tracking, 100% offline — all predictions and dictionary learning st
 - Number row (with/without symbols) + NumPad (low/high first)
 
 ### Utility Bar (above suggestions)
-Toggle via chevron: Clipboard, Text Edit & navigation, Undo/Redo, Numpad, Emoji, Layout switcher, Theme switcher, Floating mode, Settings — with simple flat styling that follows the keyboard theme.
+Toggle via chevron: Clipboard, Text Edit & navigation, Undo/Redo, Numpad, Emoji, Layout switcher, Theme switcher, Floating mode, Settings — with simple flat styling that follows the keyboard theme
 
 ### Panes
 - **Editing pane** — line start/end, page up/down, arrow keys, word jump, select mode, backspace/delete, select-all, enter — all using normal key styling
@@ -113,14 +113,11 @@ sdkmanager "platforms;android-36" "build-tools;36.1.0" "platform-tools"
 
 ## Privacy & License
 
-<<<<<<< HEAD
-This project is open-source and offline-first. See source for license.
-=======
-This project is open-source and offline-first . See source for license.
->>>>>>> 6bedde51b643b0e62cc6f0f1263f726bbf45bebb
+This project is open-source and offline-first. Licensed under Apache License 2.0. See [LICENSE](LICENSE) for details.
 
 ## App Info
 
 - **Namespace:** `expected.keyboard2`
 - **Application ID:** `com.expected.keyboard` (`app/build.gradle.kts:13`)
 - **Min SDK:** 24, **Target/Compile SDK:** 36
+- **Language:** Java
