@@ -38,17 +38,27 @@ public class DotExtensionPopup {
   public void setOnDismiss(Runnable r) { this.onDismissCallback = r; }
 
   public void show(View anchor, Rect keyRect, List<String> exts, Callback cb) {
+    show(anchor, null, keyRect, exts, cb);
+  }
+
+  public void show(View anchor, Rect asdfRowRect, Rect keyRect, List<String> exts, Callback cb) {
     this.anchorView = anchor;
     this.extensions = exts;
     this.callback = cb;
     Context ctx = anchor.getContext();
     View content = LayoutInflater.from(ctx).inflate(R.layout.popup_dot_extensions, null);
+    scrollView = content.findViewById(R.id.popup_extensions_scroll);
     container = content.findViewById(R.id.popup_extensions_container);
     container.removeAllViews();
 
     // Sort extensions
     List<String> sorted = new ArrayList<>(exts);
     Collections.sort(sorted, String.CASE_INSENSITIVE_ORDER);
+
+    // Get screen width and compute dynamic item padding / min width so all items fit cleanly
+    int screenWidth = anchor.getResources().getDisplayMetrics().widthPixels;
+    int availableWidth = screenWidth - 24; // 12dp margins on each side
+    int itemCount = sorted.size();
 
     // Get theme label color to match keyboard layout
     int labelColor = 0xFFE2E8F0;
@@ -57,20 +67,26 @@ public class DotExtensionPopup {
       labelColor = ta.getColor(0, labelColor);
       ta.recycle();
     } catch (Exception ignored) {}
+
+    // Dynamic padding and font sizing based on item count and screen width
+    // e.g. for 9 items on a 360dp-420dp screen, compact padding ensures all fit on screen without cut-off
+    float density = ctx.getResources().getDisplayMetrics().density;
+    int padH = (int)(Math.max(4, Math.min(10, (availableWidth / (float)Math.max(1, itemCount) - 26 * density) / 2f)));
+    int padV = (int)(6 * density);
+    int marginH = (int)(2 * density);
+
     for (String ext : sorted) {
       TextView tv = new TextView(ctx);
       tv.setText(ext);
-      tv.setTextSize(13);
+      tv.setTextSize(12.5f);
       tv.setTextColor(labelColor);
-      tv.setPadding(28, 16, 28, 16);
+      tv.setPadding(padH, padV, padH, padV);
       tv.setBackgroundResource(R.drawable.popup_extension_item_bg);
       LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-      lp.setMargins(6,4,6,4);
+      lp.setMargins(marginH, (int)(2 * density), marginH, (int)(2 * density));
       tv.setLayoutParams(lp);
       tv.setGravity(Gravity.CENTER);
       tv.setSingleLine(true);
-      tv.setEllipsize(android.text.TextUtils.TruncateAt.END);
-      tv.setMinWidth(80);
       tv.setTag(ext);
       // Click to select
       tv.setOnClickListener(v -> {
@@ -119,46 +135,40 @@ public class DotExtensionPopup {
     popup = new PopupWindow(content, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
     popup.setOutsideTouchable(true);
     popup.setBackgroundDrawable(null);
-    popup.setElevation(12);
+    popup.setElevation(16);
+    popup.setClippingEnabled(false);
     popup.setAnimationStyle(android.R.style.Animation_Dialog);
     popup.setOnDismissListener(() -> { if (onDismissCallback != null) onDismissCallback.run(); });
 
-    // Measure and always show over asdfghjk row — anchor is Keyboard2View, follow it wherever it is (floating or docked)
-    content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-    int pw = content.getMeasuredWidth();
+    // Measure and position directly over the ASDFGHJKL row in the keyboard window
+    content.measure(View.MeasureSpec.makeMeasureSpec(availableWidth, View.MeasureSpec.AT_MOST),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+    int pw = Math.min(content.getMeasuredWidth(), availableWidth);
     int ph = content.getMeasuredHeight();
-    int[] loc = new int[2];
-    anchor.getLocationOnScreen(loc);
-    int anchorCenterX = loc[0] + keyRect.centerX();
-    int keyboardHeight = anchor.getHeight();
-    int screenHeight = anchor.getResources().getDisplayMetrics().heightPixels;
-    int screenWidth = anchor.getResources().getDisplayMetrics().widthPixels;
-    if (keyboardHeight <= 0) {
-      // Fallback if not yet laid out — estimate from screen
-      keyboardHeight = (int)(screenHeight * 0.36f);
+
+    int[] winLoc = new int[2];
+    anchor.getLocationInWindow(winLoc);
+
+    int anchorWidth = anchor.getWidth();
+    if (anchorWidth <= 0) anchorWidth = screenWidth;
+
+    // Calculate Y position centered exactly over the ASDFGHJKL row
+    int localRowCenterY;
+    if (asdfRowRect != null) {
+      localRowCenterY = asdfRowRect.centerY();
+    } else {
+      localRowCenterY = (int)(anchor.getHeight() * 0.45f);
     }
-    int keyboardTop = loc[1];
-    // If loc is 0 (not laid out yet), fallback to bottom for docked
-    if (keyboardTop <= 0 && keyboardHeight > 0) {
-      // Try window location as fallback
-      int[] winLoc = new int[2];
-      try { anchor.getLocationInWindow(winLoc); if (winLoc[1] > 0) keyboardTop = winLoc[1]; } catch (Exception ignored) {}
-    }
-    if (keyboardTop <= 0) {
-      // Last resort: docked at bottom
-      keyboardTop = screenHeight - keyboardHeight;
-    }
-    // Position over asdf row: ~30-34% down from keyboard top (row1 center)
-    // This is inside keyboard top area and moves with keyboard (floating or docked)
-    int yOff = keyboardTop + (int)(keyboardHeight * 0.30f) - ph / 2;
-    int xOff = anchorCenterX - pw/2;
-    // Keep inside screen horizontally (centered on dot key)
-    if (xOff < 8) xOff = 8;
-    if (xOff + pw > screenWidth - 8) xOff = screenWidth - pw - 8;
-    // Keep vertically on screen
-    if (yOff < 8) yOff = 8;
-    if (yOff + ph > screenHeight - 8) yOff = screenHeight - ph - 8;
-    popup.showAtLocation(anchor, Gravity.NO_GRAVITY, xOff, yOff);
+
+    int yInWindow = winLoc[1] + localRowCenterY - (ph / 2);
+    int xInWindow = winLoc[0] + (anchorWidth / 2) - (pw / 2);
+
+    // Keep horizontally inside screen boundaries
+    if (xInWindow < 12) xInWindow = 12;
+    if (xInWindow + pw > screenWidth - 12) xInWindow = screenWidth - pw - 12;
+    if (yInWindow < 8) yInWindow = 8;
+
+    popup.showAtLocation(anchor, Gravity.TOP | Gravity.START, xInWindow, yInWindow);
   }
 
   private View findChildAt(ViewGroup parent, float x, float y) {
@@ -180,6 +190,8 @@ public class DotExtensionPopup {
     return best;
   }
 
+  private android.widget.HorizontalScrollView scrollView;
+
   private void setSelected(TextView tv) {
     if (selectedView != null) {
       selectedView.setBackgroundResource(R.drawable.popup_extension_item_bg);
@@ -189,6 +201,18 @@ public class DotExtensionPopup {
     selectedText = (String) tv.getTag();
     tv.setBackgroundResource(R.drawable.popup_extension_selected_bg);
     tv.setTextColor(0xFFFFFFFF);
+
+    if (scrollView != null && tv != null) {
+      int scrollX = scrollView.getScrollX();
+      int scrollWidth = scrollView.getWidth();
+      int left = tv.getLeft();
+      int right = tv.getRight();
+      if (left < scrollX) {
+        scrollView.smoothScrollTo(Math.max(0, left - 16), 0);
+      } else if (right > scrollX + scrollWidth && scrollWidth > 0) {
+        scrollView.smoothScrollTo(right - scrollWidth + 16, 0);
+      }
+    }
   }
 
   public void updateSelectionForRawX(float rawX) {

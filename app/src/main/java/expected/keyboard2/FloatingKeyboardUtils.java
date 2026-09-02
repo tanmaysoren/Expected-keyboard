@@ -33,7 +33,7 @@ public final class FloatingKeyboardUtils {
     int screenHeight = dm.heightPixels;
 
     int storedWidth = readFloatingWidth(context, screenWidth);
-    int storedHeight = readFloatingHeight(context, screenWidth);
+    int storedHeight = readFloatingHeight(context, screenWidth, storedWidth);
     int[] pos = readFloatingPosition(context, screenWidth, screenHeight, storedWidth, storedHeight);
 
     int floatingX = pos[0];
@@ -57,7 +57,7 @@ public final class FloatingKeyboardUtils {
     containerView.setLayoutParams(flp);
 
     if (config != null) {
-      config.updateFloatingHeight(dm, storedHeight);
+      config.updateFloatingHeight(dm, storedHeight, storedWidth);
     }
 
     adjustInnerViewHeights(containerView, storedHeight, true);
@@ -181,7 +181,7 @@ public final class FloatingKeyboardUtils {
     if (bottomResizeContainer == null) {
       FrameLayout bottomContainer = new FrameLayout(context);
       bottomContainer.setTag(TAG_RESIZE_HANDLE);
-      int bottomHeight = (int) (18 * dm.density);
+      int bottomHeight = (int) (22 * dm.density);
       LinearLayout.LayoutParams bottomLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, bottomHeight);
       bottomLp.topMargin = (int) (2 * dm.density);
       bottomLp.bottomMargin = (int) (2 * dm.density);
@@ -200,21 +200,35 @@ public final class FloatingKeyboardUtils {
       centerPill.setBackground(pillDrawable);
       bottomContainer.addView(centerPill);
 
-      // Enlarged corner resize handle button
-      ImageView resizeHandle = new ImageView(context);
-      resizeHandle.setImageResource(R.drawable.ic_resize);
       int handleTouchWidth = (int) (48 * dm.density);
-      int handleTouchHeight = (int) (20 * dm.density);
-      FrameLayout.LayoutParams resizeLp = new FrameLayout.LayoutParams(handleTouchWidth, handleTouchHeight);
-      resizeLp.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
-      resizeHandle.setLayoutParams(resizeLp);
-      resizeHandle.setPadding((int)(8 * dm.density), (int)(2 * dm.density), (int)(6 * dm.density), (int)(2 * dm.density));
-      resizeHandle.setScaleType(ImageView.ScaleType.FIT_END);
-      resizeHandle.setContentDescription("Resize Floating Keyboard");
+      int handleTouchHeight = (int) (22 * dm.density);
 
-      bottomContainer.addView(resizeHandle);
+      // Left corner resize handle button
+      ImageView leftResizeHandle = new ImageView(context);
+      leftResizeHandle.setImageResource(R.drawable.ic_resize);
+      leftResizeHandle.setRotation(90);
+      FrameLayout.LayoutParams leftResizeLp = new FrameLayout.LayoutParams(handleTouchWidth, handleTouchHeight);
+      leftResizeLp.gravity = Gravity.START | Gravity.CENTER_VERTICAL;
+      leftResizeHandle.setLayoutParams(leftResizeLp);
+      leftResizeHandle.setPadding((int)(6 * dm.density), (int)(2 * dm.density), (int)(8 * dm.density), (int)(2 * dm.density));
+      leftResizeHandle.setScaleType(ImageView.ScaleType.FIT_START);
+      leftResizeHandle.setContentDescription("Resize Floating Keyboard Left");
+      bottomContainer.addView(leftResizeHandle);
+
+      // Right corner resize handle button
+      ImageView rightResizeHandle = new ImageView(context);
+      rightResizeHandle.setImageResource(R.drawable.ic_resize);
+      FrameLayout.LayoutParams rightResizeLp = new FrameLayout.LayoutParams(handleTouchWidth, handleTouchHeight);
+      rightResizeLp.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
+      rightResizeHandle.setLayoutParams(rightResizeLp);
+      rightResizeHandle.setPadding((int)(8 * dm.density), (int)(2 * dm.density), (int)(6 * dm.density), (int)(2 * dm.density));
+      rightResizeHandle.setScaleType(ImageView.ScaleType.FIT_END);
+      rightResizeHandle.setContentDescription("Resize Floating Keyboard Right");
+      bottomContainer.addView(rightResizeHandle);
+
       setupDragListener(bottomContainer, containerView, context);
-      setupResizeListener(resizeHandle, containerView, context, config, keyboardLayoutView);
+      setupResizeListener(rightResizeHandle, containerView, context, config, keyboardLayoutView, false);
+      setupResizeListener(leftResizeHandle, containerView, context, config, keyboardLayoutView, true);
 
       containerView.addView(bottomContainer);
       bottomResizeContainer = bottomContainer;
@@ -288,10 +302,11 @@ public final class FloatingKeyboardUtils {
     });
   }
 
-  private static void setupResizeListener(View resizeView, final ViewGroup containerView, final Context context, final Config config, final View keyboardLayoutView) {
+  private static void setupResizeListener(View resizeView, final ViewGroup containerView, final Context context, final Config config, final View keyboardLayoutView, final boolean isLeft) {
     resizeView.setOnTouchListener(new View.OnTouchListener() {
       private float downRawX, downRawY;
       private int initialWidth, initialHeight;
+      private int initialLeft, initialTop;
 
       @Override
       public boolean onTouch(View v, MotionEvent event) {
@@ -307,8 +322,10 @@ public final class FloatingKeyboardUtils {
             downRawX = event.getRawX();
             downRawY = event.getRawY();
             ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams) rawLp;
+            initialLeft = marginLp.leftMargin;
+            initialTop = marginLp.topMargin;
             initialWidth = containerView.getWidth() > 0 ? containerView.getWidth() : marginLp.width;
-            initialHeight = containerView.getHeight() > 0 ? containerView.getHeight() : readFloatingHeight(context, availableWidth);
+            initialHeight = containerView.getHeight() > 0 ? containerView.getHeight() : readFloatingHeight(context, availableWidth, initialWidth);
             if (v.getParent() != null) {
               v.getParent().requestDisallowInterceptTouchEvent(true);
             }
@@ -318,37 +335,52 @@ public final class FloatingKeyboardUtils {
             float dx = event.getRawX() - downRawX;
             float dy = event.getRawY() - downRawY;
 
-            int minWidth = (int) (180 * dm.density);
+            int minWidth = (int) (140 * dm.density);
             int maxWidth = (int) (availableWidth * 0.98f);
-            int minHeight = (int) (120 * dm.density);
-            int maxHeight = (int) (availableHeight * 0.88f);
+            int minHeight = (int) (90 * dm.density);
+            int maxHeight = (int) (availableHeight * 0.92f);
 
-            int newWidth = Math.max(minWidth, Math.min(maxWidth, initialWidth + (int) dx));
-            int newHeight = Math.max(minHeight, Math.min(maxHeight, initialHeight + (int) dy));
+            int newWidth;
+            int newLeft = initialLeft;
+            int newTop = initialTop;
 
-            ViewGroup.MarginLayoutParams currentMarginLp = (ViewGroup.MarginLayoutParams) rawLp;
-            if (currentMarginLp.leftMargin + newWidth > availableWidth) {
-              newWidth = Math.max(minWidth, availableWidth - currentMarginLp.leftMargin);
+            if (isLeft) {
+              newWidth = Math.max(minWidth, Math.min(maxWidth, initialWidth - (int) dx));
+              newLeft = initialLeft + (initialWidth - newWidth);
+              if (newLeft < 0) {
+                newWidth += newLeft;
+                newLeft = 0;
+              }
+            } else {
+              newWidth = Math.max(minWidth, Math.min(maxWidth, initialWidth + (int) dx));
+              if (newLeft + newWidth > availableWidth) {
+                newLeft = Math.max(0, availableWidth - newWidth);
+              }
             }
-            if (currentMarginLp.topMargin + newHeight > availableHeight) {
-              newHeight = Math.max(minHeight, availableHeight - currentMarginLp.topMargin);
+
+            int newHeight = Math.max(minHeight, Math.min(maxHeight, initialHeight + (int) dy));
+            if (newTop + newHeight > availableHeight) {
+              newTop = Math.max(0, availableHeight - newHeight);
             }
 
             FrameLayout.LayoutParams flp;
             if (rawLp instanceof FrameLayout.LayoutParams) {
               flp = (FrameLayout.LayoutParams) rawLp;
             } else {
-              flp = new FrameLayout.LayoutParams(currentMarginLp);
+              flp = new FrameLayout.LayoutParams((ViewGroup.MarginLayoutParams) rawLp);
             }
             flp.gravity = Gravity.TOP | Gravity.LEFT;
+            flp.leftMargin = newLeft;
+            flp.topMargin = newTop;
             flp.width = newWidth;
             flp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             containerView.setLayoutParams(flp);
 
             saveFloatingSize(context, availableWidth, newWidth, newHeight);
+            saveFloatingPosition(context, availableWidth, newLeft, newTop);
 
             if (config != null) {
-              config.updateFloatingHeight(dm, newHeight);
+              config.updateFloatingHeight(dm, newHeight, newWidth);
             }
 
             adjustInnerViewHeights(containerView, newHeight, true);
@@ -372,6 +404,25 @@ public final class FloatingKeyboardUtils {
         return false;
       }
     });
+  }
+
+  public static int calculateDefaultFloatingHeight(Context context, int floatWidth) {
+    if (context == null) return (int) (240 * 2.5f);
+    DisplayMetrics dm = context.getResources().getDisplayMetrics();
+    float density = dm.density;
+    // Calculate key row height proportional to key width (10 keys standard per row)
+    float keyWidth = floatWidth / 10.0f;
+    float rowHeight = keyWidth * 1.15f;
+    // Clamp rowHeight between 34dp and 46dp for standard readability & touch comfort
+    rowHeight = Math.max(34 * density, Math.min(46 * density, rowHeight));
+
+    Config config = Config.globalConfig();
+    float numRows = 4.0f; // standard layout rows
+    float candidateHeight = (config != null && config.suggestions_enabled) ? rowHeight : (20 * density);
+    float topBarHeight = 16 * density;
+    float bottomBarHeight = 22 * density;
+
+    return (int) (rowHeight * numRows + candidateHeight + topBarHeight + bottomBarHeight);
   }
 
   public static int calculateDockedHeight(Context context, int screenWidth) {
@@ -407,7 +458,7 @@ public final class FloatingKeyboardUtils {
     if (context == null) return screenWidth;
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     String suffix = getOrientationSuffix(context);
-    int defaultWidth = suffix.equals("_landscape") ? (int)(screenWidth * 0.55f) : (int)(screenWidth * 0.85f);
+    int defaultWidth = suffix.equals("_landscape") ? (int)(screenWidth * 0.52f) : (int)(screenWidth * 0.85f);
 
     if (prefs.contains(PREF_FLOATING_WIDTH_PREFIX + suffix)) {
       return prefs.getInt(PREF_FLOATING_WIDTH_PREFIX + suffix, defaultWidth);
@@ -415,16 +466,26 @@ public final class FloatingKeyboardUtils {
     return defaultWidth;
   }
 
-  public static int readFloatingHeight(Context context, int screenWidth) {
+  public static int readFloatingHeight(Context context, int screenWidth, int floatWidth) {
     if (context == null) return (int) (240 * 2.0f);
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     String suffix = getOrientationSuffix(context);
-    int defaultHeight = calculateDockedHeight(context, screenWidth);
+    int defaultHeight = calculateDefaultFloatingHeight(context, floatWidth);
 
     if (prefs.contains(PREF_FLOATING_HEIGHT_PREFIX + suffix)) {
-      return prefs.getInt(PREF_FLOATING_HEIGHT_PREFIX + suffix, defaultHeight);
+      int saved = prefs.getInt(PREF_FLOATING_HEIGHT_PREFIX + suffix, defaultHeight);
+      DisplayMetrics dm = context.getResources().getDisplayMetrics();
+      if (saved >= (int) (80 * dm.density) && saved <= (int) (dm.heightPixels * 0.95f)) {
+        return saved;
+      }
+      return defaultHeight;
     }
     return defaultHeight;
+  }
+
+  public static int readFloatingHeight(Context context, int screenWidth) {
+    int width = readFloatingWidth(context, screenWidth);
+    return readFloatingHeight(context, screenWidth, width);
   }
 
   public static void saveFloatingSize(Context context, int screenWidth, int width, int height) {

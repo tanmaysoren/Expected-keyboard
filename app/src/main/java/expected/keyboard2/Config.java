@@ -232,22 +232,40 @@ public final class Config
     physical_keyboard_hide = _prefs.getString("physical_keyboard_behavior", "show").equals("hide");
     floating_mode = isFloatingMode();
     if (floating_mode) {
-      int handleHeight = (int) (16 * dm.density);
-      int candidateHeight = suggestions_enabled ? keyboard_rows_height_pixels : (int) (20 * dm.density);
-      int defaultHeight = (int) (keyboard_rows_height_pixels * 3.95f) + candidateHeight + handleHeight;
-      int storedHeight = FloatingKeyboardUtils.readFloatingHeight(res == null ? null : null, dm.widthPixels);
-      updateFloatingHeight(dm, storedHeight);
+      int floatWidth = (int) (dm.widthPixels * (orientation_landscape ? 0.52f : 0.85f));
+      String suffix = orientation_landscape ? "_landscape" : "_portrait";
+      if (_prefs != null && _prefs.contains(FloatingKeyboardUtils.PREF_FLOATING_WIDTH_PREFIX + suffix)) {
+        floatWidth = _prefs.getInt(FloatingKeyboardUtils.PREF_FLOATING_WIDTH_PREFIX + suffix, floatWidth);
+      }
+      float keyWidth = floatWidth / 10.0f;
+      float rowHeight = Math.max(34 * dm.density, Math.min(46 * dm.density, keyWidth * 1.15f));
+      float candidateHeight = suggestions_enabled ? rowHeight : (20 * dm.density);
+      int defaultHeight = (int) (rowHeight * 4.0f + candidateHeight + 34 * dm.density);
+      int storedHeight = defaultHeight;
+      if (_prefs != null && _prefs.contains(FloatingKeyboardUtils.PREF_FLOATING_HEIGHT_PREFIX + suffix)) {
+        int saved = _prefs.getInt(FloatingKeyboardUtils.PREF_FLOATING_HEIGHT_PREFIX + suffix, defaultHeight);
+        if (saved >= (int) (80 * dm.density) && saved <= (int) (dm.heightPixels * 0.95f)) {
+          storedHeight = saved;
+        }
+      }
+      updateFloatingHeight(dm, storedHeight, floatWidth);
     }
     float screen_width_dp = dm.widthPixels / dm.density;
     wide_screen = screen_width_dp >= WIDE_DEVICE_THRESHOLD;
     split_layout = get_split_layout();
   }
 
-  public void updateFloatingHeight(DisplayMetrics dm, int totalFloatingHeight) {
+  public void updateFloatingHeight(DisplayMetrics dm, int totalFloatingHeight, int floatingWidth) {
     int handleHeight = (int) (16 * dm.density);
-    int candidateHeight = suggestions_enabled ? (int) (20 * dm.density) : 0;
-    int availH = Math.max((int) (80 * dm.density), totalFloatingHeight - handleHeight - candidateHeight);
-    keyboard_rows_height_pixels = (int) (availH / 4.0f);
+    int bottomHeight = (int) (22 * dm.density);
+    int candidateHeight = suggestions_enabled ? (int) (36 * dm.density) : 0;
+    int availH = Math.max((int) (80 * dm.density), totalFloatingHeight - handleHeight - bottomHeight - candidateHeight);
+    keyboard_rows_height_pixels = Math.max((int) (18 * dm.density), (int) (availH / 4.0f));
+  }
+
+  public void updateFloatingHeight(DisplayMetrics dm, int totalFloatingHeight) {
+    int defaultWidth = (int) (dm.widthPixels * (orientation_landscape ? 0.52f : 0.85f));
+    updateFloatingHeight(dm, totalFloatingHeight, defaultWidth);
   }
 
   public int get_current_layout()

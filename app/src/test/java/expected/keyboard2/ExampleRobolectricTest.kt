@@ -167,8 +167,8 @@ class ExampleRobolectricTest {
       "€", "ß", "£", "§", "†"
     )
     for (key in expected.keyboard2.prefs.ExtraKeysPreference.extra_keys) {
-      val expected = enabledKeys.contains(key)
-      assertEquals("Key $key default_checked mismatch", expected, expected.keyboard2.prefs.ExtraKeysPreference.default_checked(key))
+      val isExpected = enabledKeys.contains(key)
+      assertEquals("Key $key default_checked mismatch", isExpected, expected.keyboard2.prefs.ExtraKeysPreference.default_checked(key))
     }
   }
 
@@ -231,21 +231,21 @@ class ExampleRobolectricTest {
     val context = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
     val keyboardData = KeyboardData.load(context.resources, expected.keyboard2.R.xml.latn_qwerty_us)
 
-    // home at nw of q (dir 1)
-    val homeKey = KeyValue.getKeyByName("home")
-    val qKey = KeyValue.getKeyByName("q")
-    val homePos = keyboardData.keys[homeKey]!!
-    val qPos = keyboardData.keys[qKey]!!
-    assertEquals(qPos.row, homePos.row)
-    assertEquals(qPos.col, homePos.col)
-    assertEquals(1, homePos.dir) // nw
-
-    // f11 at ne of q (dir 2)
+    // f11 at nw of q (dir 1)
     val f11Key = KeyValue.getKeyByName("f11")
+    val qKey = KeyValue.getKeyByName("q")
     val f11Pos = keyboardData.keys[f11Key]!!
+    val qPos = keyboardData.keys[qKey]!!
     assertEquals(qPos.row, f11Pos.row)
     assertEquals(qPos.col, f11Pos.col)
-    assertEquals(2, f11Pos.dir) // ne
+    assertEquals(1, f11Pos.dir) // nw
+
+    // esc at se of q (dir 4)
+    val escKey = KeyValue.getKeyByName("esc")
+    val escPos = keyboardData.keys[escKey]!!
+    assertEquals(qPos.row, escPos.row)
+    assertEquals(qPos.col, escPos.col)
+    assertEquals(4, escPos.dir) // se
 
     // f12 at nw of w (dir 1)
     val f12Key = KeyValue.getKeyByName("f12")
@@ -256,18 +256,29 @@ class ExampleRobolectricTest {
     assertEquals(wPos.col, f12Pos.col)
     assertEquals(1, f12Pos.dir) // nw
 
-    // ~ at ne of w (dir 2)
+    // ~ at se of w (dir 4)
     val tildeKey = KeyValue.getKeyByName("~")
     val tildePos = keyboardData.keys[tildeKey]!!
     assertEquals(wPos.row, tildePos.row)
     assertEquals(wPos.col, tildePos.col)
-    assertEquals(2, tildePos.dir) // ne
+    assertEquals(4, tildePos.dir) // se
 
-    // page_up at sw of w (dir 3)
+    // home at nw of f (dir 1)
+    val homeKey = KeyValue.getKeyByName("home")
+    val fKey = KeyValue.getKeyByName("f")
+    val homePos = keyboardData.keys[homeKey]!!
+    val fPos = keyboardData.keys[fKey]!!
+    assertEquals(fPos.row, homePos.row)
+    assertEquals(fPos.col, homePos.col)
+    assertEquals(1, homePos.dir) // nw
+
+    // page_up at sw of o (dir 3)
     val pgUpKey = KeyValue.getKeyByName("page_up")
+    val oKey = KeyValue.getKeyByName("o")
     val pgUpPos = keyboardData.keys[pgUpKey]!!
-    assertEquals(wPos.row, pgUpPos.row)
-    assertEquals(wPos.col, pgUpPos.col)
+    val oPos = keyboardData.keys[oKey]!!
+    assertEquals(oPos.row, pgUpPos.row)
+    assertEquals(oPos.col, pgUpPos.col)
     assertEquals(3, pgUpPos.dir) // sw
 
     // page_down at nw of e (dir 1)

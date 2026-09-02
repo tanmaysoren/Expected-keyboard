@@ -207,6 +207,43 @@ public class Keyboard2View extends View
     _config.handler.mods_changed(_mods);
   }
 
+  public Rect getAsdfRowRect() {
+    if (_keyboard == null) return null;
+    // 1. Try finding 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', or 'l'
+    for (KeyboardData.Row row : _keyboard.rows) {
+      for (KeyboardData.Key k : row.keys) {
+        if (k.keys != null && k.keys[0] != null) {
+          String s = k.keys[0].getString();
+          if (s != null && (s.equalsIgnoreCase("a") || s.equalsIgnoreCase("f") || s.equalsIgnoreCase("h") || s.equalsIgnoreCase("s") || s.equalsIgnoreCase("d") || s.equalsIgnoreCase("j") || s.equalsIgnoreCase("k") || s.equalsIgnoreCase("l"))) {
+            return getRowRect(row);
+          }
+        }
+      }
+    }
+    // 2. Fallback: row index (_keyboard.rows.size() >= 4 ? _keyboard.rows.size() - 3 : 1)
+    if (_keyboard.rows != null && !_keyboard.rows.isEmpty()) {
+      int targetIdx = Math.max(0, _keyboard.rows.size() >= 4 ? _keyboard.rows.size() - 3 : 1);
+      if (targetIdx < _keyboard.rows.size()) {
+        return getRowRect(_keyboard.rows.get(targetIdx));
+      }
+    }
+    return null;
+  }
+
+  public Rect getRowRect(KeyboardData.Row targetRow) {
+    if (_keyboard == null || targetRow == null) return null;
+    float y = _tc.margin_top;
+    for (KeyboardData.Row row : _keyboard.rows) {
+      y += row.shift * _tc.row_height;
+      float keyH = row.height * _tc.row_height - _tc.vertical_margin;
+      if (row == targetRow) {
+        return new Rect(0, (int)y, getWidth(), (int)(y + keyH));
+      }
+      y += row.height * _tc.row_height;
+    }
+    return null;
+  }
+
   private Rect getKeyRect(KeyboardData.Key target) {
     if (_keyboard == null || target == null) return null;
     float y = _tc.margin_top;
@@ -239,6 +276,7 @@ public class Keyboard2View extends View
     Rect r = getKeyRect(key);
     if (r == null) return;
     _dotKeyRect.set(r);
+    Rect asdfRect = getAsdfRowRect();
     java.util.List<String> exts = DotExtensionPopup.loadExtensions(getContext());
     // Ensure popup shows at least default extensions if custom empty
     if (_dotExtensionPopup == null) _dotExtensionPopup = new DotExtensionPopup(getContext());
@@ -249,7 +287,7 @@ public class Keyboard2View extends View
       _dotLongPressRunnable = null;
       invalidate();
     });
-    _dotExtensionPopup.show(this, _dotKeyRect, exts, ext -> {
+    _dotExtensionPopup.show(this, asdfRect, _dotKeyRect, exts, ext -> {
       // Insert extension directly at cursor without replacing the typed word
       try {
         android.view.inputmethod.InputConnection ic = null;
@@ -654,6 +692,21 @@ public class Keyboard2View extends View
     return sublabel ? _theme.subLabelColor : _theme.labelColor;
   }
 
+  private boolean isNumpadArrKey(String text)
+  {
+    if (text == null || text.isEmpty()) return false;
+    boolean isArrow = text.equals("←") || text.equals("→") || text.equals("↑") || text.equals("↓")
+        || text.equals("↕") || text.equals("↖") || text.equals("↗") || text.equals("↙") || text.equals("↘")
+        || text.equalsIgnoreCase("left") || text.equalsIgnoreCase("right")
+        || text.equalsIgnoreCase("up") || text.equalsIgnoreCase("down");
+    if (!isArrow) return false;
+
+    boolean isNumpad = (_keyboard != null && _keyboard.resourceName != null
+        && (_keyboard.resourceName.contains("numeric") || _keyboard.resourceName.contains("pin")));
+    boolean isArrActive = (_mods != null && _mods.has(KeyValue.Modifier.ARROWS));
+    return isNumpad || isArrActive;
+  }
+
   private void drawLabel(Canvas canvas, KeyValue kv, float x, float y,
       float keyH, boolean isKeyDown, Theme.Computed.Key tc)
   {
@@ -663,7 +716,7 @@ public class Keyboard2View extends View
     float textSize = scaleTextSize(kv, true);
     Paint p = tc.label_paint(kv.isSpecialFont(), labelColor(kv, isKeyDown, false), textSize);
     String text = kv.getString();
-    if (KeySvgIcons.hasIcon(text))
+    if (KeySvgIcons.hasIcon(text) && !isNumpadArrKey(text))
     {
       float centerX = x;
       float centerY = y + keyH / 2f;
@@ -735,7 +788,7 @@ public class Keyboard2View extends View
       }
     }
 
-    if (KeySvgIcons.hasIcon(label))
+    if (KeySvgIcons.hasIcon(label) && !isNumpadArrKey(label))
     {
       float iconX = x;
       if (a == Paint.Align.CENTER)
@@ -896,8 +949,6 @@ public class Keyboard2View extends View
 
   private void drawDpadTriangles(Canvas canvas, float x, float y, float keyW, float keyH, boolean isKeyDown)
   {
-    // No center tap — keys[0]==null already, no red X as requested; only 4 triangle arrows
-    // Draw arrows centered inside each triangle - full triangle hitbox via Pointers dominant axis (0.12 threshold) with auto-swipable across all 4 dirs
     float baseSize = Math.min(keyW, keyH) * 0.32f;
     int col = isKeyDown ? _theme.activatedColor : _theme.labelColor;
     Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -905,11 +956,20 @@ public class Keyboard2View extends View
     p.setTextAlign(Paint.Align.CENTER);
     p.setTextSize(baseSize);
     float cx = x + keyW/2f, cy = y + keyH/2f;
-    // left triangle center
-    canvas.drawText("←", x + keyW*0.22f, cy - (p.ascent()+p.descent())/2f, p);
-    canvas.drawText("→", x + keyW*0.78f, cy - (p.ascent()+p.descent())/2f, p);
-    canvas.drawText("↑", cx, y + keyH*0.22f - (p.ascent()+p.descent())/2f, p);
-    canvas.drawText("↓", cx, y + keyH*0.78f - (p.ascent()+p.descent())/2f, p);
+
+    // Draw crisp vector icons if available, with font fallback
+    if (!KeySvgIcons.drawIcon(canvas, "left", x + keyW * 0.22f, cy, baseSize, p, isKeyDown)) {
+      canvas.drawText("←", x + keyW * 0.22f, cy - (p.ascent() + p.descent()) / 2f, p);
+    }
+    if (!KeySvgIcons.drawIcon(canvas, "right", x + keyW * 0.78f, cy, baseSize, p, isKeyDown)) {
+      canvas.drawText("→", x + keyW * 0.78f, cy - (p.ascent() + p.descent()) / 2f, p);
+    }
+    if (!KeySvgIcons.drawIcon(canvas, "up", cx, y + keyH * 0.22f, baseSize, p, isKeyDown)) {
+      canvas.drawText("↑", cx, y + keyH * 0.22f - (p.ascent() + p.descent()) / 2f, p);
+    }
+    if (!KeySvgIcons.drawIcon(canvas, "down", cx, y + keyH * 0.78f, baseSize, p, isKeyDown)) {
+      canvas.drawText("↓", cx, y + keyH * 0.78f - (p.ascent() + p.descent()) / 2f, p);
+    }
   }
 
   private float scaleTextSize(KeyValue k, boolean main_label)

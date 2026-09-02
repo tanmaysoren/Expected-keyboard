@@ -2,6 +2,7 @@ package expected.keyboard2;
 
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -179,7 +180,11 @@ public final class Pointers implements Handler.Callback
     {
       clearLatched();
       removePtr(ptr);
-      _handler.onPointerUp(ptr_value, ptr.modifiers);
+      if (isDpadKey(ptr.key)) {
+        _handler.onPointerFlagsChanged(false);
+      } else {
+        _handler.onPointerUp(ptr_value, ptr.modifiers);
+      }
     }
   }
 
@@ -260,10 +265,85 @@ public final class Pointers implements Handler.Callback
     return null;
   }
 
-  private KeyValue findNavKey(KeyboardData.Key k, String primary, String secondary) {
+  private boolean isDpadKey(KeyboardData.Key k) {
+    if (k == null) return false;
+    // Dpad key layout: center keys[0] is null and has arrows at indices 5, 6, 7, 8
+    if (k.keys[0] == null) {
+      for (int i = 1; i < 9; i++) {
+        if (isNavKeyValue(k.keys[i]))
+          return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isNavKeyValue(KeyValue kv) {
+    if (kv == null) return false;
+    if (kv.getKind() == KeyValue.Kind.Keyevent) {
+      int code = kv.getKeyevent();
+      return code == KeyEvent.KEYCODE_DPAD_LEFT || code == KeyEvent.KEYCODE_DPAD_RIGHT
+          || code == KeyEvent.KEYCODE_DPAD_UP || code == KeyEvent.KEYCODE_DPAD_DOWN;
+    }
+    String s = kv.getString();
+    return "left".equals(s) || "right".equals(s) || "up".equals(s) || "down".equals(s);
+  }
+
+  private void handleDpadTouchMove(Pointer ptr, float dx, float dy) {
+    float absDx = Math.abs(dx);
+    float absDy = Math.abs(dy);
+    float dpadThreshold = _config.swipe_dist_px * 0.16f;
+
+    // Center deadzone — middle red circle
+    if (absDx < dpadThreshold && absDy < dpadThreshold) {
+      if (ptr.value != null) {
+        ptr.value = null;
+        ptr.flags = 0;
+        stopLongPress(ptr);
+        _handler.onPointerFlagsChanged(false);
+      }
+      return;
+    }
+
+    // Determine swipe direction with strict quadrant boundaries (45 degree cones)
+    // Left swipe: dx < 0 and |dx| > |dy| -> DPAD_LEFT
+    // Right swipe: dx > 0 and |dx| > |dy| -> DPAD_RIGHT
+    // Up swipe: dy < 0 and |dy| >= |dx| -> DPAD_UP
+    // Down swipe: dy > 0 and |dy| >= |dx| -> DPAD_DOWN
+    KeyValue navKv = null;
+    if (absDx > absDy) {
+      navKv = dx < 0 ? findNavKey(ptr.key, KeyEvent.KEYCODE_DPAD_LEFT) : findNavKey(ptr.key, KeyEvent.KEYCODE_DPAD_RIGHT);
+    } else {
+      navKv = dy < 0 ? findNavKey(ptr.key, KeyEvent.KEYCODE_DPAD_UP) : findNavKey(ptr.key, KeyEvent.KEYCODE_DPAD_DOWN);
+    }
+
+    if (navKv == null) return;
+
+    // If the direction changed (or newly triggered), update value, emit immediately and start repeat
+    if (!navKv.equals(ptr.value)) {
+      if (ptr.gesture == null) ptr.gesture = new Gesture(0);
+      ptr.value = navKv;
+      ptr.flags = pointer_flags_of_kv(navKv);
+      // Immediately emit 1st keystroke for responsive feedback
+      _handler.onPointerHold(navKv, ptr.modifiers);
+      _handler.onPointerFlagsChanged(true);
+      // Start repeat on hold
+      restartLongPress(ptr);
+    }
+  }
+
+  private KeyValue findNavKey(KeyboardData.Key k, int keyCode) {
     if (k == null) return null;
-    for (int i = 0; i < 9; i++) if (k.keys[i] != null && primary.equals(k.keys[i].getString())) return k.keys[i];
-    if (secondary != null) for (int i = 0; i < 9; i++) if (k.keys[i] != null && secondary.equals(k.keys[i].getString())) return k.keys[i];
+    for (int i = 0; i < 9; i++) {
+      if (k.keys[i] != null && k.keys[i].getKind() == KeyValue.Kind.Keyevent && k.keys[i].getKeyevent() == keyCode) {
+        return k.keys[i];
+      }
+    }
+    switch (keyCode) {
+      case KeyEvent.KEYCODE_DPAD_LEFT: return KeyValue.getKeyByName("left");
+      case KeyEvent.KEYCODE_DPAD_RIGHT: return KeyValue.getKeyByName("right");
+      case KeyEvent.KEYCODE_DPAD_UP: return KeyValue.getKeyByName("up");
+      case KeyEvent.KEYCODE_DPAD_DOWN: return KeyValue.getKeyByName("down");
+    }
     return null;
   }
 
@@ -286,20 +366,12 @@ public final class Pointers implements Handler.Callback
 
     float dist = Math.abs(dx) + Math.abs(dy);
     float threshold = _config.swipe_dist_px;
-    // Navigation arrows — dpad center red-circle: little swipe from center must trigger, hold for repeat
-    if (ptr.key != null) {
-      boolean isNav = false;
-      boolean isDpad = ptr.key.keys[0]==null;
-      for (int k = 1; k < 9; k++) {
-        if (ptr.key.keys[k] != null) {
-          String s = ptr.key.keys[k].getString();
-          if ("word_left".equals(s) || "word_right".equals(s) || "left".equals(s) || "right".equals(s) || "up".equals(s) || "down".equals(s)) {
-            isNav = true; break;
-          }
-        }
-      }
-      if (isNav) threshold *= isDpad ? 0.14f : 0.30f;
+    // Navigation arrows — for Dpad key (keys[0]==null and has directional keys) or keys containing dpad arrows
+    if (ptr.key != null && isDpadKey(ptr.key)) {
+      handleDpadTouchMove(ptr, dx, dy);
+      return;
     }
+
     if (dist < threshold)
     {
       // Pointer is still on the center.
@@ -313,40 +385,6 @@ public final class Pointers implements Handler.Callback
     }
       else
       { // Pointer is on a quadrant.
-        // Special forgiving handling for navigation arrows next to spacebar — use dominant axis
-        if (ptr.key != null) {
-          boolean hasNav = false;
-          for (int k = 1; k < 9; k++) {
-            if (ptr.key.keys[k] != null) {
-              String s = ptr.key.keys[k].getString();
-              if ("left".equals(s) || "right".equals(s) || "up".equals(s) || "down".equals(s) || "word_left".equals(s) || "word_right".equals(s)) { hasNav = true; break; }
-            }
-          }
-          if (hasNav) {
-            KeyValue navKv = null;
-            if (Math.abs(dx) > Math.abs(dy)) {
-              // Horizontal dominant
-              navKv = dx < 0 ? findNavKey(ptr.key, "left", null) : findNavKey(ptr.key, "right", null);
-            } else {
-              // Vertical dominant
-              navKv = dy < 0 ? findNavKey(ptr.key, "up", null) : findNavKey(ptr.key, "down", null);
-            }
-            if (navKv != null) {
-              // Never apply fn/modifiers to navigation pad — keep pure left/right/up/down, remove home/end completely
-              KeyValue modNav = _handler.modifyKey(navKv, Pointers.Modifiers.EMPTY);
-              if (modNav != null && !modNav.equals(ptr.value)) {
-                if (ptr.gesture == null) ptr.gesture = new Gesture(0);
-                ptr.value = modNav;
-                ptr.flags = pointer_flags_of_kv(modNav);
-                _handler.onPointerDown(modNav, true);
-                restartLongPress(ptr);
-                return;
-              }
-              // Holding same dir — keep original long-press timer for reliable repeat (don't restart on jitter)
-              if (modNav != null) return;
-            }
-          }
-        }
         // See [getKeyAtDirection()] for the meaning. The starting point on the
         // circle is the top direction.
         double a = Math.atan2(dy, dx) + Math.PI;
@@ -474,13 +512,6 @@ public final class Pointers implements Handler.Callback
     int what = (uniqueTimeoutWhat++);
     ptr.timeoutWhat = what;
     long timeout = _config.longPressTimeout;
-    // Dpad — faster initial repeat for responsive hold
-    if (ptr.value != null && ptr.value.getKind()==KeyValue.Kind.Keyevent) {
-      int code = ptr.value.getKeyevent();
-      if (code==android.view.KeyEvent.KEYCODE_DPAD_LEFT || code==android.view.KeyEvent.KEYCODE_DPAD_RIGHT || code==android.view.KeyEvent.KEYCODE_DPAD_UP || code==android.view.KeyEvent.KEYCODE_DPAD_DOWN) {
-        timeout = Math.min(160, timeout);
-      }
-    }
     _longpress_handler.sendEmptyMessageDelayed(what, timeout);
   }
 
@@ -508,6 +539,13 @@ public final class Pointers implements Handler.Callback
     // Latched key, no key
     if (ptr.hasFlagsAny(FLAG_P_LATCHED) || ptr.value == null)
       return;
+    // Navigation arrows are always repeatable on hold
+    if (isNavKeyValue(ptr.value))
+    {
+      _handler.onPointerHold(ptr.value, ptr.modifiers);
+      _longpress_handler.sendEmptyMessageDelayed(ptr.timeoutWhat, _config.longPressInterval);
+      return;
+    }
     // Sliders are repeatable (e.g. space bar word navigation, cursor sliding)
     if (ptr.value.getKind() == KeyValue.Kind.Slider)
     {

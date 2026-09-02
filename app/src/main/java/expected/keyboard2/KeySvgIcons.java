@@ -234,6 +234,23 @@ public class KeySvgIcons {
 
     String toggleFloatingPath = "M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z";
     addIcon('⛶', toggleFloatingPath, 24f);
+
+    // 20. NAVIGATION ARROWS (Dpad Left, Right, Up, Down for Dpad / functional navigation keys)
+    String arrowLeftPath = "M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z";
+    addStringIcon("left", arrowLeftPath, 24f);
+    addStringIcon("dpad_left", arrowLeftPath, 24f);
+
+    String arrowRightPath = "M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z";
+    addStringIcon("right", arrowRightPath, 24f);
+    addStringIcon("dpad_right", arrowRightPath, 24f);
+
+    String arrowUpPath = "M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z";
+    addStringIcon("up", arrowUpPath, 24f);
+    addStringIcon("dpad_up", arrowUpPath, 24f);
+
+    String arrowDownPath = "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z";
+    addStringIcon("down", arrowDownPath, 24f);
+    addStringIcon("dpad_down", arrowDownPath, 24f);
   }
 
   private static void addCompositeIcon(char c, String strokePathData, String fillPathData, float fillOpacityUnclicked, float fillOpacityClicked, float viewBox, float strokeWidth) {

@@ -30,6 +30,9 @@ public class EmojiPredictor
     EMOJI_MAP.put("thumbs", "👍");
     EMOJI_MAP.put("like", "👍");
     EMOJI_MAP.put("ok", "👌");
+    EMOJI_MAP.put("middlefinger", "🖕");
+    EMOJI_MAP.put("fu", "🖕");
+    EMOJI_MAP.put("fuck", "🖕");
     EMOJI_MAP.put("pray", "🙏");
     EMOJI_MAP.put("please", "🙏");
     EMOJI_MAP.put("thanks", "🙏");

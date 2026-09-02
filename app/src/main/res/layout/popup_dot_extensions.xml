@@ -4,16 +4,24 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@drawable/popup_dot_bg"
-    android:paddingHorizontal="8dp"
-    android:paddingVertical="6dp"
-    android:elevation="8dp">
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="4dp"
+    android:elevation="12dp">
 
-    <!-- Extensions will be added dynamically -->
-    <LinearLayout
-        android:id="@+id/popup_extensions_container"
+    <HorizontalScrollView
+        android:id="@+id/popup_extensions_scroll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical" />
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/popup_extensions_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical" />
+    </HorizontalScrollView>
 
 </LinearLayout>
