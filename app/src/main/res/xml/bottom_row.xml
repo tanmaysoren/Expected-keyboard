@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<row height="0.95">
+<row height="1.05">
   <key width="1.1" role="action" key0="ctrl" key1="loc switch_greekmath" key2="loc meta" key3="loc switch_clipboard" key4="switch_numeric"/>
   <key width="1.1" role="action" key0="alt" key2="loc change_method" key3="switch_emoji" key4="config"/>
   <key width="0.7" role="action" key0="."/>

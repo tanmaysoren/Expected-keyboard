@@ -286,21 +286,19 @@ public final class Pointers implements Handler.Callback
 
     float dist = Math.abs(dx) + Math.abs(dy);
     float threshold = _config.swipe_dist_px;
-    // Fat-finger fix: navigation arrows (space+dpad) — ultra-sensitive little swipe, bigger hitbox
+    // Navigation arrows — dpad center red-circle: little swipe from center must trigger, hold for repeat
     if (ptr.key != null) {
       boolean isNav = false;
-      boolean isDpad = false;
+      boolean isDpad = ptr.key.keys[0]==null;
       for (int k = 1; k < 9; k++) {
         if (ptr.key.keys[k] != null) {
           String s = ptr.key.keys[k].getString();
           if ("word_left".equals(s) || "word_right".equals(s) || "left".equals(s) || "right".equals(s) || "up".equals(s) || "down".equals(s)) {
-            isNav = true;
-            if (ptr.key.keys[0]==null) isDpad=true; // dpad has no center => even more sensitive
-            break;
+            isNav = true; break;
           }
         }
       }
-      if (isNav) threshold *= isDpad ? 0.12f : 0.30f;
+      if (isNav) threshold *= isDpad ? 0.14f : 0.30f;
     }
     if (dist < threshold)
     {
@@ -341,8 +339,11 @@ public final class Pointers implements Handler.Callback
                 ptr.value = modNav;
                 ptr.flags = pointer_flags_of_kv(modNav);
                 _handler.onPointerDown(modNav, true);
+                restartLongPress(ptr);
                 return;
               }
+              // Holding same dir — keep original long-press timer for reliable repeat (don't restart on jitter)
+              if (modNav != null) return;
             }
           }
         }
@@ -472,7 +473,15 @@ public final class Pointers implements Handler.Callback
   {
     int what = (uniqueTimeoutWhat++);
     ptr.timeoutWhat = what;
-    _longpress_handler.sendEmptyMessageDelayed(what, _config.longPressTimeout);
+    long timeout = _config.longPressTimeout;
+    // Dpad — faster initial repeat for responsive hold
+    if (ptr.value != null && ptr.value.getKind()==KeyValue.Kind.Keyevent) {
+      int code = ptr.value.getKeyevent();
+      if (code==android.view.KeyEvent.KEYCODE_DPAD_LEFT || code==android.view.KeyEvent.KEYCODE_DPAD_RIGHT || code==android.view.KeyEvent.KEYCODE_DPAD_UP || code==android.view.KeyEvent.KEYCODE_DPAD_DOWN) {
+        timeout = Math.min(160, timeout);
+      }
+    }
+    _longpress_handler.sendEmptyMessageDelayed(what, timeout);
   }
 
   private void stopLongPress(Pointer ptr)
