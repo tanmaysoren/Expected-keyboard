@@ -41,7 +41,7 @@
     <key width="1.2" role="action" c="alt" />
     <key width="2.8" role="space_bar" c="space" nw="superscript" sw="subscript" />
     <key width="1.2" role="action" c="0" ne="." />
-    <key width="1.2" role="action" c="compose" n="up" e="right" w="left" s="down" />
+    <key width="1.2" role="action" key5="left" key6="right" key7="up" key8="down" />
     <key width="1.2" role="action" c="enter" nw="=" ne="action" se="toggle_floating" />
   </row>
 </keyboard>
