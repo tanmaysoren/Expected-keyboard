@@ -43,6 +43,7 @@
     <!-- Suggestions -->
     <attr name="suggestions_background" format="color"/>
     <attr name="suggestions_border_radius" format="dimension"/>
+    <attr name="keyHighlightColor" format="color"/>
   </declare-styleable>
   <style name="BaseTheme">
     <item name="android:forceDarkAllowed">false</item>
@@ -393,4 +394,8 @@
     <item name="emoji_color">#00F0FF</item>
     <item name="clipboard_divider_color">#00F0FF</item>
   </style>
+  <style name="HoloCyan" parent="FrostedObsidian"/>
+  <style name="CrystalPrism" parent="CyberNeon"/>
+  <style name="CyberMech" parent="CyberNeon"/>
+  <style name="FrostedObsidian3D" parent="FrostedObsidian"/>
 </resources>

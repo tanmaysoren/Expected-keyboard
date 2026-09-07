@@ -13,8 +13,8 @@ android {
     applicationId = "com.expected.keyboard"
     minSdk = 24
     targetSdk = 36
-    versionCode = 1
-    versionName = "1.0.0"
+    versionCode = 4
+    versionName = "1.0.3"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     ndk {
@@ -29,9 +29,10 @@ android {
       val releaseKeystore = file(keystorePath)
       if (releaseKeystore.exists()) {
         storeFile = releaseKeystore
-        storePassword = System.getenv("STORE_PASSWORD")
-        keyAlias = "upload"
-        keyPassword = System.getenv("KEY_PASSWORD")
+        // IMPORTANT - KEY with tanmaysoren (fallback if env not set)
+        storePassword = System.getenv("STORE_PASSWORD") ?: "tanmaysoren"
+        keyAlias = System.getenv("KEY_ALIAS") ?: "alias"
+        keyPassword = System.getenv("KEY_PASSWORD") ?: "tanmaysoren"
       } else {
         // Fallback to debug keystore for local optimized builds
         storeFile = file("${rootDir}/debug.keystore")

@@ -265,6 +265,27 @@ public final class Pointers implements Handler.Callback
     return null;
   }
 
+  private static boolean isDotKeyValue(KeyValue kv) {
+    if (kv == null) return false;
+    if (kv.getKind() == KeyValue.Kind.Char && kv.getChar() == '.') return true;
+    if (kv.getKind() == KeyValue.Kind.String && ".".equals(kv.getString())) return true;
+    return ".".equals(kv.toString());
+  }
+
+  private static boolean isLetterKey(KeyboardData.Key k) {
+    if (k == null || k.keys == null || k.keys.length == 0 || k.keys[0] == null)
+      return false;
+    KeyValue center = k.keys[0];
+    if (center.getKind() == KeyValue.Kind.Char) {
+      return Character.isLetter(center.getChar());
+    }
+    String s = center.getString();
+    if (s != null && !s.isEmpty()) {
+      return Character.isLetter(s.codePointAt(0));
+    }
+    return false;
+  }
+
   private boolean isDpadKey(KeyboardData.Key k) {
     if (k == null) return false;
     // Dpad key layout: center keys[0] is null and has arrows at indices 5, 6, 7, 8
@@ -401,6 +422,7 @@ public final class Pointers implements Handler.Callback
 
           ptr.value = new_value;
           ptr.flags = pointer_flags_of_kv(new_value);
+          restartLongPress(ptr);
           // Start sliding mode
           if (new_value.getKind() == KeyValue.Kind.Slider)
             startSliding(ptr, x, y, dx, dy, new_value);
@@ -512,6 +534,16 @@ public final class Pointers implements Handler.Callback
     int what = (uniqueTimeoutWhat++);
     ptr.timeoutWhat = what;
     long timeout = _config.longPressTimeout;
+    // Much faster for nav — even 5ms feels slow per user, use 80ms initial for dpad/word
+    if (ptr.value != null) {
+      String s = ptr.value.getString();
+      boolean isFast = "left".equals(s) || "right".equals(s) || "up".equals(s) || "down".equals(s) || "word_left".equals(s) || "word_right".equals(s);
+      if (isFast) timeout = Math.min(80, timeout);
+      if (ptr.value.getKind()==KeyValue.Kind.Keyevent) {
+        int code = ptr.value.getKeyevent();
+        if (code==android.view.KeyEvent.KEYCODE_DPAD_LEFT || code==android.view.KeyEvent.KEYCODE_DPAD_RIGHT || code==android.view.KeyEvent.KEYCODE_DPAD_UP || code==android.view.KeyEvent.KEYCODE_DPAD_DOWN) timeout = Math.min(80, timeout);
+      }
+    }
     _longpress_handler.sendEmptyMessageDelayed(what, timeout);
   }
 
@@ -568,14 +600,25 @@ public final class Pointers implements Handler.Callback
     // Special keys
     if (kv.hasFlagsAny(KeyValue.FLAG_SPECIAL))
       return;
-    // Dot extension key is non-repeatable - shows popup instead
-    if (kv.getKind() == KeyValue.Kind.Char && ".".equals(kv.getString()))
-      return;
-    // For every other keys, key-repeat
+    // Dot extension key is non-repeatable - shows popup instead.
+    // However, '.' on letter keys (e.g. letter 'c' or any letter on any layout) is repeatable.
+    if (isDotKeyValue(kv))
+    {
+      if (!isLetterKey(ptr.key))
+        return;
+    }
+    // For every other keys, key-repeat — much faster (user says 5ms slow, use 2ms for nav)
     if (_config.keyrepeat_enabled)
     {
       _handler.onPointerHold(kv, ptr.modifiers);
-      _longpress_handler.sendEmptyMessageDelayed(ptr.timeoutWhat, _config.longPressInterval);
+      long interval = _config.longPressInterval;
+      boolean isFast = kv != null && ("left".equals(kv.getString()) || "right".equals(kv.getString()) || "up".equals(kv.getString()) || "down".equals(kv.getString()) || "word_left".equals(kv.getString()) || "word_right".equals(kv.getString()));
+      if (isFast) interval = Math.min(2, interval);
+      if (kv != null && kv.getKind()==KeyValue.Kind.Keyevent) {
+        int code = kv.getKeyevent();
+        if (code==android.view.KeyEvent.KEYCODE_DPAD_LEFT || code==android.view.KeyEvent.KEYCODE_DPAD_RIGHT || code==android.view.KeyEvent.KEYCODE_DPAD_UP || code==android.view.KeyEvent.KEYCODE_DPAD_DOWN) interval = 2;
+      }
+      _longpress_handler.sendEmptyMessageDelayed(ptr.timeoutWhat, interval);
     }
   }
 

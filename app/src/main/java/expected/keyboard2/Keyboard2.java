@@ -63,6 +63,7 @@ public class Keyboard2 extends InputMethodService
   private KeyboardData _cachedNumericLayout = null;
   private KeyboardData _cachedGreekMathLayout = null;
   private KeyboardData _cachedPinLayout = null;
+  private boolean _suppressPrefChangeListener = false;
 
   private void clearLayoutCaches()
   {
@@ -364,6 +365,7 @@ public class Keyboard2 extends InputMethodService
   public void onConfigurationChanged(Configuration newConfig)
   {
     super.onConfigurationChanged(newConfig);
+    expected.keyboard2.layout.LanguageLayoutPopup.dismiss();
     refresh_config();
     if (_config.editor_config.numeric_layout)
       _currentSpecialLayout = refresh_special_layout();
@@ -372,6 +374,15 @@ public class Keyboard2 extends InputMethodService
     applyFloatingModeLayout();
     updateInputViewShown();
   }
+
+  @Override
+  public void onWindowHidden()
+  {
+    expected.keyboard2.layout.LanguageLayoutPopup.dismiss();
+    super.onWindowHidden();
+  }
+
+
 
   private static void updateLayoutSizeOf(final Window window, final int layoutWidth, final int layoutHeight) {
     if (window == null) return;
@@ -581,12 +592,14 @@ public class Keyboard2 extends InputMethodService
   public void onFinishInputView(boolean finishingInput)
   {
     super.onFinishInputView(finishingInput);
+    expected.keyboard2.layout.LanguageLayoutPopup.dismiss();
     _keyboard_layout_view.reset();
   }
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences _prefs, String _key)
   {
+    if (_suppressPrefChangeListener) return;
     refresh_config();
     _keyboard_layout_view.setKeyboard(current_layout());
   }
@@ -687,9 +700,7 @@ public class Keyboard2 extends InputMethodService
           break;
 
         case SWITCH_LAYOUT_PANE:
-          if (_layoutPane == null)
-            _layoutPane = (ViewGroup)inflate_view(R.layout.layout_switcher_pane);
-          setInputView(_layoutPane);
+          expected.keyboard2.layout.LanguageLayoutPopup.show(Keyboard2.this, _keyboard_container_view != null ? _keyboard_container_view : _keyboard_layout_view);
           break;
 
         case SWITCH_THEME_PANE:
@@ -701,9 +712,20 @@ public class Keyboard2 extends InputMethodService
         case SWITCH_BACK_EMOJI:
         case SWITCH_BACK_CLIPBOARD:
         case SWITCH_BACK_EDITING:
-        case SWITCH_BACK_LAYOUT_PANE:
         case SWITCH_BACK_THEME_PANE:
           setInputView(_keyboard_container_view);
+          break;
+
+        case SWITCH_BACK_LAYOUT_PANE:
+          if (expected.keyboard2.layout.LanguageLayoutPopup.isShowing())
+          {
+            expected.keyboard2.layout.LanguageLayoutPopup.dismiss();
+          }
+          if (_layoutPane != null)
+          {
+            _layoutPane = null;
+            setInputView(_keyboard_container_view);
+          }
           break;
 
         case CHANGE_METHOD_PICKER:
@@ -824,70 +846,133 @@ public class Keyboard2 extends InputMethodService
     {
       if (_config.layouts != null && index >= 0 && index < _config.layouts.size())
       {
-        clearLayoutCaches();
-        _layoutPane = null;
-        setTextLayout(index);
-        if (_keyboard_layout_view != null)
+        KeyboardData kd = _config.layouts.get(index);
+        String name = (kd != null && kd.resourceName != null) ? kd.resourceName : (kd != null ? kd.name : null);
+        if (name != null)
         {
-          _keyboard_layout_view.setKeyboard(current_layout());
-          _keyboard_layout_view.requestLayout();
-          _keyboard_layout_view.invalidate();
+          switch_to_layout_name(name);
+          return;
         }
-        setInputView(_keyboard_container_view);
+
+        _suppressPrefChangeListener = true;
+        try
+        {
+          clearLayoutCaches();
+          _layoutPane = null;
+          _config.current_layout_narrow = index;
+          _config.current_layout_wide = index;
+          _currentSpecialLayout = null;
+
+          SharedPreferences.Editor editor = Config.globalPrefs().edit();
+          editor.putInt("current_layout_portrait", index);
+          editor.putInt("current_layout_landscape", index);
+          editor.commit();
+
+          refresh_current_dictionary();
+          refresh_candidates_view();
+
+          if (_keyboard_layout_view != null)
+          {
+            _keyboard_layout_view.setKeyboard(current_layout());
+            _keyboard_layout_view.requestLayout();
+            _keyboard_layout_view.invalidate();
+          }
+        }
+        finally
+        {
+          _suppressPrefChangeListener = false;
+        }
       }
     }
 
     @Override
     public void switch_to_layout_name(String layoutName)
     {
-      if (layoutName == null) return;
+      if (layoutName == null || layoutName.trim().isEmpty()) return;
+      layoutName = layoutName.trim();
       if ("system".equals(layoutName)) layoutName = "latn_qwerty_us";
-      clearLayoutCaches();
-      _layoutPane = null;
 
-      // Check if already in active layouts
-      if (_config.layouts != null)
+      _layoutPane = null;
+      _suppressPrefChangeListener = true;
+      try
       {
-        for (int i = 0; i < _config.layouts.size(); i++)
+        clearLayoutCaches();
+
+        // 1. Check if already in active layouts
+        int targetIdx = -1;
+        if (_config.layouts != null)
         {
-          KeyboardData existing = _config.layouts.get(i);
-          String exName = (existing != null && existing.resourceName != null) ? existing.resourceName : (existing != null ? existing.name : null);
-          if (layoutName.equals(exName))
+          for (int i = 0; i < _config.layouts.size(); i++)
           {
-            setTextLayout(i);
-            if (_keyboard_layout_view != null)
+            KeyboardData existing = _config.layouts.get(i);
+            String exName = (existing != null && existing.resourceName != null) ? existing.resourceName : (existing != null ? existing.name : null);
+            if (layoutName.equals(exName))
             {
-              _keyboard_layout_view.setKeyboard(current_layout());
-              _keyboard_layout_view.requestLayout();
-              _keyboard_layout_view.invalidate();
+              targetIdx = i;
+              break;
             }
-            setInputView(_keyboard_container_view);
-            return;
           }
         }
-      }
 
-      // Dynamically load the layout
-      KeyboardData kd = expected.keyboard2.prefs.LayoutsPreference.layout_of_string(getResources(), layoutName);
-      if (kd != null)
-      {
-        kd.resourceName = layoutName;
-        if (_config.layouts == null)
+        // 2. If not found in active layouts, dynamically load it
+        if (targetIdx < 0)
         {
-          _config.layouts = new java.util.ArrayList<KeyboardData>();
+          KeyboardData kd = expected.keyboard2.prefs.LayoutsPreference.layout_of_string(getResources(), layoutName);
+          if (kd == null)
+          {
+            int id = expected.keyboard2.prefs.LayoutsPreference.layout_id_of_name(getResources(), layoutName);
+            if (id > 0)
+            {
+              kd = KeyboardData.load(getResources(), id);
+            }
+          }
+          if (kd != null)
+          {
+            kd.resourceName = layoutName;
+            if (_config.layouts == null)
+            {
+              _config.layouts = new java.util.ArrayList<KeyboardData>();
+            }
+            _config.layouts.add(kd);
+            targetIdx = _config.layouts.size() - 1;
+          }
         }
-        _config.layouts.add(kd);
-        int targetIdx = _config.layouts.size() - 1;
-        setTextLayout(targetIdx);
-        expected.keyboard2.prefs.LayoutsPreference.save_keyboard_data_to_preferences(Config.globalPrefs().edit(), _config.layouts);
+
+        if (targetIdx >= 0)
+        {
+          _config.current_layout_narrow = targetIdx;
+          _config.current_layout_wide = targetIdx;
+          _currentSpecialLayout = null;
+
+          // Save both layout list and current index to SharedPreferences in a single atomic transaction
+          SharedPreferences.Editor editor = Config.globalPrefs().edit();
+          expected.keyboard2.prefs.LayoutsPreference.save_keyboard_data_to_preferences(editor, _config.layouts);
+          editor.putInt("current_layout_portrait", targetIdx);
+          editor.putInt("current_layout_landscape", targetIdx);
+          editor.commit();
+
+          // Refresh dictionaries and candidates for new layout
+          refresh_current_dictionary();
+          refresh_candidates_view();
+
+          // Apply to keyboard view immediately
+          if (_keyboard_layout_view != null)
+          {
+            _keyboard_layout_view.setKeyboard(current_layout());
+            _keyboard_layout_view.requestLayout();
+            _keyboard_layout_view.invalidate();
+          }
+        }
+
+        if (_layoutPane != null && _keyboard_container_view != null)
+        {
+          setInputView(_keyboard_container_view);
+        }
       }
-      if (_keyboard_layout_view != null)
+      finally
       {
-        _keyboard_layout_view.setKeyboard(current_layout());
-        _keyboard_layout_view.requestLayout();
-        _keyboard_layout_view.invalidate();
+        _suppressPrefChangeListener = false;
       }
-      setInputView(_keyboard_container_view);
     }
 
     @Override

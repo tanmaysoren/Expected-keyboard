@@ -47,6 +47,7 @@ public final class Config
   public boolean show_suggestion_bar; // persistent bar toggle
   public java.util.Set<String> terminal_commands; // custom commands for terminal apps
   public java.util.Set<String> custom_emails; // custom emails for login fields
+  public boolean sound_enabled;
   // Let the system handle vibration when false.
   public boolean vibrate_custom;
   // Control the vibration if [vibrate_custom] is true.
@@ -182,6 +183,7 @@ public final class Config
     swipe_dist_px = swipe_dist_value / 25.f * swipe_scaling;
     float slider_sensitivity = Float.valueOf(_prefs.getString("slider_sensitivity", "30")) / 100.f;
     slide_step_px = slider_sensitivity * swipe_scaling;
+    sound_enabled = _prefs.getBoolean("sound_enabled", false);
     vibrate_custom = _prefs.getBoolean("vibrate_custom", false);
     vibrate_duration = _prefs.getInt("vibrate_duration", 20);
     longPressTimeout = _prefs.getInt("longpress_timeout", 240);
@@ -276,14 +278,12 @@ public final class Config
 
   public void set_current_layout(int l)
   {
-    if (wide_screen)
-      current_layout_wide = l;
-    else
-      current_layout_narrow = l;
+    current_layout_narrow = l;
+    current_layout_wide = l;
 
     SharedPreferences.Editor e = _prefs.edit();
-    e.putInt("current_layout_portrait", current_layout_narrow);
-    e.putInt("current_layout_landscape", current_layout_wide);
+    e.putInt("current_layout_portrait", l);
+    e.putInt("current_layout_landscape", l);
     e.apply();
   }
 
@@ -357,6 +357,10 @@ public final class Config
       case "pine": return R.style.Pine;
       case "epaperblack": return R.style.ePaperBlack;
       case "dracula": return R.style.Dracula;
+      case "holocyan": return R.style.HoloCyan;
+      case "crystalprism": return R.style.CrystalPrism;
+      case "cybermech": return R.style.CyberMech;
+      case "frostedobsidian3d": return R.style.FrostedObsidian3D;
       default:
       case "frostedobsidian": return R.style.FrostedObsidian;
       case "cyberneon": return R.style.CyberNeon;

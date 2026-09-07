@@ -35,6 +35,7 @@ public class Theme
   public final int keyBorderColorRight;
   public final int keyBorderColorBottom;
 
+  public final int keyHighlightColor;
   public final int colorNavBar;
   public final boolean isLightNavBar;
 
@@ -67,6 +68,7 @@ public class Theme
     keyBorderColorTop = s.getColor(R.styleable.keyboard_keyBorderColorTop, colorKey);
     keyBorderColorRight = s.getColor(R.styleable.keyboard_keyBorderColorRight, colorKey);
     keyBorderColorBottom = s.getColor(R.styleable.keyboard_keyBorderColorBottom, colorKey);
+    keyHighlightColor = s.getColor(R.styleable.keyboard_keyHighlightColor, 0);
     s.recycle();
   }
 
@@ -103,20 +105,21 @@ public class Theme
     return _key_font;
   }
 
-  public static final class Computed
-  {
-    public final float vertical_margin;
-    public final float horizontal_margin;
-    public final float margin_top;
-    public final float margin_left;
-    public final float row_height;
-    public final Paint indication_paint;
+    public static final class Computed
+    {
+      public final float vertical_margin;
+      public final float horizontal_margin;
+      public final float margin_top;
+      public final float margin_left;
+      public final float row_height;
+      public final Paint indication_paint;
+      public final boolean is3D = false;
 
-    public final Key key;
-    public final Key key_activated;
-    public final Key key_action;
-    public final Key key_space_bar;
-    public final Key key_suggestion;
+      public final Key key;
+      public final Key key_activated;
+      public final Key key_action;
+      public final Key key_space_bar;
+      public final Key key_suggestion;
 
     public Computed(Theme theme, Config config, float keyWidth, KeyboardData layout)
     {
@@ -147,6 +150,10 @@ public class Theme
       public final Paint border_bottom_paint;
       public final float border_width;
       public final float border_radius;
+      public final boolean is3D;
+      public final boolean isActivated;
+      public final Paint shadow_paint;
+      public final Paint glow_paint;
       final Paint _label_paint;
       final Paint _special_label_paint;
       final Paint _sublabel_paint;
@@ -157,6 +164,10 @@ public class Theme
           KeyboardData.Key.Role role)
       {
         border_radius = config.borderConfig ? config.customBorderRadius * keyWidth : theme.keyBorderRadius;
+        is3D = false;
+        isActivated = activated;
+        shadow_paint = null;
+        glow_paint = null;
         int bg_color;
         if (activated)
         {

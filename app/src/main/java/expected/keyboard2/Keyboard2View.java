@@ -3,10 +3,13 @@ package expected.keyboard2;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Insets;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.inputmethodservice.InputMethodService;
 import android.os.Build.VERSION;
 import android.util.AttributeSet;
@@ -54,6 +57,29 @@ public class Keyboard2View extends View
   private Theme.Computed _tc;
 
   private static RectF _tmpRect = new RectF();
+  private static RectF _tmpRect2 = new RectF();
+  private static RectF _tmpRectPedestal = new RectF();
+  private static Paint _facetPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private static Paint _specularGlarePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private static Paint _topGlintPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private static Paint _pedestalPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+  private static int blendColors(int color1, int color2, float ratio)
+  {
+    float inverse = 1.0f - ratio;
+    float a = Color.alpha(color1) * inverse + Color.alpha(color2) * ratio;
+    float r = Color.red(color1) * inverse + Color.red(color2) * ratio;
+    float g = Color.green(color1) * inverse + Color.green(color2) * ratio;
+    float b = Color.blue(color1) * inverse + Color.blue(color2) * ratio;
+    return Color.argb((int) a, (int) r, (int) g, (int) b);
+  }
+
+  private static int adjustAlpha(int color, float factor)
+  {
+    int alpha = Math.round(Color.alpha(color) * factor);
+    alpha = Math.max(0, Math.min(255, alpha));
+    return (color & 0x00FFFFFF) | (alpha << 24);
+  }
 
   private DotExtensionPopup _dotExtensionPopup;
   private android.os.Handler _dotHandler = new android.os.Handler(android.os.Looper.getMainLooper());
@@ -176,6 +202,7 @@ public class Keyboard2View extends View
     _config.handler.key_down(k, isSwipe);
     invalidate();
     vibrate();
+    SoundCompat.playClick(this, k, _config);
   }
 
   public void onPointerUp(KeyValue k, Pointers.Modifiers mods)
@@ -191,6 +218,8 @@ public class Keyboard2View extends View
   {
     _config.handler.key_up(k, mods);
     updateFlags();
+    if (_config != null && _config.sound_enabled)
+      SoundCompat.playClick(this, k, _config);
   }
 
   public void onPointerFlagsChanged(boolean shouldVibrate)
@@ -198,7 +227,10 @@ public class Keyboard2View extends View
     updateFlags();
     invalidate();
     if (shouldVibrate)
+    {
       vibrate();
+      SoundCompat.playClick(this, null, _config);
+    }
   }
 
   private void updateFlags()
@@ -612,20 +644,27 @@ public class Keyboard2View extends View
             default:
             case Normal: tc_key = _tc.key; break;
           }
-        drawKeyFrame(canvas, x, y, keyW, keyH, tc_key);
+        float density = getResources().getDisplayMetrics().density;
+        float bevelH = tc_key.is3D ? Math.max(3.8f * density, keyH * 0.085f) : 0f;
+        float pressOffset = (tc_key.is3D && isKeyDown) ? (bevelH * 0.85f) : 0f;
+        float drawY = y + pressOffset;
+        float faceH = tc_key.is3D ? (keyH - (isKeyDown ? (bevelH * 0.2f) : bevelH)) : keyH;
+
+        drawKeyFrame(canvas, x, y, keyW, keyH, tc_key, isKeyDown);
+
         // Dpad triangle key — full-space triangle zones as in screenshot (red X + arrows inside each triangle)
         boolean isDpad = k.keys[0]==null && k.keys[5]!=null && k.keys[6]!=null && k.keys[7]!=null && k.keys[8]!=null;
         if (isDpad) {
-          drawDpadTriangles(canvas, x, y, keyW, keyH, isKeyDown);
+          drawDpadTriangles(canvas, x, drawY, keyW, faceH, isKeyDown);
         } else {
           if (k.keys[0] != null)
-            drawLabel(canvas, k.keys[0], keyW / 2f + x, y, keyH, isKeyDown, tc_key);
+            drawLabel(canvas, k.keys[0], keyW / 2f + x, drawY, faceH, isKeyDown, tc_key);
           for (int i = 1; i < 9; i++)
           {
             if (k.keys[i] != null)
-              drawSubLabel(canvas, k.keys[i], x, y, keyW, keyH, i, isKeyDown, tc_key);
+              drawSubLabel(canvas, k.keys[i], x, drawY, keyW, faceH, i, isKeyDown, tc_key);
           }
-          drawIndication(canvas, k, x, y, keyW, keyH, _tc);
+          drawIndication(canvas, k, x, drawY, keyW, faceH, _tc);
         }
         x += _keyWidth * k.width;
       }
@@ -639,22 +678,143 @@ public class Keyboard2View extends View
     super.onDetachedFromWindow();
   }
 
-  /** Draw borders and background of the key. */
+  /** Draw borders and background of the key, with 3D elevation, shadow, and specular highlight if enabled. */
   void drawKeyFrame(Canvas canvas, float x, float y, float keyW, float keyH,
-      Theme.Computed.Key tc)
+      Theme.Computed.Key tc, boolean isKeyDown)
   {
     float r = tc.border_radius;
     float w = tc.border_width;
     float padding = w / 2.f;
-    _tmpRect.set(x + padding, y + padding, x + keyW - padding, y + keyH - padding);
-    canvas.drawRoundRect(_tmpRect, r, r, tc.bg_paint);
-    if (w > 0.f)
+
+    if (tc.is3D)
     {
-      float overlap = r - r * 0.85f + w; // sin(45°)
-      drawBorder(canvas, x, y, x + overlap, y + keyH, tc.border_left_paint, tc);
-      drawBorder(canvas, x + keyW - overlap, y, x + keyW, y + keyH, tc.border_right_paint, tc);
-      drawBorder(canvas, x, y, x + keyW, y + overlap, tc.border_top_paint, tc);
-      drawBorder(canvas, x, y + keyH - overlap, x + keyW, y + keyH, tc.border_bottom_paint, tc);
+      float density = getResources().getDisplayMetrics().density;
+      float bevelHeight = Math.max(3.8f * density, keyH * 0.085f);
+      float pressOffset = isKeyDown ? (bevelHeight * 0.85f) : 0f;
+      float faceY = y + pressOffset;
+      float faceH = keyH - (isKeyDown ? (bevelHeight * 0.2f) : bevelHeight);
+
+      // 1. Contact Drop Shadow underneath key base
+      if (tc.shadow_paint != null)
+      {
+        float shadowH = isKeyDown ? (1.5f * density) : (bevelHeight * 0.6f + 2f * density);
+        float shadowTop = y + keyH - shadowH;
+        _tmpRect.set(x + padding + 1f * density, shadowTop,
+                     x + keyW - padding - 1f * density, y + keyH + (isKeyDown ? 1.0f : 2.5f) * density);
+        canvas.drawRoundRect(_tmpRect, r, r, tc.shadow_paint);
+      }
+
+      // 2. 3D Keycap Extrusion Pedestal (Side-Wall)
+      if (!isKeyDown)
+      {
+        int baseColor = tc.bg_paint.getColor();
+        int pedestalColor = (tc.shadow_paint != null) ? tc.shadow_paint.getColor() : blendColors(baseColor, Color.BLACK, 0.45f);
+        int pedAlpha = Math.max(180, Color.alpha(baseColor));
+        pedestalColor = (pedestalColor & 0x00FFFFFF) | (pedAlpha << 24);
+        _pedestalPaint.setColor(pedestalColor);
+
+        _tmpRectPedestal.set(x + padding, y + bevelHeight * 0.4f, x + keyW - padding, y + keyH - padding);
+        canvas.drawRoundRect(_tmpRectPedestal, r, r, _pedestalPaint);
+      }
+
+      // 3. Ambient Aura / Underglow (for Cyber themes)
+      if (tc.glow_paint != null && (!isKeyDown || tc.isActivated))
+      {
+        _tmpRect.set(x + padding - 1f * density, faceY + padding - 1f * density,
+                     x + keyW - padding + 1f * density, faceY + faceH - padding + 1f * density);
+        canvas.drawRoundRect(_tmpRect, r + 1f * density, r + 1f * density, tc.glow_paint);
+      }
+
+      // 4. Crystalline Translucent Surface (Multi-tone vertical gradient)
+      int baseColor = tc.bg_paint.getColor();
+      int topColor;
+      int bottomColor;
+      if (isKeyDown)
+      {
+        topColor = blendColors(baseColor, Color.BLACK, 0.35f);
+        bottomColor = blendColors(baseColor, Color.BLACK, 0.10f);
+      }
+      else
+      {
+        boolean isLight = _theme.colorNavBar == 0 || Color.luminance(baseColor) > 0.4f;
+        int highlightTint = isLight ? Color.WHITE : (_theme.keyHighlightColor != 0 ? _theme.keyHighlightColor : Color.WHITE);
+        topColor = blendColors(baseColor, highlightTint, isLight ? 0.35f : 0.28f);
+        bottomColor = blendColors(baseColor, Color.BLACK, 0.18f);
+      }
+
+      LinearGradient faceShader = new LinearGradient(
+          x, faceY, x, faceY + faceH,
+          topColor, bottomColor, Shader.TileMode.CLAMP);
+      _facetPaint.setShader(faceShader);
+      _tmpRect.set(x + padding, faceY + padding, x + keyW - padding, faceY + faceH - padding);
+      canvas.drawRoundRect(_tmpRect, r, r, _facetPaint);
+
+      // 5. Curved Specular Glare Arc (Polished translucent sheen)
+      if (!isKeyDown)
+      {
+        float glareH = faceH * 0.44f;
+        float glareInset = Math.max(1.5f * density, padding + 0.8f * density);
+        if (keyW > glareInset * 2 && glareH > glareInset)
+        {
+          int glareStart = (_theme.keyHighlightColor != 0)
+              ? adjustAlpha(_theme.keyHighlightColor, 0.85f)
+              : 0x70FFFFFF;
+          int glareEnd = 0x00FFFFFF;
+
+          LinearGradient glareShader = new LinearGradient(
+              x, faceY + glareInset, x, faceY + glareH,
+              glareStart, glareEnd, Shader.TileMode.CLAMP);
+          _specularGlarePaint.setShader(glareShader);
+          _specularGlarePaint.setStyle(Paint.Style.FILL);
+
+          _tmpRect2.set(x + glareInset, faceY + glareInset, x + keyW - glareInset, faceY + glareH);
+          float glareRadius = Math.max(2f * density, r - glareInset);
+          canvas.drawRoundRect(_tmpRect2, glareRadius, glareRadius, _specularGlarePaint);
+        }
+
+        // 6. Top Glint Edge Line (Crisp optical glint along top rim)
+        _topGlintPaint.setStyle(Paint.Style.STROKE);
+        _topGlintPaint.setStrokeWidth(1.2f * density);
+        int glintColor = (_theme.keyHighlightColor != 0) ? _theme.keyHighlightColor : 0xAAFFFFFF;
+        _topGlintPaint.setColor(adjustAlpha(glintColor, 0.75f));
+        float glintY = faceY + padding + 0.6f * density;
+        float glintMargin = r * 0.75f;
+        if (keyW > glintMargin * 2)
+        {
+          canvas.drawLine(x + glintMargin, glintY, x + keyW - glintMargin, glintY, _topGlintPaint);
+        }
+      }
+
+      // 7. Prismatic Perimeter Borders
+      if (w > 0.f)
+      {
+        if (_theme.keyBorderColorTop == _theme.keyBorderColorBottom &&
+            _theme.keyBorderColorLeft == _theme.keyBorderColorRight)
+        {
+          canvas.drawRoundRect(_tmpRect, r, r, tc.border_top_paint);
+        }
+        else
+        {
+          float overlap = r - r * 0.85f + w;
+          drawBorder(canvas, x, faceY, x + overlap, faceY + faceH, tc.border_left_paint, tc);
+          drawBorder(canvas, x + keyW - overlap, faceY, x + keyW, faceY + faceH, tc.border_right_paint, tc);
+          drawBorder(canvas, x, faceY, x + keyW, faceY + overlap, tc.border_top_paint, tc);
+          drawBorder(canvas, x, faceY + faceH - overlap, x + keyW, faceY + faceH, tc.border_bottom_paint, tc);
+        }
+      }
+    }
+    else
+    {
+      _tmpRect.set(x + padding, y + padding, x + keyW - padding, y + keyH - padding);
+      canvas.drawRoundRect(_tmpRect, r, r, tc.bg_paint);
+      if (w > 0.f)
+      {
+        float overlap = r - r * 0.85f + w; // sin(45°)
+        drawBorder(canvas, x, y, x + overlap, y + keyH, tc.border_left_paint, tc);
+        drawBorder(canvas, x + keyW - overlap, y, x + keyW, y + keyH, tc.border_right_paint, tc);
+        drawBorder(canvas, x, y, x + keyW, y + overlap, tc.border_top_paint, tc);
+        drawBorder(canvas, x, y + keyH - overlap, x + keyW, y + keyH, tc.border_bottom_paint, tc);
+      }
     }
   }
 

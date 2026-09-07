@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/popup_language_bg"
+    android:padding="6dp">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="4dp">
+
+        <ImageView
+            android:id="@+id/popup_header_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_futo_layout"
+            android:tint="?attr/colorLabel"
+            android:layout_marginEnd="6dp" />
+
+        <TextView
+            android:id="@+id/popup_header_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Select Layout"
+            android:textColor="?attr/colorLabel"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/popup_btn_close"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_futo_clear"
+            android:tint="?attr/colorSubLabel"
+            android:padding="5dp"
+            android:contentDescription="Close" />
+    </LinearLayout>
+
+    <!-- Filter chips -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:id="@+id/popup_chips_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/chip_popup_popular"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="Popular"
+                android:textSize="10.5sp"
+                android:textColor="?attr/colorLabel"
+                android:background="@drawable/popup_chip_selected"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="8dp"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/chip_popup_all"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="All"
+                android:textSize="10.5sp"
+                android:textColor="?attr/colorSubLabel"
+                android:background="@drawable/popup_chip_normal"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="8dp"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/chip_popup_latin"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="Latin"
+                android:textSize="10.5sp"
+                android:textColor="?attr/colorSubLabel"
+                android:background="@drawable/popup_chip_normal"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="8dp"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/chip_popup_cyrillic"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="Cyrillic"
+                android:textSize="10.5sp"
+                android:textColor="?attr/colorSubLabel"
+                android:background="@drawable/popup_chip_normal"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="8dp"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/chip_popup_indic"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="Indic"
+                android:textSize="10.5sp"
+                android:textColor="?attr/colorSubLabel"
+                android:background="@drawable/popup_chip_normal"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="8dp"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/chip_popup_other"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="Other"
+                android:textSize="10.5sp"
+                android:textColor="?attr/colorSubLabel"
+                android:background="@drawable/popup_chip_normal"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="8dp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Scrollable Layouts List -->
+    <ListView
+        android:id="@+id/popup_layouts_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:dividerHeight="2dp"
+        android:scrollbars="vertical"
+        android:listSelector="@android:color/transparent"
+        android:overScrollMode="ifContentScrolls" />
+
+</LinearLayout>
+

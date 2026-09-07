@@ -324,4 +324,31 @@ class ExampleRobolectricTest {
     assertEquals("print_screen should be on same column as p", pPos.col, pos.col)
     assertEquals("print_screen should be in NE / top-right (dir 2)", 2, pos.dir)
   }
+
+  @Test
+  fun `layout_of_string correctly loads specific layouts without falling back`() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    val colemak = expected.keyboard2.prefs.LayoutsPreference.layout_of_string(context.resources, "latn_colemak")
+    assertNotNull(colemak)
+    assertEquals("latn_colemak", colemak.resourceName)
+
+    val dvorak = expected.keyboard2.prefs.LayoutsPreference.layout_of_string(context.resources, "latn_dvorak")
+    assertNotNull(dvorak)
+    assertEquals("latn_dvorak", dvorak.resourceName)
+
+    val hindi = expected.keyboard2.prefs.LayoutsPreference.layout_of_string(context.resources, "deva_inscript")
+    assertNotNull(hindi)
+    assertEquals("deva_inscript", hindi.resourceName)
+  }
+
+  @Test
+  fun `LanguageLayoutPopup ThemeColors resolves theme attributes without crash`() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    val themeColors = expected.keyboard2.layout.LanguageLayoutPopup.ThemeColors(context)
+    assertNotNull(themeColors)
+    assertTrue(themeColors.colorKeyboard != 0)
+    assertTrue(themeColors.colorKey != 0)
+    assertTrue(themeColors.colorLabel != 0)
+  }
 }
+
