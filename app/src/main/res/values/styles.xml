@@ -37,6 +37,7 @@
     <item name="android:layout_marginEnd">4dp</item>
     <item name="android:padding">@dimen/candidates_suggestions_padding</item>
     <item name="android:gravity">center</item>
+    <item name="android:background">@drawable/suggestions_item_background</item>
     <item name="android:textSize">22sp</item>
   </style>
   <style name="change_dictionary">
@@ -113,7 +114,7 @@
   </style>
 
   <!-- ============================================== -->
-  <!-- DARK GLASSMORPHISM / FROSTED OBSIDIAN THEME & STYLES -->
+  <!-- DARK FROSTED OBSIDIAN THEME & STYLES -->
   <!-- ============================================== -->
 
   <!-- App Theme (Frosted Obsidian & Electric Indigo/Violet) -->
@@ -144,7 +145,7 @@
     <item name="android:listSeparatorTextViewStyle">@style/CyberPreferenceCategory</item>
   </style>
 
-  <!-- Glassmorphism Preference Category Header -->
+  <!-- Modern Preference Category Header -->
   <style name="CyberPreferenceCategory">
     <item name="android:textColor">#A78BFA</item>
     <item name="android:textSize">12sp</item>
@@ -157,7 +158,7 @@
     <item name="android:letterSpacing">0.08</item>
   </style>
 
-  <!-- Glassmorphism SeekBar Style -->
+  <!-- Modern SeekBar Style -->
   <style name="CyberSeekBar" parent="@android:style/Widget.Material.SeekBar">
     <item name="android:progressDrawable">@drawable/cyber_seekbar_progress</item>
     <item name="android:thumb">@drawable/cyber_seekbar_thumb</item>
@@ -168,7 +169,7 @@
     <item name="android:paddingEnd">12dp</item>
   </style>
 
-  <!-- Glassmorphic Dialog Themes -->
+  <!-- Cyber Dialog Themes -->
   <style name="CyberSectionDialogTheme" parent="@android:style/Theme.Material.Dialog">
     <item name="android:windowBackground">@drawable/cyber_dialog_bg</item>
     <item name="android:colorBackground">#121522</item>

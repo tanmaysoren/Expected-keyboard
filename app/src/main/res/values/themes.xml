@@ -43,10 +43,16 @@
     <!-- Suggestions -->
     <attr name="suggestions_background" format="color"/>
     <attr name="suggestions_border_radius" format="dimension"/>
+    <!-- 3D Key Attributes -->
+    <attr name="keyIs3D" format="boolean"/>
+    <attr name="keyShadowColor" format="color"/>
     <attr name="keyHighlightColor" format="color"/>
+    <attr name="keyGlowColor" format="color"/>
   </declare-styleable>
   <style name="BaseTheme">
     <item name="android:forceDarkAllowed">false</item>
+    <item name="android:colorAccent">@color/system_theme_accent</item>
+    <item name="android:colorControlHighlight">@color/system_theme_highlight</item>
     <item name="navigationBarColor">?attr/colorKeyboard</item>
     <item name="windowLightNavigationBar">?attr/android:isLightTheme</item>
     <item name="keyBorderRadius">5dp</item>
@@ -56,6 +62,10 @@
     <item name="keyBorderWidthSpaceBar">?attr/keyBorderWidth</item>
     <item name="secondaryDimming">0.25</item>
     <item name="greyedDimming">0.5</item>
+    <item name="keyIs3D">false</item>
+    <item name="keyShadowColor">#00000000</item>
+    <item name="keyHighlightColor">#00000000</item>
+    <item name="keyGlowColor">#00000000</item>
     <item name="emoji_key_bg" type="color">?attr/emoji_button_bg</item>
     <item name="emoji_key_text" type="color">?attr/colorLabel</item>
     <item name="clipboard_divider_color" type="color">?attr/colorKey</item>
@@ -394,8 +404,108 @@
     <item name="emoji_color">#00F0FF</item>
     <item name="clipboard_divider_color">#00F0FF</item>
   </style>
-  <style name="HoloCyan" parent="FrostedObsidian"/>
-  <style name="CrystalPrism" parent="CyberNeon"/>
-  <style name="CyberMech" parent="CyberNeon"/>
-  <style name="FrostedObsidian3D" parent="FrostedObsidian"/>
+  <style name="HoloCyan" parent="BaseTheme">
+    <item name="android:isLightTheme">false</item>
+    <item name="colorKeyboard">#09111D</item>
+    <item name="colorKey">#11253E</item>
+    <item name="colorKeyActivated">#1B436D</item>
+    <item name="colorKeyAction">#0F2847</item>
+    <item name="colorKeySpaceBar">#10223A</item>
+    <item name="colorLabel">#E8F9FF</item>
+    <item name="colorLabelActivated">#00F2FE</item>
+    <item name="colorLabelLocked">#00FFB2</item>
+    <item name="colorSubLabel">#38BDF8</item>
+    <item name="keyBorderRadius">8dp</item>
+    <item name="keyBorderWidth">1.5dp</item>
+    <item name="keyBorderWidthActivated">2dp</item>
+    <item name="keyBorderColorLeft">#38BDF8</item>
+    <item name="keyBorderColorTop">#7DD3FC</item>
+    <item name="keyBorderColorRight">#38BDF8</item>
+    <item name="keyBorderColorBottom">#0284C7</item>
+    <item name="keyIs3D">true</item>
+    <item name="keyShadowColor">#60030B14</item>
+    <item name="keyHighlightColor">#90E0F7FF</item>
+    <item name="keyGlowColor">#4000E5FF</item>
+    <item name="emoji_button_bg">#11253E</item>
+    <item name="emoji_color">#E8F9FF</item>
+    <item name="clipboard_divider_color">#00F2FE</item>
+  </style>
+  <style name="CrystalPrism" parent="BaseTheme">
+    <item name="android:isLightTheme">true</item>
+    <item name="colorKeyboard">#E2E8F0</item>
+    <item name="colorKey">#F8FAFC</item>
+    <item name="colorKeyActivated">#CBD5E1</item>
+    <item name="colorKeyAction">#BAE6FD</item>
+    <item name="colorKeySpaceBar">#F1F5F9</item>
+    <item name="colorLabel">#0F172A</item>
+    <item name="colorLabelActivated">#0284C7</item>
+    <item name="colorLabelLocked">#059669</item>
+    <item name="colorSubLabel">#334155</item>
+    <item name="keyBorderRadius">9dp</item>
+    <item name="keyBorderWidth">1.5dp</item>
+    <item name="keyBorderWidthActivated">2.0dp</item>
+    <item name="keyBorderColorLeft">#E2E8F0</item>
+    <item name="keyBorderColorTop">#FFFFFF</item>
+    <item name="keyBorderColorRight">#CBD5E1</item>
+    <item name="keyBorderColorBottom">#94A3B8</item>
+    <item name="keyIs3D">true</item>
+    <item name="keyShadowColor">#60475569</item>
+    <item name="keyHighlightColor">#EEFFFFFF</item>
+    <item name="keyGlowColor">#00000000</item>
+    <item name="emoji_button_bg">#F8FAFC</item>
+    <item name="emoji_color">#0F172A</item>
+    <item name="clipboard_divider_color">#94A3B8</item>
+  </style>
+  <style name="CyberMech" parent="BaseTheme">
+    <item name="android:isLightTheme">false</item>
+    <item name="colorKeyboard">#08080C</item>
+    <item name="colorKey">#15161C</item>
+    <item name="colorKeyActivated">#2A1625</item>
+    <item name="colorKeyAction">#2E1226</item>
+    <item name="colorKeySpaceBar">#16171E</item>
+    <item name="colorLabel">#FF6EA7</item>
+    <item name="colorLabelActivated">#FF1493</item>
+    <item name="colorLabelLocked">#00FFAA</item>
+    <item name="colorSubLabel">#FFDE21</item>
+    <item name="keyBorderRadius">6dp</item>
+    <item name="keyBorderWidth">1.5dp</item>
+    <item name="keyBorderWidthActivated">2.2dp</item>
+    <item name="keyBorderColorLeft">#FF007F</item>
+    <item name="keyBorderColorTop">#FF3399</item>
+    <item name="keyBorderColorRight">#FF007F</item>
+    <item name="keyBorderColorBottom">#D6006B</item>
+    <item name="keyIs3D">true</item>
+    <item name="keyShadowColor">#80000000</item>
+    <item name="keyHighlightColor">#60FF6EA7</item>
+    <item name="keyGlowColor">#50FF007F</item>
+    <item name="emoji_button_bg">#15161C</item>
+    <item name="emoji_color">#FF6EA7</item>
+    <item name="clipboard_divider_color">#FF007F</item>
+  </style>
+  <style name="FrostedObsidian3D" parent="BaseTheme">
+    <item name="android:isLightTheme">false</item>
+    <item name="colorKeyboard">#090B12</item>
+    <item name="colorKey">#151928</item>
+    <item name="colorKeyActivated">#283152</item>
+    <item name="colorKeyAction">#372B5E</item>
+    <item name="colorKeySpaceBar">#1C2238</item>
+    <item name="colorLabel">#F8FAFC</item>
+    <item name="colorLabelActivated">#DDD6FE</item>
+    <item name="colorLabelLocked">#34D399</item>
+    <item name="colorSubLabel">#A78BFA</item>
+    <item name="keyBorderRadius">8dp</item>
+    <item name="keyBorderWidth">1.5dp</item>
+    <item name="keyBorderWidthActivated">2.0dp</item>
+    <item name="keyBorderColorLeft">#313A63</item>
+    <item name="keyBorderColorTop">#6366F1</item>
+    <item name="keyBorderColorRight">#313A63</item>
+    <item name="keyBorderColorBottom">#131726</item>
+    <item name="keyIs3D">true</item>
+    <item name="keyShadowColor">#80030408</item>
+    <item name="keyHighlightColor">#B0C4B5FD</item>
+    <item name="keyGlowColor">#358B5CF6</item>
+    <item name="emoji_button_bg">#151928</item>
+    <item name="emoji_color">#F8FAFC</item>
+    <item name="clipboard_divider_color">#8B5CF6</item>
+  </style>
 </resources>

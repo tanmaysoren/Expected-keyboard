@@ -120,6 +120,11 @@ public class Keyboard2View extends View
     return null;
   }
 
+  public Theme getKeyboardTheme()
+  {
+    return _theme;
+  }
+
   public void refresh_navigation_bar(Context context)
   {
     if (VERSION.SDK_INT < 21)
