@@ -75,7 +75,6 @@ public class CustomExtensionsPreference extends Preference {
       showEditDialog(ctx, old, newVal -> {
         if (newVal == null || newVal.trim().isEmpty()) return;
         newVal = newVal.trim();
-        if (!newVal.startsWith(".")) newVal = "." + newVal;
         list.set(pos, newVal);
         Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
         adapter.notifyDataSetChanged();
@@ -111,7 +110,6 @@ public class CustomExtensionsPreference extends Preference {
         showAddDialog(ctx, newVal -> {
           if (newVal == null || newVal.trim().isEmpty()) return;
           newVal = newVal.trim();
-          if (!newVal.startsWith(".")) newVal = "." + newVal;
           if (list.contains(newVal)) { Toast.makeText(ctx, "Already exists", Toast.LENGTH_SHORT).show(); return; }
           list.add(newVal);
           Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
@@ -126,8 +124,8 @@ public class CustomExtensionsPreference extends Preference {
   private interface Cb { void onResult(String v); }
   private void showAddDialog(Context ctx, Cb cb) {
     LinearLayout l = new LinearLayout(ctx); l.setOrientation(LinearLayout.VERTICAL); l.setPadding(40,30,40,10);
-    TextView tv = new TextView(ctx); tv.setText("Extension (e.g. .dev):"); tv.setTextColor(0xFFF1F5F9); l.addView(tv);
-    EditText et = new EditText(ctx); et.setHint(".com"); et.setTextColor(0xFFF1F5F9); et.setHintTextColor(0xFF94A3B8); et.setInputType(InputType.TYPE_CLASS_TEXT); et.setSingleLine(true); l.addView(et);
+    TextView tv = new TextView(ctx); tv.setText("Extension (e.g. .dev or hello):"); tv.setTextColor(0xFFF1F5F9); l.addView(tv);
+    EditText et = new EditText(ctx); et.setHint(".com or hello"); et.setTextColor(0xFFF1F5F9); et.setHintTextColor(0xFF94A3B8); et.setInputType(InputType.TYPE_CLASS_TEXT); et.setSingleLine(true); l.addView(et);
     new AlertDialog.Builder(ctx).setTitle("Add Extension").setView(l).setPositiveButton("Add", (d,w) -> cb.onResult(et.getText().toString())).setNegativeButton("Cancel", null).show();
   }
   private void showEditDialog(Context ctx, String old, Cb cb) {
