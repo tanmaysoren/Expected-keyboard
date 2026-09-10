@@ -1,6 +1,7 @@
 package expected.keyboard2.theme;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -301,6 +302,32 @@ public class ThemeSwitcherPaneView extends LinearLayout
           bg = Color.parseColor("#1A1C23");
           accent = Color.parseColor("#7C3AED");
           text = Color.parseColor("#EDE9FE");
+          break;
+        case "material3":
+          category = "monet";
+          int uiModeM3 = res.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+          boolean isM3Night = (uiModeM3 & Configuration.UI_MODE_NIGHT_NO) == 0;
+          if (isM3Night) {
+            bg = Color.parseColor("#1C1B1F");
+            accent = Color.parseColor("#D0BCFF");
+            text = Color.parseColor("#E6E1E5");
+          } else {
+            bg = Color.parseColor("#F3F0F4");
+            accent = Color.parseColor("#6750A4");
+            text = Color.parseColor("#1C1B1F");
+          }
+          break;
+        case "material3light":
+          category = "monet";
+          bg = Color.parseColor("#F3F0F4");
+          accent = Color.parseColor("#6750A4");
+          text = Color.parseColor("#1C1B1F");
+          break;
+        case "material3dark":
+          category = "monet";
+          bg = Color.parseColor("#1C1B1F");
+          accent = Color.parseColor("#D0BCFF");
+          text = Color.parseColor("#E6E1E5");
           break;
       }
 

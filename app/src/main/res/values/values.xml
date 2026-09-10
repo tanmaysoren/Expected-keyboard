@@ -26,6 +26,25 @@
   <color name="system_theme_highlight">#333399ff</color>
   <!-- accent2 is inverted accent1-->
   <color name="system_accent2_900">#009999</color>
+  <color name="system_accent1_50">#e6efff</color>
+  <color name="system_accent1_700">#0066cc</color>
+  <color name="system_accent1_800">#004499</color>
+  <color name="system_accent2_50">#e0f7f6</color>
+  <color name="system_accent2_100">#b2ebe7</color>
+  <color name="system_accent2_200">#80ded8</color>
+  <color name="system_accent2_600">#008080</color>
+  <color name="system_accent2_700">#006666</color>
+  <color name="system_accent2_800">#004d4d</color>
+  <color name="system_neutral2_50">#eceff1</color>
+  <color name="system_neutral2_100">#cfd8dc</color>
+  <color name="system_neutral2_200">#b0bec5</color>
+  <color name="system_neutral2_300">#90a4ae</color>
+  <color name="system_neutral2_400">#78909c</color>
+  <color name="system_neutral2_500">#607d8b</color>
+  <color name="system_neutral2_600">#546e7a</color>
+  <color name="system_neutral2_700">#455a64</color>
+  <color name="system_neutral2_800">#37474f</color>
+  <color name="system_neutral2_900">#263238</color>
   <color name="system_neutral1_0">#ffffff</color>
   <color name="system_neutral1_100">#e3e3e3</color>
   <color name="system_neutral1_400">#cccccc</color>

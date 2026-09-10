@@ -345,6 +345,12 @@ public final class Config
       case "epaper": return R.style.ePaper;
       case "desert": return R.style.Desert;
       case "jungle": return R.style.Jungle;
+      case "material3light": return R.style.Material3Light;
+      case "material3dark": return R.style.Material3Dark;
+      case "material3":
+        if ((night_mode & Configuration.UI_MODE_NIGHT_NO) != 0)
+          return R.style.Material3Light;
+        return R.style.Material3Dark;
       case "monetlight": return R.style.MonetLight;
       case "monetdark": return R.style.MonetDark;
       case "monet":

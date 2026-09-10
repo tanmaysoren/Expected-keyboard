@@ -38,6 +38,9 @@
     <item>@string/pref_theme_e_epaper</item>
     <item>@string/pref_theme_e_desert</item>
     <item>@string/pref_theme_e_jungle</item>
+    <item>@string/pref_theme_e_material3</item>
+    <item>@string/pref_theme_e_material3light</item>
+    <item>@string/pref_theme_e_material3dark</item>
     <item>@string/pref_theme_e_monet</item>
     <item>@string/pref_theme_e_monetlight</item>
     <item>@string/pref_theme_e_monetdark</item>
@@ -60,6 +63,9 @@
     <item>epaper</item>
     <item>desert</item>
     <item>jungle</item>
+    <item>material3</item>
+    <item>material3light</item>
+    <item>material3dark</item>
     <item>monet</item>
     <item>monetlight</item>
     <item>monetdark</item>
