@@ -425,7 +425,7 @@ public class Keyboard2View extends View
             // Cancel previous
             if (_dotLongPressRunnable != null) _dotHandler.removeCallbacks(_dotLongPressRunnable);
             _dotLongPressRunnable = () -> showDotPopup(key);
-            _dotHandler.postDelayed(_dotLongPressRunnable, 60);
+            _dotHandler.postDelayed(_dotLongPressRunnable, 200`);
           }
           _pointers.onTouchDown(tx, ty, event.getPointerId(p), key);
         }
