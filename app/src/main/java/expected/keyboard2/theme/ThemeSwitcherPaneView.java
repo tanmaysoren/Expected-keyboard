@@ -1,6 +1,7 @@
 package expected.keyboard2.theme;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -203,6 +204,19 @@ public class ThemeSwitcherPaneView extends LinearLayout
 
       switch (key.toLowerCase())
       {
+        case "custom":
+          category = "cyber";
+          SharedPreferences sp = Config.globalPrefs();
+          if (sp != null) {
+            bg = expected.keyboard2.CustomThemeManager.getColorKeyboardBg(sp);
+            accent = expected.keyboard2.CustomThemeManager.getColorActivated(sp);
+            text = expected.keyboard2.CustomThemeManager.getColorLetters(sp);
+          } else {
+            bg = Color.parseColor("#0D111E");
+            accent = Color.parseColor("#8B5CF6");
+            text = Color.parseColor("#F1F5F9");
+          }
+          break;
         case "frostedobsidian":
           category = "cyber";
           bg = Color.parseColor("#090B10");

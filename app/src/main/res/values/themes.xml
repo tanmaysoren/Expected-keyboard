@@ -558,4 +558,26 @@
     <item name="emoji_color">#F8FAFC</item>
     <item name="clipboard_divider_color">#8B5CF6</item>
   </style>
+  <style name="CustomTheme" parent="BaseTheme">
+    <item name="android:isLightTheme">false</item>
+    <item name="colorKeyboard">#0D111E</item>
+    <item name="colorKey">#151928</item>
+    <item name="colorKeyActivated">#3B2D6E</item>
+    <item name="colorKeyAction">#2A1C4E</item>
+    <item name="colorKeySpaceBar">#1C2238</item>
+    <item name="colorLabel">#F1F5F9</item>
+    <item name="colorLabelActivated">#A78BFA</item>
+    <item name="colorLabelLocked">#34D399</item>
+    <item name="colorSubLabel">#94A3B8</item>
+    <item name="keyBorderRadius">6dp</item>
+    <item name="keyBorderWidth">1.0dp</item>
+    <item name="keyBorderWidthActivated">1.5dp</item>
+    <item name="keyBorderColorLeft">#2A324B</item>
+    <item name="keyBorderColorTop">#3B4668</item>
+    <item name="keyBorderColorRight">#2A324B</item>
+    <item name="keyBorderColorBottom">#181D2D</item>
+    <item name="emoji_button_bg">#151928</item>
+    <item name="emoji_color">#F1F5F9</item>
+    <item name="clipboard_divider_color">#6366F1</item>
+  </style>
 </resources>

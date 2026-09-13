@@ -1,6 +1,7 @@
 package expected.keyboard2;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -43,24 +44,66 @@ public class Theme
   {
     getKeyFont(context); // _key_font will be accessed
     TypedArray s = context.getTheme().obtainStyledAttributes(attrs, R.styleable.keyboard, 0, 0);
-    colorKey = s.getColor(R.styleable.keyboard_colorKey, 0);
-    colorKeyActivated = s.getColor(R.styleable.keyboard_colorKeyActivated, 0);
-    colorKeyAction = s.getColor(R.styleable.keyboard_colorKeyAction, colorKey);
-    colorKeySpaceBar = s.getColor(R.styleable.keyboard_colorKeySpaceBar, colorKey);
-    // colorKeyboard = s.getColor(R.styleable.keyboard_colorKeyboard, 0);
-    colorNavBar = s.getColor(R.styleable.keyboard_navigationBarColor, 0);
-    isLightNavBar = s.getBoolean(R.styleable.keyboard_windowLightNavigationBar, false);
-    labelColor = s.getColor(R.styleable.keyboard_colorLabel, 0);
-    activatedColor = s.getColor(R.styleable.keyboard_colorLabelActivated, 0);
-    pressedColor = s.getColor(R.styleable.keyboard_colorLabelPressed, labelColor);
-    lockedColor = s.getColor(R.styleable.keyboard_colorLabelLocked, 0);
-    subLabelColor = s.getColor(R.styleable.keyboard_colorSubLabel, 0);
+
+    SharedPreferences prefs = Config.globalPrefs();
+    if (prefs == null && context != null) {
+      prefs = DirectBootAwarePreferences.get_shared_preferences(context);
+    }
+    boolean isCustom = prefs != null && "custom".equalsIgnoreCase(prefs.getString("theme", ""));
+
+    if (isCustom) {
+      int customKeyColor = CustomThemeManager.getColorKey(prefs);
+      int customLettersColor = CustomThemeManager.getColorLetters(prefs);
+      int customKeyBg = CustomThemeManager.getColorKeyBg(prefs);
+      int customActionColor = CustomThemeManager.getColorAction(prefs);
+      int customActivatedColor = CustomThemeManager.getColorActivated(prefs);
+      int customSpacebarColor = CustomThemeManager.getColorSpacebar(prefs);
+      int customSublabelColor = CustomThemeManager.getColorSublabel(prefs);
+
+      colorKey = customKeyBg != 0 ? customKeyBg : customKeyColor;
+      colorKeyActivated = customActivatedColor;
+      colorKeyAction = customActionColor;
+      colorKeySpaceBar = customSpacebarColor;
+      int bgOpacity = CustomThemeManager.getBgOpacity(prefs) * 255 / 100;
+      int customKeyboardBg = CustomThemeManager.getColorKeyboardBg(prefs);
+      colorNavBar = Color.argb(bgOpacity, Color.red(customKeyboardBg), Color.green(customKeyboardBg), Color.blue(customKeyboardBg));
+      isLightNavBar = false;
+      labelColor = customLettersColor;
+      activatedColor = customActivatedColor != 0 ? adjustLight(customLettersColor, 0.15f) : customLettersColor;
+      pressedColor = adjustLight(customLettersColor, 0.25f);
+      lockedColor = adjustLight(customLettersColor, -0.15f);
+      subLabelColor = customSublabelColor;
+    } else {
+      colorKey = s.getColor(R.styleable.keyboard_colorKey, 0);
+      colorKeyActivated = s.getColor(R.styleable.keyboard_colorKeyActivated, 0);
+      colorKeyAction = s.getColor(R.styleable.keyboard_colorKeyAction, colorKey);
+      colorKeySpaceBar = s.getColor(R.styleable.keyboard_colorKeySpaceBar, colorKey);
+      // colorKeyboard = s.getColor(R.styleable.keyboard_colorKeyboard, 0);
+      colorNavBar = s.getColor(R.styleable.keyboard_navigationBarColor, 0);
+      isLightNavBar = s.getBoolean(R.styleable.keyboard_windowLightNavigationBar, false);
+      labelColor = s.getColor(R.styleable.keyboard_colorLabel, 0);
+      activatedColor = s.getColor(R.styleable.keyboard_colorLabelActivated, 0);
+      pressedColor = s.getColor(R.styleable.keyboard_colorLabelPressed, labelColor);
+      lockedColor = s.getColor(R.styleable.keyboard_colorLabelLocked, 0);
+      subLabelColor = s.getColor(R.styleable.keyboard_colorSubLabel, 0);
+    }
+
     secondaryLabelColor = adjustLight(labelColor,
         s.getFloat(R.styleable.keyboard_secondaryDimming, 0.25f));
     greyedLabelColor = adjustLight(labelColor,
         s.getFloat(R.styleable.keyboard_greyedDimming, 0.5f));
-    keyBorderRadius = s.getDimension(R.styleable.keyboard_keyBorderRadius, 0);
-    keyBorderWidth = s.getDimension(R.styleable.keyboard_keyBorderWidth, 0);
+    // For custom theme, prefer user-configured border values from settings
+    float _borderRadius = s.getDimension(R.styleable.keyboard_keyBorderRadius, 0);
+    float _borderWidth = s.getDimension(R.styleable.keyboard_keyBorderWidth, 0);
+    if (isCustom) {
+      Config cfg = Config.globalConfig();
+      if (cfg != null && cfg.borderConfig) {
+        _borderRadius = cfg.customBorderRadius;
+        _borderWidth = cfg.customBorderLineWidth;
+      }
+    }
+    keyBorderRadius = _borderRadius;
+    keyBorderWidth = _borderWidth;
     keyBorderWidthActivated = s.getDimension(R.styleable.keyboard_keyBorderWidthActivated, 0);
     keyBorderWidthAction = s.getDimension(R.styleable.keyboard_keyBorderWidthAction, 0);
     keyBorderWidthSpaceBar = s.getDimension(R.styleable.keyboard_keyBorderWidthSpaceBar, 0);
@@ -169,11 +212,12 @@ public class Theme
         shadow_paint = null;
         glow_paint = null;
         int bg_color;
+        int bg_alpha;
         if (activated)
         {
           bg_color = theme.colorKeyActivated;
           border_width = theme.keyBorderWidthActivated;
-          bg_paint.setAlpha(config.keyActivatedOpacity);
+          bg_alpha = config.keyActivatedOpacity;
         }
         else
         {
@@ -196,9 +240,10 @@ public class Theme
               border_width = config.borderConfig ? config.customBorderLineWidth : theme.keyBorderWidth;
               break;
           }
-          bg_paint.setAlpha(config.keyOpacity);
+          bg_alpha = config.keyOpacity;
         }
         bg_paint.setColor(bg_color);
+        bg_paint.setAlpha(bg_alpha);
         border_left_paint = init_border_paint(config, border_width, theme.keyBorderColorLeft);
         border_top_paint = init_border_paint(config, border_width, theme.keyBorderColorTop);
         border_right_paint = init_border_paint(config, border_width, theme.keyBorderColorRight);

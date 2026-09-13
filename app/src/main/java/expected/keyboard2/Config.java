@@ -54,6 +54,7 @@ public final class Config
   public long vibrate_duration;
   public long longPressTimeout;
   public long longPressInterval;
+  public long keyFadeDuration; // Key fade in/out duration in ms (0 = disabled / no fade)
   public boolean keyrepeat_enabled;
   public float margin_bottom;
   public int keyboard_rows_height_pixels;
@@ -188,6 +189,7 @@ public final class Config
     vibrate_duration = _prefs.getInt("vibrate_duration", 20);
     longPressTimeout = _prefs.getInt("longpress_timeout", 240);
     longPressInterval = _prefs.getInt("longpress_interval", 5);
+    keyFadeDuration = _prefs.getInt("key_fade_duration", 0);
     keyrepeat_enabled = _prefs.getBoolean("keyrepeat_enabled", true);
     margin_bottom = get_dip_pref_oriented(dm, "margin_bottom", 7, 3);
     key_vertical_margin = get_dip_pref(dm, "key_vertical_margin", 1.5f) / 100;
@@ -195,13 +197,17 @@ public final class Config
     // Label brightness is used as the alpha channel
     labelBrightness = _prefs.getInt("label_brightness", 100) * 255 / 100;
     // Keyboard opacity
-    keyboardOpacity = _prefs.getInt("keyboard_opacity", 100) * 255 / 100;
+    if ("custom".equalsIgnoreCase(_prefs.getString("theme", ""))) {
+      keyboardOpacity = _prefs.getInt(CustomThemeManager.PREF_CUSTOM_BG_OPACITY, CustomThemeManager.DEFAULT_BG_OPACITY) * 255 / 100;
+    } else {
+      keyboardOpacity = _prefs.getInt("keyboard_opacity", 100) * 255 / 100;
+    }
     keyOpacity = _prefs.getInt("key_opacity", 100) * 255 / 100;
     keyActivatedOpacity = _prefs.getInt("key_activated_opacity", 100) * 255 / 100;
     // keyboard border settings
     borderConfig = _prefs.getBoolean("border_config", true);
-    customBorderRadius = _prefs.getInt("custom_border_radius", 0) / 100.f;
-    customBorderLineWidth = get_dip_pref(dm, "custom_border_line_width", 0);
+    customBorderRadius = _prefs.getInt("custom_border_radius", 5) / 100.f;
+    customBorderLineWidth = get_dip_pref(dm, "custom_border_line_width", 1);
     screenHeightPixels = dm.heightPixels;
     // Row height is proportional to the screen size.
     // The keyboard is keyboardHeightPercent of the screen height on 16/9
@@ -363,6 +369,7 @@ public final class Config
       case "pine": return R.style.Pine;
       case "epaperblack": return R.style.ePaperBlack;
       case "dracula": return R.style.Dracula;
+      case "custom": return R.style.CustomTheme;
       case "holocyan": return R.style.HoloCyan;
       case "crystalprism": return R.style.CrystalPrism;
       case "cybermech": return R.style.CyberMech;

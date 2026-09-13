@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.InputMethodService;
 import android.os.Build.VERSION;
@@ -201,6 +202,42 @@ public class Keyboard2 extends InputMethodService
     _keyboard_container_view = (ViewGroup)inflate_view(R.layout.keyboard);
     _keyboard_layout_view = (Keyboard2View)_keyboard_container_view.findViewById(R.id.keyboard_view);
     _candidates_view = (CandidatesView)_keyboard_container_view.findViewById(R.id.candidates_view);
+    applyKeyboardBackgroundAndOpacity();
+  }
+
+  private void applyKeyboardBackgroundAndOpacity()
+  {
+    if (_keyboard_container_view == null) return;
+    SharedPreferences prefs = Config.globalPrefs();
+    boolean isCustom = (prefs != null && "custom".equalsIgnoreCase(prefs.getString("theme", "")));
+    if (isCustom)
+    {
+      int customBg = CustomThemeManager.getColorKeyboardBg(prefs);
+      int alpha = _config.keyboardOpacity; // 0..255 from custom_theme_bg_opacity
+      int argb = Color.argb(alpha, Color.red(customBg), Color.green(customBg), Color.blue(customBg));
+      _keyboard_container_view.setBackgroundColor(argb);
+      if (_candidates_view != null)
+      {
+        _candidates_view.setBackgroundColor(argb);
+      }
+    }
+    else
+    {
+      Drawable bg = _keyboard_container_view.getBackground();
+      if (bg != null) {
+        bg = bg.mutate();
+        bg.setAlpha(_config.keyboardOpacity);
+        _keyboard_container_view.setBackground(bg);
+      }
+      if (_candidates_view != null) {
+        Drawable cbg = _candidates_view.getBackground();
+        if (cbg != null) {
+          cbg = cbg.mutate();
+          cbg.setAlpha(_config.keyboardOpacity);
+          _candidates_view.setBackground(cbg);
+        }
+      }
+    }
   }
 
   InputMethodManager get_imm()
@@ -283,13 +320,8 @@ public class Keyboard2 extends InputMethodService
       _layoutPane = null;
       setInputView(_keyboard_container_view);
     }
-    // Set keyboard background opacity
-    if (_keyboard_container_view != null)
-    {
-      Drawable bg = _keyboard_container_view.getBackground().mutate();
-      bg.setAlpha(_config.keyboardOpacity);
-      _keyboard_container_view.setBackground(bg);
-    }
+    // Set keyboard background opacity and custom color
+    applyKeyboardBackgroundAndOpacity();
     if (_keyboard_layout_view != null)
     {
       _keyboard_layout_view.setKeyboard(current_layout());
@@ -404,13 +436,41 @@ public class Keyboard2 extends InputMethodService
     }
   }
 
+  @Override
+  public void onConfigureWindow(Window win, boolean isFullscreen, boolean isCandidatesOnly)
+  {
+    super.onConfigureWindow(win, isFullscreen, isCandidatesOnly);
+    if (win != null)
+    {
+      win.setFormat(android.graphics.PixelFormat.TRANSLUCENT);
+      win.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+      win.setDimAmount(0f);
+      if (win.getDecorView() != null)
+      {
+        win.getDecorView().setBackgroundColor(android.graphics.Color.TRANSPARENT);
+      }
+    }
+  }
+
   private void updateSoftInputWindowLayoutParams() {
     final Window window = getWindow().getWindow();
     if (window == null) return;
 
+    window.setFormat(android.graphics.PixelFormat.TRANSLUCENT);
+    window.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+    window.setDimAmount(0f);
+    if (window.getDecorView() != null) {
+      window.getDecorView().setBackgroundColor(android.graphics.Color.TRANSPARENT);
+    }
+    final View inputArea = window.findViewById(android.R.id.inputArea);
+    if (inputArea != null) {
+      inputArea.setBackground(null);
+      if (inputArea.getParent() instanceof View) {
+        ((View) inputArea.getParent()).setBackground(null);
+      }
+    }
+
     if (_config != null && _config.isFloatingMode()) {
-      window.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-      window.setDimAmount(0f);
       WindowManager.LayoutParams wattrs = window.getAttributes();
       if (wattrs != null) {
         wattrs.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
@@ -419,7 +479,6 @@ public class Keyboard2 extends InputMethodService
         window.setAttributes(wattrs);
       }
       updateLayoutSizeOf(window, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-      final View inputArea = window.findViewById(android.R.id.inputArea);
       if (inputArea != null) {
         updateLayoutSizeOf(inputArea, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         updateLayoutGravityOf(inputArea, Gravity.TOP | Gravity.LEFT);
@@ -445,7 +504,6 @@ public class Keyboard2 extends InputMethodService
       }
     }
     updateLayoutSizeOf(window, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    final View inputArea = window.findViewById(android.R.id.inputArea);
     if (inputArea != null)
     {
       updateLayoutSizeOf(inputArea, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -600,8 +658,14 @@ public class Keyboard2 extends InputMethodService
   public void onSharedPreferenceChanged(SharedPreferences _prefs, String _key)
   {
     if (_suppressPrefChangeListener) return;
+    if (_key != null && _key.startsWith("custom_theme_")) {
+      create_keyboard_view();
+      setInputView(_keyboard_container_view);
+    }
     refresh_config();
-    _keyboard_layout_view.setKeyboard(current_layout());
+    if (_keyboard_layout_view != null) {
+      _keyboard_layout_view.setKeyboard(current_layout());
+    }
   }
 
   @Override

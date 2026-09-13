@@ -52,6 +52,7 @@
     <item>@string/pref_theme_e_dracula</item>
     <item>@string/pref_theme_e_frostedobsidian</item>
     <item>@string/pref_theme_e_cyberneon</item>
+    <item>@string/pref_theme_e_custom</item>
   </string-array>
   <string-array name="pref_theme_values">
     <item>system</item>
@@ -77,6 +78,7 @@
     <item>dracula</item>
     <item>frostedobsidian</item>
     <item>cyberneon</item>
+    <item>custom</item>
   </string-array>
   <string-array name="pref_swipe_dist_entries">
     <item>@string/pref_swipe_dist_e_very_short</item>

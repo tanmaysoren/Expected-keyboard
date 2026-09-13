@@ -350,5 +350,26 @@ class ExampleRobolectricTest {
     assertTrue(themeColors.colorKey != 0)
     assertTrue(themeColors.colorLabel != 0)
   }
+
+  @Test
+  fun `keyFadeDuration defaults to 0 and updates from preferences`() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    val prefs = DirectBootAwarePreferences.get_shared_preferences(context)
+    prefs.edit().remove("key_fade_duration").commit()
+
+    val dicts = expected.keyboard2.dict.Dictionaries.instance(context)
+    expected.keyboard2.Config.initGlobalConfig(prefs, context.resources, false, dicts)
+    val config = expected.keyboard2.Config.globalConfig()
+    assertEquals("Default keyFadeDuration must be 0", 0L, config.keyFadeDuration)
+
+    // Test setting to 150ms
+    prefs.edit().putInt("key_fade_duration", 150).commit()
+    config.refresh(context.resources, false, dicts)
+    assertEquals(150L, config.keyFadeDuration)
+
+    // Test title string exists
+    val title = context.getString(R.string.pref_key_fade_duration_title)
+    assertTrue(title.isNotEmpty())
+  }
 }
 

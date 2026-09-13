@@ -139,13 +139,28 @@ public class IntSlideBarPreference extends DialogPreference
     presetsRow.setGravity(Gravity.CENTER);
     presetsRow.setPadding(0, (int)(12 * dp), 0, 0);
 
-    Button btnMin = createPresetButton(context, "Min: " + _min, 0, dp);
-    Button btnDefault = createPresetButton(context, "Default: " + _defaultVal, _defaultVal - _min, dp);
-    Button btnMax = createPresetButton(context, "Max: " + _max, _max - _min, dp);
+    if ("key_fade_duration".equals(getKey()))
+    {
+      Button btnOff = createPresetButton(context, "0ms (Off)", 0, dp);
+      Button btn150 = createPresetButton(context, "150ms", 150, dp);
+      Button btn260 = createPresetButton(context, "260ms", 260, dp);
+      Button btn500 = createPresetButton(context, "500ms", 500, dp);
 
-    presetsRow.addView(btnMin);
-    presetsRow.addView(btnDefault);
-    presetsRow.addView(btnMax);
+      presetsRow.addView(btnOff);
+      presetsRow.addView(btn150);
+      presetsRow.addView(btn260);
+      presetsRow.addView(btn500);
+    }
+    else
+    {
+      Button btnMin = createPresetButton(context, "Min: " + _min, 0, dp);
+      Button btnDefault = createPresetButton(context, "Default: " + _defaultVal, _defaultVal - _min, dp);
+      Button btnMax = createPresetButton(context, "Max: " + _max, _max - _min, dp);
+
+      presetsRow.addView(btnMin);
+      presetsRow.addView(btnDefault);
+      presetsRow.addView(btnMax);
+    }
 
     _layout.addView(presetsRow);
   }
@@ -233,7 +248,16 @@ public class IntSlideBarPreference extends DialogPreference
 
   private void updateText()
   {
-    String f = String.format(_initialSummary, _seekBar.getProgress() + _min);
+    int val = _seekBar.getProgress() + _min;
+    String f;
+    if ("key_fade_duration".equals(getKey()) && val == 0)
+    {
+      f = "0ms (No fade)";
+    }
+    else
+    {
+      f = String.format(_initialSummary, val);
+    }
     if (_valueBadge != null)
       _valueBadge.setText(f);
     setSummary(f);

@@ -21,7 +21,10 @@ import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class Keyboard2View extends View
   implements View.OnTouchListener, Pointers.IPointerEventHandler
@@ -88,6 +91,43 @@ public class Keyboard2View extends View
   private Rect _dotKeyRect = new Rect();
   private boolean _dotPopupActive = false;
 
+  // Key fade out & fade in animation when typed
+  // Key animations: pressed key color & layer fade are adjustable via Typing & Gestures settings.
+  // When keyFadeDuration is 0 (default), there is no fade out or in.
+  private long getFadeDuration()
+  {
+    if (_config == null) {
+      _config = Config.globalConfig();
+    }
+    return (_config != null) ? _config.keyFadeDuration : 0L;
+  }
+
+  private final Paint _dynamicKeyBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private final Paint _dynamicKeyBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+  private static class KeyAnimState
+  {
+    long downTime;
+    long releaseTime; // 0 while held
+  }
+
+  private final Map<KeyboardData.Key, KeyAnimState> _keyAnimations = new HashMap<>();
+
+  public void triggerKeyAnimation(KeyboardData.Key key)
+  {
+    if (key == null) return;
+    if (getFadeDuration() <= 0L) return;
+    KeyAnimState state = _keyAnimations.get(key);
+    if (state == null)
+    {
+      state = new KeyAnimState();
+      _keyAnimations.put(key, state);
+    }
+    state.downTime = android.os.SystemClock.uptimeMillis();
+    state.releaseTime = 0; // currently held down
+    invalidate();
+  }
+
   enum Vertical
   {
     TOP,
@@ -131,7 +171,14 @@ public class Keyboard2View extends View
       return;
     // The intermediate Window is a [Dialog].
     Window w = getParentWindow(context);
-    w.setNavigationBarColor(_theme.colorNavBar);
+    if (w != null)
+    {
+      if (VERSION.SDK_INT >= 29)
+      {
+        w.setNavigationBarContrastEnforced(false);
+      }
+      w.setNavigationBarColor(_theme.colorNavBar);
+    }
     if (VERSION.SDK_INT < 26)
       return;
     int uiFlags = getSystemUiVisibility();
@@ -425,9 +472,10 @@ public class Keyboard2View extends View
             // Cancel previous
             if (_dotLongPressRunnable != null) _dotHandler.removeCallbacks(_dotLongPressRunnable);
             _dotLongPressRunnable = () -> showDotPopup(key);
-            _dotHandler.postDelayed(_dotLongPressRunnable, 200`);
+            _dotHandler.postDelayed(_dotLongPressRunnable, 190);
           }
           _pointers.onTouchDown(tx, ty, event.getPointerId(p), key);
+          triggerKeyAnimation(key);
         }
         break;
       case MotionEvent.ACTION_MOVE:
@@ -466,6 +514,21 @@ public class Keyboard2View extends View
       default:
         return (false);
     }
+    if (getFadeDuration() <= 0L)
+    {
+      if (!_keyAnimations.isEmpty())
+        _keyAnimations.clear();
+    }
+    else
+    {
+      long nowUptime = android.os.SystemClock.uptimeMillis();
+      for (Map.Entry<KeyboardData.Key, KeyAnimState> entry : _keyAnimations.entrySet()) {
+        if (entry.getValue().releaseTime == 0 && !_pointers.isKeyDown(entry.getKey())) {
+          entry.getValue().releaseTime = nowUptime;
+        }
+      }
+    }
+    invalidate();
     return (true);
   }
 
@@ -626,6 +689,13 @@ public class Keyboard2View extends View
       updateMetricsAndTheme(getWidth());
     if (_tc == null)
       return;
+    long now = android.os.SystemClock.uptimeMillis();
+    for (Map.Entry<KeyboardData.Key, KeyAnimState> entry : _keyAnimations.entrySet()) {
+      if (entry.getValue().releaseTime == 0 && !_pointers.isKeyDown(entry.getKey())) {
+        entry.getValue().releaseTime = now;
+      }
+    }
+    boolean hasActiveAnimations = false;
     float y = _tc.margin_top;
     for (KeyboardData.Row row : _keyboard.rows)
     {
@@ -637,43 +707,153 @@ public class Keyboard2View extends View
         x += k.shift * _keyWidth;
         float keyW = _keyWidth * k.width - _tc.horizontal_margin;
         boolean isKeyDown = _pointers.isKeyDown(k);
-        Theme.Computed.Key tc_key;
-        if (isKeyDown)
-          tc_key = _tc.key_activated;
-        else
-          switch (k.role)
+        Theme.Computed.Key tc_normal;
+        switch (k.role)
+        {
+          case Action: tc_normal = _tc.key_action; break;
+          case Space_bar: tc_normal = _tc.key_space_bar; break;
+          case Suggestion: tc_normal = _tc.key_suggestion; break;
+          default:
+          case Normal: tc_normal = _tc.key; break;
+        }
+        Theme.Computed.Key tc_activated = _tc.key_activated;
+
+        // Key pressed color & layer fade animations (user-adjustable via keyFadeDuration, 0 = disabled / instant)
+        long fadeDuration = getFadeDuration();
+        KeyAnimState animState = (fadeDuration > 0L) ? _keyAnimations.get(k) : null;
+        float pressedFraction = 0.0f;
+        float animAlpha = 1.0f;
+        int savedLayer = -1;
+
+        if (animState != null && fadeDuration > 0L)
+        {
+          long fadeInDuration = fadeDuration;
+          long lockedDuration = fadeDuration;
+          long fadeOutDuration = fadeDuration;
+
+          if (isKeyDown)
           {
-            case Action: tc_key = _tc.key_action; break;
-            case Space_bar: tc_key = _tc.key_space_bar; break;
-            case Suggestion: tc_key = _tc.key_suggestion; break;
-            default:
-            case Normal: tc_key = _tc.key; break;
+            animState.releaseTime = 0;
           }
+          else if (animState.releaseTime == 0)
+          {
+            animState.releaseTime = now;
+          }
+
+          long elapsedDown = now - animState.downTime;
+
+          if (isKeyDown)
+          {
+            hasActiveAnimations = true;
+            if (elapsedDown < fadeInDuration)
+            {
+              float progress = (float) elapsedDown / (float) fadeInDuration;
+              pressedFraction = progress;
+              animAlpha = 1.0f - (0.90f * progress); // fades out to 0.10
+            }
+            else
+            {
+              pressedFraction = 1.0f; // locked in pressed color while held!
+              animAlpha = 0.10f; // stays faded out while held!
+            }
+          }
+          else
+          {
+            long releaseTime = animState.releaseTime;
+            long lockedEndTime = Math.max(animState.downTime + fadeInDuration + lockedDuration, releaseTime);
+
+            if (now < animState.downTime + fadeInDuration)
+            {
+              // Released quickly during the fade-in phase: continue fade-in
+              hasActiveAnimations = true;
+              float progress = (float) (now - animState.downTime) / (float) fadeInDuration;
+              pressedFraction = progress;
+              animAlpha = 1.0f - (0.90f * progress);
+            }
+            else if (now < lockedEndTime)
+            {
+              // In the locked phase: locked at full pressed color & layer fade
+              hasActiveAnimations = true;
+              pressedFraction = 1.0f;
+              animAlpha = 0.10f;
+            }
+            else
+            {
+              // In the fade-out phase: fade out pressed color and fade in layer alpha
+              long elapsedOut = now - lockedEndTime;
+              if (elapsedOut < fadeOutDuration)
+              {
+                hasActiveAnimations = true;
+                float progressOut = (float) elapsedOut / (float) fadeOutDuration;
+                pressedFraction = 1.0f - progressOut;
+                animAlpha = 0.10f + (0.90f * progressOut);
+              }
+              else
+              {
+                pressedFraction = 0.0f;
+                animAlpha = 1.0f;
+                _keyAnimations.remove(k);
+              }
+            }
+          }
+
+          if (animAlpha < 0.999f)
+          {
+            float density = getResources().getDisplayMetrics().density;
+            int alphaInt = Math.max(0, Math.min(255, (int)(animAlpha * 255)));
+            _tmpRect.set(x - 2f, y - 2f, x + keyW + 2f, y + keyH + 4f * density);
+            savedLayer = canvas.saveLayerAlpha(_tmpRect, alphaInt);
+          }
+        }
+        else
+        {
+          if (animState != null)
+          {
+            _keyAnimations.remove(k);
+          }
+          if (isKeyDown)
+          {
+            pressedFraction = 1.0f;
+          }
+        }
+
+        Theme.Computed.Key tc_key = (pressedFraction >= 0.5f) ? tc_activated : tc_normal;
         float density = getResources().getDisplayMetrics().density;
         float bevelH = tc_key.is3D ? Math.max(3.8f * density, keyH * 0.085f) : 0f;
-        float pressOffset = (tc_key.is3D && isKeyDown) ? (bevelH * 0.85f) : 0f;
+        float pressOffset = tc_key.is3D ? (bevelH * 0.85f * pressedFraction) : 0f;
         float drawY = y + pressOffset;
-        float faceH = tc_key.is3D ? (keyH - (isKeyDown ? (bevelH * 0.2f) : bevelH)) : keyH;
+        float faceH = tc_key.is3D ? (keyH - (bevelH * 0.2f * pressedFraction + bevelH * (1f - pressedFraction))) : keyH;
 
-        drawKeyFrame(canvas, x, y, keyW, keyH, tc_key, isKeyDown);
+        drawKeyFrame(canvas, x, y, keyW, keyH, tc_normal, tc_activated, pressedFraction, isKeyDown);
 
         // Dpad triangle key — full-space triangle zones as in screenshot (red X + arrows inside each triangle)
         boolean isDpad = k.keys[0]==null && k.keys[5]!=null && k.keys[6]!=null && k.keys[7]!=null && k.keys[8]!=null;
         if (isDpad) {
-          drawDpadTriangles(canvas, x, drawY, keyW, faceH, isKeyDown);
+          drawDpadTriangles(canvas, x, drawY, keyW, faceH, pressedFraction >= 0.5f);
         } else {
           if (k.keys[0] != null)
-            drawLabel(canvas, k.keys[0], keyW / 2f + x, drawY, faceH, isKeyDown, tc_key);
+            drawLabel(canvas, k.keys[0], keyW / 2f + x, drawY, faceH, pressedFraction, tc_normal, tc_activated);
           for (int i = 1; i < 9; i++)
           {
             if (k.keys[i] != null)
-              drawSubLabel(canvas, k.keys[i], x, drawY, keyW, faceH, i, isKeyDown, tc_key);
+              drawSubLabel(canvas, k.keys[i], x, drawY, keyW, faceH, i, pressedFraction, tc_normal, tc_activated);
           }
           drawIndication(canvas, k, x, drawY, keyW, faceH, _tc);
         }
+
+        if (savedLayer != -1)
+        {
+          canvas.restoreToCount(savedLayer);
+        }
+
         x += _keyWidth * k.width;
       }
       y += row.height * _tc.row_height;
+    }
+
+    if (hasActiveAnimations)
+    {
+      postInvalidateOnAnimation();
     }
   }
 
@@ -685,8 +865,9 @@ public class Keyboard2View extends View
 
   /** Draw borders and background of the key, with 3D elevation, shadow, and specular highlight if enabled. */
   void drawKeyFrame(Canvas canvas, float x, float y, float keyW, float keyH,
-      Theme.Computed.Key tc, boolean isKeyDown)
+      Theme.Computed.Key tcNormal, Theme.Computed.Key tcActivated, float pressedFraction, boolean isKeyDown)
   {
+    Theme.Computed.Key tc = (pressedFraction >= 0.5f) ? tcActivated : tcNormal;
     float r = tc.border_radius;
     float w = tc.border_width;
     float padding = w / 2.f;
@@ -695,35 +876,36 @@ public class Keyboard2View extends View
     {
       float density = getResources().getDisplayMetrics().density;
       float bevelHeight = Math.max(3.8f * density, keyH * 0.085f);
-      float pressOffset = isKeyDown ? (bevelHeight * 0.85f) : 0f;
+      float pressOffset = bevelHeight * 0.85f * pressedFraction;
       float faceY = y + pressOffset;
-      float faceH = keyH - (isKeyDown ? (bevelHeight * 0.2f) : bevelHeight);
+      float faceH = keyH - (bevelHeight * 0.2f * pressedFraction + bevelHeight * (1f - pressedFraction));
 
       // 1. Contact Drop Shadow underneath key base
       if (tc.shadow_paint != null)
       {
-        float shadowH = isKeyDown ? (1.5f * density) : (bevelHeight * 0.6f + 2f * density);
+        float shadowH = bevelHeight * (0.6f * (1f - pressedFraction) + 0.15f) + 2f * density;
         float shadowTop = y + keyH - shadowH;
         _tmpRect.set(x + padding + 1f * density, shadowTop,
-                     x + keyW - padding - 1f * density, y + keyH + (isKeyDown ? 1.0f : 2.5f) * density);
+                     x + keyW - padding - 1f * density, y + keyH + (1.0f + 1.5f * (1f - pressedFraction)) * density);
         canvas.drawRoundRect(_tmpRect, r, r, tc.shadow_paint);
       }
 
       // 2. 3D Keycap Extrusion Pedestal (Side-Wall)
-      if (!isKeyDown)
-      {
-        int baseColor = tc.bg_paint.getColor();
-        int pedestalColor = (tc.shadow_paint != null) ? tc.shadow_paint.getColor() : blendColors(baseColor, Color.BLACK, 0.45f);
-        int pedAlpha = Math.max(180, Color.alpha(baseColor));
-        pedestalColor = (pedestalColor & 0x00FFFFFF) | (pedAlpha << 24);
-        _pedestalPaint.setColor(pedestalColor);
+      int normalBase = tcNormal.bg_paint.getColor();
+      int activatedBase = tcActivated.bg_paint.getColor();
+      int baseColor = (pressedFraction <= 0.001f) ? normalBase :
+          ((pressedFraction >= 0.999f) ? activatedBase : blendColors(normalBase, activatedBase, pressedFraction));
 
-        _tmpRectPedestal.set(x + padding, y + bevelHeight * 0.4f, x + keyW - padding, y + keyH - padding);
-        canvas.drawRoundRect(_tmpRectPedestal, r, r, _pedestalPaint);
-      }
+      int pedestalColor = (tc.shadow_paint != null) ? tc.shadow_paint.getColor() : blendColors(baseColor, Color.BLACK, 0.45f);
+      int pedAlpha = Math.max(180, Color.alpha(baseColor));
+      pedestalColor = (pedestalColor & 0x00FFFFFF) | (pedAlpha << 24);
+      _pedestalPaint.setColor(pedestalColor);
+
+      _tmpRectPedestal.set(x + padding, y + bevelHeight * 0.4f, x + keyW - padding, y + keyH - padding);
+      canvas.drawRoundRect(_tmpRectPedestal, r, r, _pedestalPaint);
 
       // 3. Ambient Aura / Underglow (for Cyber themes)
-      if (tc.glow_paint != null && (!isKeyDown || tc.isActivated))
+      if (tc.glow_paint != null)
       {
         _tmpRect.set(x + padding - 1f * density, faceY + padding - 1f * density,
                      x + keyW - padding + 1f * density, faceY + faceH - padding + 1f * density);
@@ -731,21 +913,15 @@ public class Keyboard2View extends View
       }
 
       // 4. Crystalline Translucent Surface (Multi-tone vertical gradient)
-      int baseColor = tc.bg_paint.getColor();
-      int topColor;
-      int bottomColor;
-      if (isKeyDown)
-      {
-        topColor = blendColors(baseColor, Color.BLACK, 0.35f);
-        bottomColor = blendColors(baseColor, Color.BLACK, 0.10f);
-      }
-      else
-      {
-        boolean isLight = _theme.colorNavBar == 0 || Color.luminance(baseColor) > 0.4f;
-        int highlightTint = isLight ? Color.WHITE : (_theme.keyHighlightColor != 0 ? _theme.keyHighlightColor : Color.WHITE);
-        topColor = blendColors(baseColor, highlightTint, isLight ? 0.35f : 0.28f);
-        bottomColor = blendColors(baseColor, Color.BLACK, 0.18f);
-      }
+      boolean isLight = _theme.colorNavBar == 0 || Color.luminance(baseColor) > 0.4f;
+      int highlightTint = isLight ? Color.WHITE : (_theme.keyHighlightColor != 0 ? _theme.keyHighlightColor : Color.WHITE);
+      int unpressedTop = blendColors(baseColor, highlightTint, isLight ? 0.35f : 0.28f);
+      int unpressedBottom = blendColors(baseColor, Color.BLACK, 0.18f);
+      int pressedTop = blendColors(baseColor, Color.BLACK, 0.35f);
+      int pressedBottom = blendColors(baseColor, Color.BLACK, 0.10f);
+
+      int topColor = blendColors(unpressedTop, pressedTop, pressedFraction);
+      int bottomColor = blendColors(unpressedBottom, pressedBottom, pressedFraction);
 
       LinearGradient faceShader = new LinearGradient(
           x, faceY, x, faceY + faceH,
@@ -755,15 +931,15 @@ public class Keyboard2View extends View
       canvas.drawRoundRect(_tmpRect, r, r, _facetPaint);
 
       // 5. Curved Specular Glare Arc (Polished translucent sheen)
-      if (!isKeyDown)
+      if (pressedFraction < 0.8f)
       {
         float glareH = faceH * 0.44f;
         float glareInset = Math.max(1.5f * density, padding + 0.8f * density);
         if (keyW > glareInset * 2 && glareH > glareInset)
         {
           int glareStart = (_theme.keyHighlightColor != 0)
-              ? adjustAlpha(_theme.keyHighlightColor, 0.85f)
-              : 0x70FFFFFF;
+              ? adjustAlpha(_theme.keyHighlightColor, 0.85f * (1f - pressedFraction))
+              : adjustAlpha(0x70FFFFFF, 1f - pressedFraction);
           int glareEnd = 0x00FFFFFF;
 
           LinearGradient glareShader = new LinearGradient(
@@ -781,7 +957,7 @@ public class Keyboard2View extends View
         _topGlintPaint.setStyle(Paint.Style.STROKE);
         _topGlintPaint.setStrokeWidth(1.2f * density);
         int glintColor = (_theme.keyHighlightColor != 0) ? _theme.keyHighlightColor : 0xAAFFFFFF;
-        _topGlintPaint.setColor(adjustAlpha(glintColor, 0.75f));
+        _topGlintPaint.setColor(adjustAlpha(glintColor, 0.75f * (1f - pressedFraction)));
         float glintY = faceY + padding + 0.6f * density;
         float glintMargin = r * 0.75f;
         if (keyW > glintMargin * 2)
@@ -811,14 +987,54 @@ public class Keyboard2View extends View
     else
     {
       _tmpRect.set(x + padding, y + padding, x + keyW - padding, y + keyH - padding);
-      canvas.drawRoundRect(_tmpRect, r, r, tc.bg_paint);
-      if (w > 0.f)
+      if (pressedFraction <= 0.001f)
       {
-        float overlap = r - r * 0.85f + w; // sin(45°)
-        drawBorder(canvas, x, y, x + overlap, y + keyH, tc.border_left_paint, tc);
-        drawBorder(canvas, x + keyW - overlap, y, x + keyW, y + keyH, tc.border_right_paint, tc);
-        drawBorder(canvas, x, y, x + keyW, y + overlap, tc.border_top_paint, tc);
-        drawBorder(canvas, x, y + keyH - overlap, x + keyW, y + keyH, tc.border_bottom_paint, tc);
+        canvas.drawRoundRect(_tmpRect, r, r, tcNormal.bg_paint);
+        if (w > 0.f)
+        {
+          float overlap = r - r * 0.85f + w; // sin(45°)
+          drawBorder(canvas, x, y, x + overlap, y + keyH, tcNormal.border_left_paint, tcNormal);
+          drawBorder(canvas, x + keyW - overlap, y, x + keyW, y + keyH, tcNormal.border_right_paint, tcNormal);
+          drawBorder(canvas, x, y, x + keyW, y + overlap, tcNormal.border_top_paint, tcNormal);
+          drawBorder(canvas, x, y + keyH - overlap, x + keyW, y + keyH, tcNormal.border_bottom_paint, tcNormal);
+        }
+      }
+      else if (pressedFraction >= 0.999f)
+      {
+        canvas.drawRoundRect(_tmpRect, r, r, tcActivated.bg_paint);
+        if (w > 0.f)
+        {
+          float overlap = r - r * 0.85f + w; // sin(45°)
+          drawBorder(canvas, x, y, x + overlap, y + keyH, tcActivated.border_left_paint, tcActivated);
+          drawBorder(canvas, x + keyW - overlap, y, x + keyW, y + keyH, tcActivated.border_right_paint, tcActivated);
+          drawBorder(canvas, x, y, x + keyW, y + overlap, tcActivated.border_top_paint, tcActivated);
+          drawBorder(canvas, x, y + keyH - overlap, x + keyW, y + keyH, tcActivated.border_bottom_paint, tcActivated);
+        }
+      }
+      else
+      {
+        int normalBg = tcNormal.bg_paint.getColor();
+        int activatedBg = tcActivated.bg_paint.getColor();
+        int blendedBg = blendColors(normalBg, activatedBg, pressedFraction);
+        int normalAlpha = tcNormal.bg_paint.getAlpha();
+        int activatedAlpha = tcActivated.bg_paint.getAlpha();
+        int blendedAlpha = (int)(normalAlpha + (activatedAlpha - normalAlpha) * pressedFraction);
+        _dynamicKeyBgPaint.setColor(blendedBg);
+        _dynamicKeyBgPaint.setAlpha(blendedAlpha);
+        _dynamicKeyBgPaint.setStyle(Paint.Style.FILL);
+        canvas.drawRoundRect(_tmpRect, r, r, _dynamicKeyBgPaint);
+
+        if (w > 0.f)
+        {
+          int normalBorder = tcNormal.border_top_paint.getColor();
+          int activatedBorder = tcActivated.border_top_paint.getColor();
+          int blendedBorder = blendColors(normalBorder, activatedBorder, pressedFraction);
+          _dynamicKeyBorderPaint.setColor(blendedBorder);
+          _dynamicKeyBorderPaint.setAlpha(blendedAlpha);
+          _dynamicKeyBorderPaint.setStrokeWidth(w);
+          _dynamicKeyBorderPaint.setStyle(Paint.Style.STROKE);
+          canvas.drawRoundRect(_tmpRect, r, r, _dynamicKeyBorderPaint);
+        }
       }
     }
   }
@@ -873,13 +1089,22 @@ public class Keyboard2View extends View
   }
 
   private void drawLabel(Canvas canvas, KeyValue kv, float x, float y,
-      float keyH, boolean isKeyDown, Theme.Computed.Key tc)
+      float keyH, float pressedFraction, Theme.Computed.Key tcNormal, Theme.Computed.Key tcActivated)
   {
     kv = modifyKey(kv, _mods);
     if (kv == null)
       return;
     float textSize = scaleTextSize(kv, true);
-    Paint p = tc.label_paint(kv.isSpecialFont(), labelColor(kv, isKeyDown, false), textSize);
+    Theme.Computed.Key tc = (pressedFraction >= 0.5f) ? tcActivated : tcNormal;
+    int color;
+    if (pressedFraction <= 0.001f)
+      color = labelColor(kv, false, false);
+    else if (pressedFraction >= 0.999f)
+      color = labelColor(kv, true, false);
+    else
+      color = blendColors(labelColor(kv, false, false), labelColor(kv, true, false), pressedFraction);
+
+    Paint p = tc.label_paint(kv.isSpecialFont(), color, textSize);
     String text = kv.getString();
     if (KeySvgIcons.hasIcon(text) && !isNumpadArrKey(text))
     {
@@ -887,15 +1112,15 @@ public class Keyboard2View extends View
       float centerY = y + keyH / 2f;
       float iconScale = (text.equalsIgnoreCase("sup") || text.equalsIgnoreCase("sub") || text.equalsIgnoreCase("superscript") || text.equalsIgnoreCase("subscript")) ? 1.6f : 1.15f;
       float iconSize = textSize * iconScale;
-      if (KeySvgIcons.drawIcon(canvas, text, centerX, centerY, iconSize, p, isKeyDown))
+      if (KeySvgIcons.drawIcon(canvas, text, centerX, centerY, iconSize, p, pressedFraction >= 0.5f))
         return;
     }
     canvas.drawText(text, x, (keyH - p.ascent() - p.descent()) / 2f + y, p);
   }
 
   private void drawSubLabel(Canvas canvas, KeyValue kv, float x, float y,
-      float keyW, float keyH, int sub_index, boolean isKeyDown,
-      Theme.Computed.Key tc)
+      float keyW, float keyH, int sub_index, float pressedFraction,
+      Theme.Computed.Key tcNormal, Theme.Computed.Key tcActivated)
   {
     Paint.Align a = LABEL_POSITION_H[sub_index];
     Vertical v = LABEL_POSITION_V[sub_index];
@@ -903,9 +1128,19 @@ public class Keyboard2View extends View
     if (kv == null)
       return;
     float textSize = scaleTextSize(kv, false);
-    Paint p = tc.sublabel_paint(kv.isSpecialFont(), labelColor(kv, isKeyDown, true), textSize, a);
+    Theme.Computed.Key tc = (pressedFraction >= 0.5f) ? tcActivated : tcNormal;
+    int color;
+    if (pressedFraction <= 0.001f)
+      color = labelColor(kv, false, true);
+    else if (pressedFraction >= 0.999f)
+      color = labelColor(kv, true, true);
+    else
+      color = blendColors(labelColor(kv, false, true), labelColor(kv, true, true), pressedFraction);
+
+    Paint p = tc.sublabel_paint(kv.isSpecialFont(), color, textSize, a);
     float subPadding = _config.keyPadding;
     String label = kv.getString();
+    boolean isKeyDown = pressedFraction >= 0.5f;
 
     // Check if this sublabel is layout switch forward (swipe up) or backward (swipe down)
     boolean isSwitchForward = (kv.getKind() == KeyValue.Kind.Event && kv.getEvent() == KeyValue.Event.SWITCH_FORWARD)
@@ -931,7 +1166,7 @@ public class Keyboard2View extends View
 
       if (targetLang != null && !targetLang.isEmpty())
       {
-        Paint textPaint = tc.sublabel_paint(false, labelColor(kv, isKeyDown, true), textSize * 0.78f, Paint.Align.LEFT);
+        Paint textPaint = tc.sublabel_paint(false, color, textSize * 0.78f, Paint.Align.LEFT);
         float textWidth = textPaint.measureText(targetLang);
         float spacing = 3f * getResources().getDisplayMetrics().density;
         float totalWidth = iconSize + spacing + textWidth;

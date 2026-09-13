@@ -46,6 +46,8 @@
     <string name="pref_swipe_dist_summary">Distance of characters in the corners of the keys (%s)</string>
     <string name="pref_long_timeout_title">Long press timeout</string>
     <string name="pref_long_interval_title">Key repeat interval</string>
+    <string name="pref_key_fade_duration_title">Key fade in &amp; out</string>
+    <string name="pref_key_fade_duration_summary">Key typing and pressed color fade duration (%s)</string>
     <string name="pref_keyrepeat_enabled">Key repeat on long press</string>
     <string name="pref_lock_double_tap_title">Double tap on shift for caps lock</string>
     <string name="pref_lock_double_tap_summary">You can lock any modifier by holding it</string>
@@ -92,6 +94,7 @@
     <string name="pref_theme_e_dracula">Dracula</string>
     <string name="pref_theme_e_frostedobsidian">Frosted Obsidian (Glass)</string>
     <string name="pref_theme_e_cyberneon">Cyber Neon</string>
+    <string name="pref_theme_e_custom">Custom Theme</string>
     <string name="pref_swipe_dist_e_very_short">Very short</string>
     <string name="pref_swipe_dist_e_short">Short</string>
     <string name="pref_swipe_dist_e_default">Normal</string>
@@ -232,4 +235,15 @@
     <string name="pref_split_layout_never">Never</string>
     <string name="pref_split_layout_landscape">In landscape orientation</string>
     <string name="pref_split_layout_wide">On wide screens</string>
+    <string name="pref_custom_theme_title">Custom Theme Builder</string>
+    <string name="pref_custom_theme_summary">Customize individual colors for keys, letters, backgrounds and adjust opacity</string>
+    <string name="pref_custom_color_key">Key Color</string>
+    <string name="pref_custom_color_letters">Letters / Text Color</string>
+    <string name="pref_custom_color_key_bg">Key Background Color</string>
+    <string name="pref_custom_color_keyboard_bg">Keyboard Background Color</string>
+    <string name="pref_custom_color_action">Special Keys (Shift, Ctrl, Alt, Enter, Numpad)</string>
+    <string name="pref_custom_color_activated">Pressed Key Color</string>
+    <string name="pref_custom_color_spacebar">Space Bar Color</string>
+    <string name="pref_custom_color_sublabel">Sublabel / Corner Hints Color</string>
+    <string name="pref_custom_bg_opacity">Background Opacity</string>
 </resources>
