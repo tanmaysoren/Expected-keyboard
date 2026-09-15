@@ -237,8 +237,8 @@ public final class KeyValue implements Comparable<KeyValue>
         case 0xE01D: sb.append("📖"); break; // Dictionary
         case 0xE030: sb.append("❐"); break; // Copy
         case 0xE031: sb.append("✂"); break; // Cut
-        case 0xE032:
-        case 0xE035: sb.append("\uE032"); break; // Paste / Paste plain
+        case 0xE032: sb.append("\uE032"); break; // Paste
+        case 0xE035: sb.append("\uE035"); break; // Paste plain
         case 0xE033: sb.append("⬚"); break; // Select All
         case 0xE034: sb.append("➦"); break; // Share
         case 0xE036: sb.append("↶"); break; // Undo

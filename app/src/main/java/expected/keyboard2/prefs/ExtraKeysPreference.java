@@ -35,7 +35,6 @@ public class ExtraKeysPreference extends PreferenceCategory
     "print_screen",
     "switch_greekmath",
     "change_method",
-    "capslock",
     "copy",
     "paste",
     "cut",

@@ -206,6 +206,7 @@ class ExampleRobolectricTest {
     assertFalse("page_down should be removed", extraKeysList.contains("page_down"))
     assertFalse("home should be removed", extraKeysList.contains("home"))
     assertFalse("end should be removed", extraKeysList.contains("end"))
+    assertFalse("capslock should be removed", extraKeysList.contains("capslock"))
   }
 
   @Test
@@ -370,6 +371,23 @@ class ExampleRobolectricTest {
     // Test title string exists
     val title = context.getString(R.string.pref_key_fade_duration_title)
     assertTrue(title.isNotEmpty())
+  }
+
+  @Test
+  fun `paste as plain text svg icon is registered and drawable`() {
+    assertTrue("KeySvgIcons must recognize pasteasplaintext", KeySvgIcons.hasIcon("pasteasplaintext"))
+    assertTrue("KeySvgIcons must recognize pasteAsPlainText", KeySvgIcons.hasIcon("pasteAsPlainText"))
+    assertTrue("KeySvgIcons must recognize \\uE035", KeySvgIcons.hasIcon("\uE035"))
+
+    val bitmap = android.graphics.Bitmap.createBitmap(100, 100, android.graphics.Bitmap.Config.ARGB_8888)
+    val canvas = android.graphics.Canvas(bitmap)
+    val paint = android.graphics.Paint()
+
+    val drawn1 = KeySvgIcons.drawIcon(canvas, "pasteasplaintext", 50f, 50f, 40f, paint, false)
+    assertTrue("Drawing pasteasplaintext should succeed", drawn1)
+
+    val drawn2 = KeySvgIcons.drawIcon(canvas, "\uE035", 50f, 50f, 40f, paint, true)
+    assertTrue("Drawing \\uE035 should succeed", drawn2)
   }
 }
 
