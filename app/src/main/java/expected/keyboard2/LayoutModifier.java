@@ -89,7 +89,85 @@ public final class LayoutModifier
     // Avoid adding extra keys to the number row
     if (added_number_row != null)
       kw = kw.insert_row(added_number_row, 0);
+    kw = inject_macro_key(kw);
     return kw;
+  }
+
+  static KeyboardData inject_macro_key(KeyboardData kw)
+  {
+    if (globalConfig == null || !globalConfig.has_macros)
+      return kw;
+
+    // Strategy 1: Place on 'i'/'I' key's bottom-left swipe slot
+    if (placeOnKeyChar(kw, 'i') || placeOnKeyChar(kw, 'I'))
+      return kw;
+
+    // Strategy 2: First normal key in top 2 rows with empty sw slot
+    if (placeOnFirstEmpty(kw, 2))
+      return kw;
+
+    // Strategy 3: Any normal key with empty sw, or shift existing sw to se
+    placeOnFirstEmptyAnywhere(kw);
+    return kw;
+  }
+
+  private static boolean placeOnKeyChar(KeyboardData kw, char target)
+  {
+    for (KeyboardData.Row row : kw.rows)
+    {
+      for (KeyboardData.Key key : row.keys)
+      {
+        if (key.keys == null || key.keys[0] == null)
+          continue;
+        if (key.keys[0].getKind() != KeyValue.Kind.Char || key.keys[0].getChar() != target)
+          continue;
+        if (key.keys[3] != null && key.keys[4] == null)
+          key.keys[4] = key.keys[3];
+        key.keys[3] = KeyValue.MACRO_EXPAND;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean placeOnFirstEmpty(KeyboardData kw, int maxRows)
+  {
+    int limit = Math.min(maxRows, kw.rows.size());
+    for (int r = 0; r < limit; r++)
+    {
+      for (KeyboardData.Key key : kw.rows.get(r).keys)
+      {
+        if (key.role == KeyboardData.Key.Role.Normal && key.keys != null && key.keys[0] != null && key.keys[3] == null)
+        {
+          key.keys[3] = KeyValue.MACRO_EXPAND;
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private static void placeOnFirstEmptyAnywhere(KeyboardData kw)
+  {
+    for (KeyboardData.Row row : kw.rows)
+    {
+      for (KeyboardData.Key key : row.keys)
+      {
+        if (key.role != KeyboardData.Key.Role.Normal || key.keys == null || key.keys[0] == null)
+          continue;
+        if (key.keys[3] == null)
+        {
+          key.keys[3] = KeyValue.MACRO_EXPAND;
+          return;
+        }
+        if (key.keys[4] == null)
+        {
+          key.keys[4] = key.keys[3];
+          key.keys[3] = KeyValue.MACRO_EXPAND;
+          return;
+        }
+      }
+    }
   }
 
   /** Handle the numpad layout. The [main_kw] is used to adapt the numpad to

@@ -48,6 +48,7 @@ public final class Config
   public java.util.Set<String> terminal_commands; // custom commands for terminal apps
   public java.util.Set<String> custom_emails; // custom emails for login fields
   public boolean sound_enabled;
+  public boolean has_macros;
   // Let the system handle vibration when false.
   public boolean vibrate_custom;
   // Control the vibration if [vibrate_custom] is true.
@@ -237,6 +238,7 @@ public final class Config
     clipboard_history_enabled = _prefs.getBoolean("clipboard_history_enabled", false);
     clipboard_history_duration = Integer.parseInt(_prefs.getString("clipboard_history_duration", "5"));
     space_bar_auto_complete = _prefs.getBoolean("space_bar_auto_complete", false);
+    has_macros = MacroManager.hasMacros(_prefs);
     physical_keyboard_hide = _prefs.getString("physical_keyboard_behavior", "show").equals("hide");
     floating_mode = isFloatingMode();
     if (floating_mode) {
@@ -418,6 +420,11 @@ public final class Config
   public static Config globalConfig()
   {
     return _globalConfig;
+  }
+
+  public SharedPreferences getPrefs()
+  {
+    return _prefs;
   }
 
   public static SharedPreferences globalPrefs()

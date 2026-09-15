@@ -95,6 +95,7 @@ public final class KeyValue implements Comparable<KeyValue>
     WORD_RIGHT,
     SELECTION_CURSOR_LEFT,
     SELECTION_CURSOR_RIGHT,
+    MACRO_EXPAND,
   }
 
   public static enum Placeholder
@@ -244,6 +245,7 @@ public final class KeyValue implements Comparable<KeyValue>
         case 0xE036: sb.append("↶"); break; // Undo
         case 0xE037: sb.append("↷"); break; // Redo
         case 0xE038: sb.append("✨"); break; // Assist
+        case 0xE03A: sb.append("\uE03A"); break; // Macro Expand
 
         // Accents / Diacritics
         case 0xE050: sb.append("´"); break;
@@ -669,6 +671,7 @@ public final class KeyValue implements Comparable<KeyValue>
   public static final KeyValue CHANGE_METHOD_NEXT = eventKey(0xE009, Event.CHANGE_METHOD_NEXT, FLAG_SMALLER_FONT);
   public static final KeyValue TOGGLE_FLOATING = eventKey("⛶", Event.TOGGLE_FLOATING, FLAG_SMALLER_FONT);
   public static final KeyValue COMPOSE_CANCEL = placeholderKey(0xE01A, Placeholder.COMPOSE_CANCEL, FLAG_SECONDARY);
+  public static final KeyValue MACRO_EXPAND = editingKey(0xE03A, Editing.MACRO_EXPAND, 0);
 
   public static KeyValue getSpecialKeyByName(String name)
   {
@@ -915,6 +918,9 @@ public final class KeyValue implements Comparable<KeyValue>
       case "replaceText": return editingKey("repl", Editing.REPLACE, FLAG_SPECIAL | FLAG_SMALLER_FONT);
       case "textAssist": return editingKey(0xE038, Editing.ASSIST, FLAG_SPECIAL);
       case "autofill": return editingKey("auto", Editing.AUTOFILL, FLAG_SPECIAL | FLAG_SMALLER_FONT);
+      case "macro_expand":
+      case "macro":
+        return MACRO_EXPAND;
 
       /* The compose key */
       case "compose": return COMPOSE;

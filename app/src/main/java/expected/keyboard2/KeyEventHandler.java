@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyCharacterMap;
@@ -12,6 +13,7 @@ import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import java.util.Iterator;
+import java.util.Map;
 import expected.keyboard2.suggestions.Suggestions;
 
 public final class KeyEventHandler
@@ -450,6 +452,58 @@ public final class KeyEventHandler
       case WORD_RIGHT: move_cursor(1); break;
       case SELECTION_CURSOR_LEFT: move_cursor_sel(-1, true, false); break;
       case SELECTION_CURSOR_RIGHT: move_cursor_sel(1, false, false); break;
+      case MACRO_EXPAND: expand_macro(); break;
+    }
+  }
+
+  public void expand_macro()
+  {
+    InputConnection conn = _recv.getCurrentInputConnection();
+    if (conn == null)
+      return;
+
+    SharedPreferences prefs = (_recv != null && _recv.getContext() != null)
+        ? DirectBootAwarePreferences.get_shared_preferences(_recv.getContext())
+        : Config.globalPrefs();
+
+    Map<String, String> macros = MacroManager.getMacros(prefs);
+    if (macros == null || macros.isEmpty())
+      return;
+
+    CharSequence beforeCs = conn.getTextBeforeCursor(256, 0);
+    String before = (beforeCs != null) ? beforeCs.toString() : "";
+    String typed = _typedword.get();
+
+    String bestTrigger = null;
+    String bestExpansion = null;
+
+    for (Map.Entry<String, String> entry : macros.entrySet())
+    {
+      String trigger = entry.getKey();
+      if (trigger == null || trigger.isEmpty())
+        continue;
+
+      if (!before.isEmpty() && before.endsWith(trigger))
+      {
+        if (bestTrigger == null || trigger.length() > bestTrigger.length())
+        {
+          bestTrigger = trigger;
+          bestExpansion = entry.getValue();
+        }
+      }
+      else if (before.isEmpty() && typed != null && typed.endsWith(trigger))
+      {
+        if (bestTrigger == null || trigger.length() > bestTrigger.length())
+        {
+          bestTrigger = trigger;
+          bestExpansion = entry.getValue();
+        }
+      }
+    }
+
+    if (bestTrigger != null && bestExpansion != null)
+    {
+      replace_surrounding_text(bestTrigger.length(), 0, bestExpansion);
     }
   }
 

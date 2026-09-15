@@ -662,7 +662,15 @@ public class Keyboard2 extends InputMethodService
       create_keyboard_view();
       setInputView(_keyboard_container_view);
     }
+    // Preserve theme when non-theme keys change (e.g. suggestion bar toggle)
+    // SectionSettingsActivity.onStop() copies credential prefs to device-protected,
+    // which can overwrite the theme with stale defaults.
+    int savedTheme = _config.theme;
     refresh_config();
+    if (_key != null && !_key.equals("theme") && _config.theme != savedTheme) {
+      _config.theme = savedTheme;
+      _config.refresh(getResources(), _foldStateTracker.isUnfolded(), _dictionaries);
+    }
     if (_keyboard_layout_view != null) {
       _keyboard_layout_view.setKeyboard(current_layout());
     }

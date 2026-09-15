@@ -246,4 +246,6 @@
     <string name="pref_custom_color_spacebar">Space Bar Color</string>
     <string name="pref_custom_color_sublabel">Sublabel / Corner Hints Color</string>
     <string name="pref_custom_bg_opacity">Background Opacity</string>
+    <string name="pref_macro_keys_title">Macro Keys</string>
+    <string name="pref_macro_keys_summary">Set shortcut triggers that expand into text when swiping BL on \'I\'</string>
 </resources>
