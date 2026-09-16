@@ -258,6 +258,7 @@ public final class CurrentlyTypedWord
   {
     _refresh_pending = false;
     _w_cursor = 0;
+    if (_callback != null) _callback.reset_macro_fallback();
     if (_ic == null)
       return;
     try
@@ -348,5 +349,6 @@ public final class CurrentlyTypedWord
   public static interface Callback
   {
     public void currently_typed_word(String word);
+    public void reset_macro_fallback();
   }
 }

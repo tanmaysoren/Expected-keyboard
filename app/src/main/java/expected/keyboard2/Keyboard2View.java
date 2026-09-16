@@ -91,6 +91,11 @@ public class Keyboard2View extends View
   private Rect _dotKeyRect = new Rect();
   private boolean _dotPopupActive = false;
 
+  private MacroListPopup _macroListPopup;
+  private Runnable _macroLongPressRunnable;
+  private KeyboardData.Key _macroPressedKey;
+  private boolean _macroPopupActive = false;
+
   // Key fade out & fade in animation when typed
   // Key animations: pressed key color & layer fade are adjustable via Typing & Gestures settings.
   // When keyFadeDuration is 0 (default), there is no fade out or in.
@@ -355,6 +360,25 @@ public class Keyboard2View extends View
     return ".".equals(s);
   }
 
+  private void showMacroPopup(KeyboardData.Key key) {
+    if (key == null) return;
+    Rect r = getKeyRect(key);
+    if (r == null) return;
+    Rect asdfRect = getAsdfRowRect();
+    if (_macroListPopup == null) _macroListPopup = new MacroListPopup(getContext());
+    if (_macroListPopup.isShowing()) _macroListPopup.dismiss();
+    _macroListPopup.setOnDismiss(() -> {
+      _macroPopupActive = false;
+      _macroPressedKey = null;
+      _macroLongPressRunnable = null;
+      invalidate();
+    });
+    _macroListPopup.show(this);
+    _macroPopupActive = true;
+    _pointers.onTouchCancel();
+    invalidate();
+  }
+
   private void showDotPopup(KeyboardData.Key key) {
     if (key == null || !isDotKey(key)) return;
     Rect r = getKeyRect(key);
@@ -442,6 +466,10 @@ public class Keyboard2View extends View
           _dotHandler.removeCallbacks(_dotLongPressRunnable);
           _dotLongPressRunnable = null;
         }
+        if (_macroLongPressRunnable != null) {
+          _dotHandler.removeCallbacks(_macroLongPressRunnable);
+          _macroLongPressRunnable = null;
+        }
         if (_dotPopupActive && _dotPressedKey != null) {
           // If popup was not shown, this was a normal dot tap — let it through
           if (_dotExtensionPopup == null || !_dotExtensionPopup.isShowing()) {
@@ -450,11 +478,18 @@ public class Keyboard2View extends View
             // Popup is showing, don't send key up to pointers
           }
           // Don't reset _dotPopupActive here; popup handles its own dismiss
+        } else if (_macroPopupActive && _macroPressedKey != null) {
+          if (_macroListPopup == null || !_macroListPopup.isShowing()) {
+            _pointers.onTouchUp(event.getPointerId(event.getActionIndex()));
+          }
         } else {
           _pointers.onTouchUp(event.getPointerId(event.getActionIndex()));
         }
         if (!_dotPopupActive) {
           _dotPressedKey = null;
+        }
+        if (!_macroPopupActive) {
+          _macroPressedKey = null;
         }
         break;
       case MotionEvent.ACTION_DOWN:
@@ -475,6 +510,13 @@ public class Keyboard2View extends View
             _dotHandler.postDelayed(_dotLongPressRunnable, 90);
           }
           _pointers.onTouchDown(tx, ty, event.getPointerId(p), key);
+          KeyValue val = _pointers.getPointerValue(event.getPointerId(p));
+          if (val != null && KeyValue.MACRO_EXPAND.equals(val)) {
+            _macroPressedKey = key;
+            if (_macroLongPressRunnable != null) _dotHandler.removeCallbacks(_macroLongPressRunnable);
+            _macroLongPressRunnable = () -> showMacroPopup(key);
+            _dotHandler.postDelayed(_macroLongPressRunnable, 200);
+          }
           triggerKeyAnimation(key);
         }
         break;
@@ -492,6 +534,24 @@ public class Keyboard2View extends View
             }
           }
           _pointers.onTouchMove(mx, my, event.getPointerId(p));
+          
+          KeyValue val = _pointers.getPointerValue(event.getPointerId(p));
+          if (val != null && KeyValue.MACRO_EXPAND.equals(val)) {
+            if (_macroLongPressRunnable == null && !_macroPopupActive) {
+              _macroPressedKey = getKeyAtPosition(mx, my);
+              if (_macroPressedKey != null) {
+                _macroLongPressRunnable = () -> showMacroPopup(_macroPressedKey);
+                _dotHandler.postDelayed(_macroLongPressRunnable, 200);
+              }
+            }
+          } else {
+            if (_macroLongPressRunnable != null) {
+              _dotHandler.removeCallbacks(_macroLongPressRunnable);
+              _macroLongPressRunnable = null;
+              _macroPressedKey = null;
+            }
+          }
+
           // If popup active, also forward to popup for drag
           if (_dotPopupActive && _dotExtensionPopup != null && _dotExtensionPopup.isShowing()) {
             // Find extension under finger's X relative to popup
@@ -504,11 +564,20 @@ public class Keyboard2View extends View
           _dotHandler.removeCallbacks(_dotLongPressRunnable);
           _dotLongPressRunnable = null;
         }
+        if (_macroLongPressRunnable != null) {
+          _dotHandler.removeCallbacks(_macroLongPressRunnable);
+          _macroLongPressRunnable = null;
+        }
         if (_dotExtensionPopup != null && _dotExtensionPopup.isShowing()) {
           _dotExtensionPopup.dismiss();
           _dotPopupActive = false;
         }
+        if (_macroListPopup != null && _macroListPopup.isShowing()) {
+          _macroListPopup.dismiss();
+          _macroPopupActive = false;
+        }
         _dotPressedKey = null;
+        _macroPressedKey = null;
         _pointers.onTouchCancel();
         break;
       default:

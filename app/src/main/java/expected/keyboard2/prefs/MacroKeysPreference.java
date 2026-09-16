@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import expected.keyboard2.DirectBootAwarePreferences;
 import expected.keyboard2.MacroManager;
 import expected.keyboard2.R;
 
@@ -188,6 +189,11 @@ public class MacroKeysPreference extends Preference
           }
         }
         MacroManager.saveMacros(prefs, newMap);
+        // Also write directly to device-protected prefs so the keyboard
+        // (which reads from device-protected storage) picks up the change
+        // immediately, without waiting for SectionSettingsActivity.onStop().
+        MacroManager.saveMacros(
+            DirectBootAwarePreferences.get_shared_preferences(ctx), newMap);
         updateSummary(newMap.size());
         Toast.makeText(ctx, "Saved " + newMap.size() + " macro(s)", Toast.LENGTH_SHORT).show();
       })

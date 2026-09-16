@@ -95,7 +95,7 @@ public final class LayoutModifier
 
   static KeyboardData inject_macro_key(KeyboardData kw)
   {
-    if (globalConfig == null || !globalConfig.has_macros)
+    if (globalConfig == null)
       return kw;
 
     // Strategy 1: Place on 'i'/'I' key's bottom-left swipe slot

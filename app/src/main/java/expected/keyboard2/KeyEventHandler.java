@@ -40,6 +40,9 @@ public final class KeyEventHandler
   /** Remember the action that was handled. This is used by autocorrect. */
   LastAction _last_action = null;
   LastAction _next_last_action = null;
+  boolean _is_terminal = false;
+
+  private StringBuilder _macro_fallback = new StringBuilder();
 
   public KeyEventHandler(IReceiver recv, Suggestions sg)
   {
@@ -63,7 +66,9 @@ public final class KeyEventHandler
       conf.editor_config.should_move_cursor_force_fallback;
     _space_bar_auto_complete = conf.space_bar_auto_complete;
     _autocorrect_enabled = conf.autocorrect_enabled;
+    _is_terminal = conf.editor_config.is_terminal;
     _last_action = null;
+    _macro_fallback.setLength(0);
   }
 
   /** Selection has been updated. */
@@ -207,6 +212,13 @@ public final class KeyEventHandler
       _suggestions.currently_typed_word(word);
   }
 
+  @Override
+  public void reset_macro_fallback()
+  {
+    if (_macro_fallback != null)
+      _macro_fallback.setLength(0);
+  }
+
   public void dictionary_changed()
   {
     try
@@ -306,6 +318,14 @@ public final class KeyEventHandler
       {
         _autocap.event_sent(eventCode, metaState);
         _typedword.event_sent(eventCode, metaState);
+        if (eventCode == KeyEvent.KEYCODE_DEL && _macro_fallback.length() > 0)
+          _macro_fallback.setLength(_macro_fallback.length() - 1);
+        else if (eventCode == KeyEvent.KEYCODE_SPACE)
+          _macro_fallback.append(" ");
+        else if (eventCode == KeyEvent.KEYCODE_ENTER)
+          _macro_fallback.append("\n");
+        else if (eventCode != KeyEvent.KEYCODE_SHIFT_LEFT && eventCode != KeyEvent.KEYCODE_SHIFT_RIGHT && eventCode != KeyEvent.KEYCODE_ALT_LEFT && eventCode != KeyEvent.KEYCODE_ALT_RIGHT && eventCode != KeyEvent.KEYCODE_DEL)
+          _macro_fallback.setLength(0);
       }
     }
     catch (Throwable t)
@@ -325,6 +345,9 @@ public final class KeyEventHandler
         return;
       _autocap.typed(text);
       _typedword.typed(text);
+      _macro_fallback.append(text);
+      if (_macro_fallback.length() > 256)
+        _macro_fallback.delete(0, _macro_fallback.length() - 256);
       conn.commitText(text, 1);
     }
     catch (Throwable t)
@@ -345,25 +368,42 @@ public final class KeyEventHandler
     {
       conn.beginBatchEdit();
       boolean deleted = false;
-      try
+      
+      if (_is_terminal && remove_before > 0)
       {
-        deleted = conn.deleteSurroundingText(remove_before, remove_after);
-      }
-      catch (Throwable t) {}
-
-      // Fallback for terminal apps (such as Termux) where deleteSurroundingText returns false or is not handled
-      if (!deleted && remove_before > 0)
-      {
+        StringBuilder backspaces = new StringBuilder();
         for (int i = 0; i < remove_before; i++)
+          backspaces.append('\u007F'); // Send DEL character synchronously
+        conn.commitText(backspaces.toString(), 1);
+        deleted = true;
+      }
+      else
+      {
+        try
         {
-          conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-          conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
+          deleted = conn.deleteSurroundingText(remove_before, remove_after);
+        }
+        catch (Throwable t) {}
+  
+        // Fallback for terminal apps where deleteSurroundingText returns false or is not handled
+        if (!deleted && remove_before > 0)
+        {
+          for (int i = 0; i < remove_before; i++)
+          {
+            conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+            conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
+          }
         }
       }
 
       conn.commitText(new_text, 1);
       _typedword.remove_surrounding_text(remove_before, remove_after);
       _typedword.typed(new_text);
+      if (_macro_fallback.length() >= remove_before)
+        _macro_fallback.setLength(_macro_fallback.length() - remove_before);
+      else
+        _macro_fallback.setLength(0);
+      _macro_fallback.append(new_text);
     }
     catch (Throwable t)
     {
@@ -472,7 +512,7 @@ public final class KeyEventHandler
 
     CharSequence beforeCs = conn.getTextBeforeCursor(256, 0);
     String before = (beforeCs != null) ? beforeCs.toString() : "";
-    String typed = _typedword.get();
+    String typed = _macro_fallback.toString();
 
     String bestTrigger = null;
     String bestExpansion = null;
@@ -491,7 +531,7 @@ public final class KeyEventHandler
           bestExpansion = entry.getValue();
         }
       }
-      else if (before.isEmpty() && typed != null && typed.endsWith(trigger))
+      else if (typed != null && typed.endsWith(trigger))
       {
         if (bestTrigger == null || trigger.length() > bestTrigger.length())
         {

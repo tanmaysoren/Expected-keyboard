@@ -194,6 +194,13 @@ public final class Pointers implements Handler.Callback
     _handler.onPointerFlagsChanged(true);
   }
 
+  public KeyValue getPointerValue(int pointerId) {
+    for (Pointer p : _ptrs) {
+      if (p.pointerId == pointerId) return p.value;
+    }
+    return null;
+  }
+
   /* Whether an other pointer is down on a non-special key. */
   private boolean isOtherPointerDown()
   {

@@ -20,6 +20,8 @@ public final class EditorConfig
   /** Whether this is an email/phone/login field (for custom email suggestions) */
   public boolean is_email_field = false;
   public boolean is_phone_field = false;
+  /** Whether this is a terminal editor (TYPE_NULL) */
+  public boolean is_terminal = false;
   /** Whether the numeric layout should be shown by default. */
   public boolean numeric_layout = false;
   /** Workaround some apps which answers to [getExtractedText] but do not react
@@ -52,6 +54,7 @@ public final class EditorConfig
     /* Selection mode.
        Editors with [TYPE_NULL] are for example Termux and Emacs. */
     selection_mode_enabled = inputType != InputType.TYPE_NULL;
+    is_terminal = inputType == InputType.TYPE_NULL;
     // Email / phone detection for custom email suggestions
     is_email_field = false;
     is_phone_field = false;
