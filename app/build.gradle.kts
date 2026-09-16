@@ -25,7 +25,7 @@ android {
 
   signingConfigs {
     create("release") {
-      val keystorePath = System.getenv("KEYSTORE_PATH") ?: "${rootDir}/my-upload-key.jks"
+      val keystorePath = System.getenv("KEYSTORE_PATH") ?: "${rootDir}/app signature key.jks"
       val releaseKeystore = file(keystorePath)
       if (releaseKeystore.exists()) {
         storeFile = releaseKeystore

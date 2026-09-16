@@ -496,11 +496,14 @@ public final class KeyEventHandler
     }
   }
 
-  public void expand_macro()
+  private boolean last_macro_auto_entered = false;
+
+  public boolean expand_macro()
   {
+    last_macro_auto_entered = false;
     InputConnection conn = _recv.getCurrentInputConnection();
     if (conn == null)
-      return;
+      return false;
 
     SharedPreferences prefs = (_recv != null && _recv.getContext() != null)
         ? DirectBootAwarePreferences.get_shared_preferences(_recv.getContext())
@@ -508,7 +511,7 @@ public final class KeyEventHandler
 
     Map<String, String> macros = MacroManager.getMacros(prefs);
     if (macros == null || macros.isEmpty())
-      return;
+      return false;
 
     CharSequence beforeCs = conn.getTextBeforeCursor(256, 0);
     String before = (beforeCs != null) ? beforeCs.toString() : "";
@@ -543,8 +546,22 @@ public final class KeyEventHandler
 
     if (bestTrigger != null && bestExpansion != null)
     {
+      boolean autoEnter = false;
+      if (bestExpansion.endsWith("\\n")) {
+        autoEnter = true;
+        bestExpansion = bestExpansion.substring(0, bestExpansion.length() - 2);
+      } else if (bestExpansion.endsWith("\n")) {
+        autoEnter = true;
+        bestExpansion = bestExpansion.substring(0, bestExpansion.length() - 1);
+      }
       replace_surrounding_text(bestTrigger.length(), 0, bestExpansion);
+      if (autoEnter) {
+        last_macro_auto_entered = true;
+        send_key_down_up(android.view.KeyEvent.KEYCODE_ENTER);
+      }
+      return true;
     }
+    return false;
   }
 
   static ExtractedTextRequest _move_cursor_req = null;

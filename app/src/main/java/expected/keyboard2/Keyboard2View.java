@@ -515,7 +515,7 @@ public class Keyboard2View extends View
             _macroPressedKey = key;
             if (_macroLongPressRunnable != null) _dotHandler.removeCallbacks(_macroLongPressRunnable);
             _macroLongPressRunnable = () -> showMacroPopup(key);
-            _dotHandler.postDelayed(_macroLongPressRunnable, 200);
+            _dotHandler.postDelayed(_macroLongPressRunnable, 900);
           }
           triggerKeyAnimation(key);
         }
@@ -541,7 +541,7 @@ public class Keyboard2View extends View
               _macroPressedKey = getKeyAtPosition(mx, my);
               if (_macroPressedKey != null) {
                 _macroLongPressRunnable = () -> showMacroPopup(_macroPressedKey);
-                _dotHandler.postDelayed(_macroLongPressRunnable, 200);
+                _dotHandler.postDelayed(_macroLongPressRunnable, 900);
               }
             }
           } else {
