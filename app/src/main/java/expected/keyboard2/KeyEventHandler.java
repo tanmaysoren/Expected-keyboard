@@ -359,6 +359,12 @@ public final class KeyEventHandler
   void replace_surrounding_text(int remove_before, int remove_after,
       String new_text)
   {
+    replace_surrounding_text(remove_before, remove_after, new_text, false);
+  }
+
+  void replace_surrounding_text(int remove_before, int remove_after,
+      String new_text, boolean force_key_events)
+  {
     if (new_text == null)
       return;
     InputConnection conn = _recv.getCurrentInputConnection();
@@ -369,13 +375,17 @@ public final class KeyEventHandler
       conn.beginBatchEdit();
       boolean deleted = false;
       
-      if (_is_terminal && remove_before > 0)
+      if (force_key_events || _is_terminal || _move_cursor_force_fallback)
       {
-        StringBuilder backspaces = new StringBuilder();
-        for (int i = 0; i < remove_before; i++)
-          backspaces.append('\u007F'); // Send DEL character synchronously
-        conn.commitText(backspaces.toString(), 1);
-        deleted = true;
+        if (remove_before > 0)
+        {
+          for (int i = 0; i < remove_before; i++)
+          {
+            conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+            conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
+          }
+          deleted = true;
+        }
       }
       else
       {
@@ -385,7 +395,7 @@ public final class KeyEventHandler
         }
         catch (Throwable t) {}
   
-        // Fallback for terminal apps where deleteSurroundingText returns false or is not handled
+        // Fallback for apps where deleteSurroundingText returns false
         if (!deleted && remove_before > 0)
         {
           for (int i = 0; i < remove_before; i++)
@@ -393,6 +403,7 @@ public final class KeyEventHandler
             conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
             conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
           }
+          deleted = true;
         }
       }
 
@@ -472,19 +483,19 @@ public final class KeyEventHandler
       return;
     switch (ev)
     {
-      case COPY: if(_typedword.is_selection_not_empty()) send_context_menu_action(android.R.id.copy); break;
+      case COPY: perform_shortcut(KeyEvent.KEYCODE_C, android.R.id.copy, true); break;
       case PASTE: handle_paste(false); break;
-      case CUT: if(_typedword.is_selection_not_empty()) send_context_menu_action(android.R.id.cut); break;
-      case SELECT_ALL: send_context_menu_action(android.R.id.selectAll); break;
+      case CUT: perform_shortcut(KeyEvent.KEYCODE_X, android.R.id.cut, true); break;
+      case SELECT_ALL: perform_shortcut(KeyEvent.KEYCODE_A, android.R.id.selectAll, false); break;
       case SHARE: send_context_menu_action(android.R.id.shareText); break;
       case PASTE_PLAIN: handle_paste(true); break;
-      case UNDO: send_context_menu_action(android.R.id.undo); break;
-      case REDO: send_context_menu_action(android.R.id.redo); break;
+      case UNDO: perform_shortcut(KeyEvent.KEYCODE_Z, android.R.id.undo, false); break;
+      case REDO: perform_shortcut(KeyEvent.KEYCODE_Y, android.R.id.redo, false); break;
       case REPLACE: send_context_menu_action(android.R.id.replaceText); break;
       case ASSIST: send_context_menu_action(android.R.id.textAssist); break;
       case AUTOFILL: send_context_menu_action(android.R.id.autofill); break;
-      case DELETE_WORD: send_key_down_up(KeyEvent.KEYCODE_DEL, KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON); break;
-      case FORWARD_DELETE_WORD: send_key_down_up(KeyEvent.KEYCODE_FORWARD_DEL, KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON); break;
+      case DELETE_WORD: delete_word(); break;
+      case FORWARD_DELETE_WORD: forward_delete_word(); break;
       case SELECTION_CANCEL: cancel_selection(); break;
       case SPACE_BAR: handle_space_bar(); break;
       case BACKSPACE: handle_backspace(); break;
@@ -493,6 +504,56 @@ public final class KeyEventHandler
       case SELECTION_CURSOR_LEFT: move_cursor_sel(-1, true, false); break;
       case SELECTION_CURSOR_RIGHT: move_cursor_sel(1, false, false); break;
       case MACRO_EXPAND: expand_macro(); break;
+    }
+  }
+
+  void perform_shortcut(int keycode, int actionId, boolean requiresSelection)
+  {
+    if (_is_terminal || _move_cursor_force_fallback)
+    {
+      send_key_down_up(keycode, KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON);
+    }
+    else if (!requiresSelection || _typedword.is_selection_not_empty())
+    {
+      send_context_menu_action(actionId);
+    }
+  }
+
+  void delete_word()
+  {
+    try {
+      InputConnection conn = _recv.getCurrentInputConnection();
+      if (conn == null) return;
+      CharSequence before = conn.getTextBeforeCursor(2048, 0);
+      if (before == null || before.length() == 0 || !can_set_selection(conn)) {
+        send_key_down_up(KeyEvent.KEYCODE_DEL, KeyEvent.META_ALT_ON | KeyEvent.META_ALT_LEFT_ON);
+      } else {
+        int offset = getWordOffsetLeft(before, 1);
+        if (offset < 0) {
+          conn.deleteSurroundingText(-offset, 0);
+        }
+      }
+    } catch (Throwable t) {
+      Logs.warn("Error in delete_word", t);
+    }
+  }
+
+  void forward_delete_word()
+  {
+    try {
+      InputConnection conn = _recv.getCurrentInputConnection();
+      if (conn == null) return;
+      CharSequence after = conn.getTextAfterCursor(2048, 0);
+      if (after == null || after.length() == 0 || !can_set_selection(conn)) {
+        send_key_down_up(KeyEvent.KEYCODE_D, KeyEvent.META_ALT_ON | KeyEvent.META_ALT_LEFT_ON);
+      } else {
+        int offset = getWordOffsetRight(after, 1);
+        if (offset > 0) {
+          conn.deleteSurroundingText(0, offset);
+        }
+      }
+    } catch (Throwable t) {
+      Logs.warn("Error in forward_delete_word", t);
     }
   }
 
@@ -554,7 +615,7 @@ public final class KeyEventHandler
         autoEnter = true;
         bestExpansion = bestExpansion.substring(0, bestExpansion.length() - 1);
       }
-      replace_surrounding_text(bestTrigger.length(), 0, bestExpansion);
+      replace_surrounding_text(bestTrigger.length(), 0, bestExpansion, true);
       if (autoEnter) {
         last_macro_auto_entered = true;
         send_key_down_up(android.view.KeyEvent.KEYCODE_ENTER);
