@@ -375,7 +375,7 @@ public final class KeyEventHandler
       conn.beginBatchEdit();
       boolean deleted = false;
       
-      if (force_key_events || _is_terminal || _move_cursor_force_fallback)
+      if (_is_terminal || _move_cursor_force_fallback)
       {
         if (remove_before > 0)
         {
@@ -384,30 +384,41 @@ public final class KeyEventHandler
             conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
             conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
           }
-          deleted = true;
         }
+        if (remove_after > 0)
+        {
+          for (int i = 0; i < remove_after; i++)
+          {
+            conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_FORWARD_DEL));
+            conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_FORWARD_DEL));
+          }
+        }
+        conn.commitText(new_text, 1);
       }
       else
       {
+        boolean usedSelection = false;
         try
         {
-          deleted = conn.deleteSurroundingText(remove_before, remove_after);
+          if (remove_before > 0 || remove_after > 0)
+          {
+             int[] sel = get_selection_range(conn);
+             if (sel != null && sel[0] == sel[1] && sel[0] >= remove_before)
+             {
+                conn.setSelection(sel[0] - remove_before, sel[0] + remove_after);
+                usedSelection = true;
+             }
+          }
         }
         catch (Throwable t) {}
   
-        // Fallback for apps where deleteSurroundingText returns false
-        if (!deleted && remove_before > 0)
+        if (!usedSelection)
         {
-          for (int i = 0; i < remove_before; i++)
-          {
-            conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-            conn.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
-          }
-          deleted = true;
+          conn.deleteSurroundingText(remove_before, remove_after);
         }
-      }
 
-      conn.commitText(new_text, 1);
+        conn.commitText(new_text, 1);
+      }
       _typedword.remove_surrounding_text(remove_before, remove_after);
       _typedword.typed(new_text);
       if (_macro_fallback.length() >= remove_before)
@@ -615,7 +626,7 @@ public final class KeyEventHandler
         autoEnter = true;
         bestExpansion = bestExpansion.substring(0, bestExpansion.length() - 1);
       }
-      replace_surrounding_text(bestTrigger.length(), 0, bestExpansion, true);
+      replace_surrounding_text(bestTrigger.length(), 0, bestExpansion);
       if (autoEnter) {
         last_macro_auto_entered = true;
         send_key_down_up(android.view.KeyEvent.KEYCODE_ENTER);
