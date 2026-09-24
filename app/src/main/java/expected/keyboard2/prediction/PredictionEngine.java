@@ -422,13 +422,15 @@ public class PredictionEngine
    */
   public void onWordCommitted(String word)
   {
-    if (word == null || word.length() < 2) return;
-    userDict.learnWord(word);
+    if (word == null) return;
+    String clean = UserDictionary.normalizeWord(word);
+    if (clean == null || clean.length() < 2) return;
+    userDict.learnWord(clean);
     if (lastCommittedWord != null && !lastCommittedWord.isEmpty())
     {
-      userDict.learnBigram(lastCommittedWord, word);
+      userDict.learnBigram(lastCommittedWord, clean);
     }
-    lastCommittedWord = word;
+    lastCommittedWord = clean;
   }
 
   public void resetContext()

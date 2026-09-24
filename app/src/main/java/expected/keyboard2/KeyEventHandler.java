@@ -185,9 +185,11 @@ public final class KeyEventHandler
     {
       String old = _typedword.get();
       int cur_rel = _typedword.cursor_relative();
-      replace_surrounding_text(old.length() + cur_rel, -cur_rel, text);
+      String replacement = text.endsWith(" ") ? text : (text + " ");
+      replace_surrounding_text(old.length() + cur_rel, -cur_rel, replacement);
       last_replaced_word = old;
-      last_replacement_word_len = text.length();
+      last_replacement_word_len = replacement.length();
+      _last_action = LastAction.SUGGESTION_ENTERED;
       _next_last_action = LastAction.SUGGESTION_ENTERED;
       if (_suggestions != null)
         _suggestions.onWordCommitted(text.trim());
@@ -343,6 +345,28 @@ public final class KeyEventHandler
       InputConnection conn = _recv.getCurrentInputConnection();
       if (conn == null)
         return;
+
+      if (text.length() == 1)
+      {
+        char c = text.charAt(0);
+        if (c == '.' || c == ',' || c == '!' || c == '?' || c == ':' || c == ';')
+        {
+          if (_last_action == LastAction.AUTOCORRECTED || _last_action == LastAction.SUGGESTION_ENTERED)
+          {
+            CharSequence before = conn.getTextBeforeCursor(2, 0);
+            if (before != null && before.length() > 0 && before.charAt(before.length() - 1) == ' ')
+            {
+              conn.deleteSurroundingText(1, 0);
+              _typedword.remove_surrounding_text(1, 0);
+              if (_macro_fallback.length() > 0 && _macro_fallback.charAt(_macro_fallback.length() - 1) == ' ')
+              {
+                _macro_fallback.setLength(_macro_fallback.length() - 1);
+              }
+            }
+          }
+        }
+      }
+
       _autocap.typed(text);
       _typedword.typed(text);
       _macro_fallback.append(text);
@@ -1137,7 +1161,7 @@ public final class KeyEventHandler
           // Perform FUTO-style Autocorrect
           String best = _suggestions.best_autocorrect;
           int cur_rel = _typedword.cursor_relative();
-          String replacement = best + " ";
+          String replacement = best.endsWith(" ") ? best : (best + " ");
           replace_surrounding_text(typed.length() + cur_rel, -cur_rel, replacement);
           last_autocorrect_original = typed;
           last_autocorrect_replacement_len = replacement.length();
@@ -1145,7 +1169,7 @@ public final class KeyEventHandler
           _next_last_action = LastAction.AUTOCORRECTED;
           if (_suggestions != null)
           {
-            _suggestions.onWordCommitted(best);
+            _suggestions.onWordCommitted(best.trim());
           }
         }
         else if (_space_bar_auto_complete && _suggestions != null && _suggestions.count > 0
@@ -1153,7 +1177,7 @@ public final class KeyEventHandler
             && !_typedword.is_selection_not_empty()
             && _typedword.cursor_relative() == 0)
         {
-          suggestion_entered(_suggestions.suggestions[0] + " ");
+          suggestion_entered(_suggestions.suggestions[0]);
         }
         else
         {
@@ -1204,10 +1228,22 @@ public final class KeyEventHandler
           _suggestions.currently_typed_word(oldWord);
         }
       }
-      else if (_last_action == LastAction.SUGGESTION_ENTERED
-          && last_replaced_word != null)
+      else if (_last_action == LastAction.SUGGESTION_ENTERED)
       {
-        replace_surrounding_text(last_replacement_word_len, 0, last_replaced_word);
+        InputConnection conn = _recv.getCurrentInputConnection();
+        CharSequence before = (conn != null) ? conn.getTextBeforeCursor(1, 0) : null;
+        if (before != null && before.length() > 0 && before.charAt(0) == ' ')
+        {
+          send_key_down_up(KeyEvent.KEYCODE_DEL);
+        }
+        else if (last_replaced_word != null)
+        {
+          replace_surrounding_text(last_replacement_word_len, 0, last_replaced_word);
+        }
+        else
+        {
+          send_key_down_up(KeyEvent.KEYCODE_DEL);
+        }
         last_replaced_word = null;
         _last_action = LastAction.OTHER;
       }

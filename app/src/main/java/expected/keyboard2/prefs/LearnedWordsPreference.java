@@ -35,6 +35,7 @@ public class LearnedWordsPreference extends Preference {
   private void showDialog() {
     Context ctx = getContext();
     UserDictionary dict = new UserDictionary(ctx);
+    int removedDuplicates = dict.removeDuplicatesAndSave();
     List<Map.Entry<String,Integer>> words = dict.getAllWordsSorted();
 
     LinearLayout root = new LinearLayout(ctx);
@@ -60,7 +61,11 @@ public class LearnedWordsPreference extends Preference {
     root.addView(header);
 
     TextView count = new TextView(ctx);
-    count.setText(words.size() + " learned words");
+    String countText = words.size() + " learned words";
+    if (removedDuplicates > 0) {
+      countText += " (" + removedDuplicates + " duplicates removed)";
+    }
+    count.setText(countText);
     count.setTextSize(12);
     count.setTextColor(0xFF94A3B8);
     count.setPadding(0,0,0,12);
@@ -200,6 +205,7 @@ public class LearnedWordsPreference extends Preference {
     super.onSetInitialValue(restorePersistedValue, defaultValue);
     Context ctx = getContext();
     UserDictionary d = new UserDictionary(ctx);
+    d.removeDuplicatesAndSave();
     setSummary(d.getAllWordsSorted().size() + " words");
   }
 }

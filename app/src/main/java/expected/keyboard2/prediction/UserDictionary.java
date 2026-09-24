@@ -31,6 +31,54 @@ public class UserDictionary
   private final Map<String, Map<String, Integer>> bigrams = new HashMap<String, Map<String, Integer>>();
   private final Set<String> blocklist = new HashSet<String>();
 
+  public static String normalizeWord(String word)
+  {
+    if (word == null)
+      return null;
+    String s = word.trim().replace("\r", "").replace("\n", "").replace("\t", "");
+    if (s.isEmpty())
+      return null;
+
+    int start = 0;
+    int end = s.length();
+    while (start < end)
+    {
+      char c = s.charAt(start);
+      if (Character.isLetterOrDigit(c))
+        break;
+      start++;
+    }
+    while (end > start)
+    {
+      char c = s.charAt(end - 1);
+      if (Character.isLetterOrDigit(c))
+        break;
+      end--;
+    }
+    if (start >= end)
+      return null;
+
+    s = s.substring(start, end).toLowerCase(Locale.ROOT);
+
+    boolean hasLetter = false;
+    for (int i = 0; i < s.length(); i++)
+    {
+      char c = s.charAt(i);
+      if (Character.isLetter(c))
+      {
+        hasLetter = true;
+      }
+      else if (!Character.isDigit(c) && c != '\'' && c != '-')
+      {
+        return null;
+      }
+    }
+    if (!hasLetter || s.length() < 2)
+      return null;
+
+    return s;
+  }
+
   public UserDictionary(Context context)
   {
     this.prefs = DirectBootAwarePreferences.get_protected_prefs(context, PREF_NAME);
@@ -40,20 +88,42 @@ public class UserDictionary
   private void load()
   {
     Set<String> wordsSet = prefs.getStringSet(PREF_WORDS_KEY, null);
+    boolean needsResave = false;
     if (wordsSet != null)
     {
       for (String item : wordsSet)
       {
+        if (item == null) continue;
         int colon = item.lastIndexOf(':');
+        String rawWord;
+        int freq = 1;
         if (colon > 0)
         {
-          String word = item.substring(0, colon);
+          rawWord = item.substring(0, colon);
           try
           {
-            int freq = Integer.parseInt(item.substring(colon + 1));
-            wordFrequencies.put(word.toLowerCase(Locale.ROOT), freq);
+            freq = Integer.parseInt(item.substring(colon + 1));
           }
           catch (NumberFormatException ignored) {}
+        }
+        else
+        {
+          rawWord = item;
+        }
+
+        String clean = normalizeWord(rawWord);
+        if (clean != null && !isBlocked(clean))
+        {
+          int existing = wordFrequencies.containsKey(clean) ? wordFrequencies.get(clean) : 0;
+          wordFrequencies.put(clean, Math.min(500, existing + freq));
+          if (!clean.equals(rawWord) || existing > 0)
+          {
+            needsResave = true;
+          }
+        }
+        else
+        {
+          needsResave = true;
         }
       }
     }
@@ -63,23 +133,28 @@ public class UserDictionary
     {
       for (String item : bigramSet)
       {
+        if (item == null) continue;
         String[] parts = item.split(":");
         if (parts.length == 3)
         {
-          String prev = parts[0].toLowerCase(Locale.ROOT);
-          String next = parts[1].toLowerCase(Locale.ROOT);
-          try
+          String prev = normalizeWord(parts[0]);
+          String next = normalizeWord(parts[1]);
+          if (prev != null && next != null)
           {
-            int count = Integer.parseInt(parts[2]);
-            Map<String, Integer> nextMap = bigrams.get(prev);
-            if (nextMap == null)
+            try
             {
-              nextMap = new HashMap<String, Integer>();
-              bigrams.put(prev, nextMap);
+              int count = Integer.parseInt(parts[2]);
+              Map<String, Integer> nextMap = bigrams.get(prev);
+              if (nextMap == null)
+              {
+                nextMap = new HashMap<String, Integer>();
+                bigrams.put(prev, nextMap);
+              }
+              int existingCount = nextMap.containsKey(next) ? nextMap.get(next) : 0;
+              nextMap.put(next, Math.min(200, existingCount + count));
             }
-            nextMap.put(next, count);
+            catch (NumberFormatException ignored) {}
           }
-          catch (NumberFormatException ignored) {}
         }
       }
     }
@@ -88,8 +163,14 @@ public class UserDictionary
     if (blockSet != null)
     {
       for (String w : blockSet) {
-        if (w != null && !w.isEmpty()) blocklist.add(w.toLowerCase(Locale.ROOT));
+        String clean = normalizeWord(w);
+        if (clean != null && !clean.isEmpty()) blocklist.add(clean);
       }
+    }
+
+    if (needsResave)
+    {
+      save();
     }
   }
 
@@ -98,16 +179,23 @@ public class UserDictionary
     Set<String> wordsSet = new HashSet<String>();
     for (Map.Entry<String, Integer> e : wordFrequencies.entrySet())
     {
-      wordsSet.add(e.getKey() + ":" + e.getValue());
+      String clean = normalizeWord(e.getKey());
+      if (clean != null && !isBlocked(clean))
+      {
+        wordsSet.add(clean + ":" + e.getValue());
+      }
     }
 
     Set<String> bigramSet = new HashSet<String>();
     for (Map.Entry<String, Map<String, Integer>> prevEntry : bigrams.entrySet())
     {
-      String prev = prevEntry.getKey();
+      String prev = normalizeWord(prevEntry.getKey());
+      if (prev == null || isBlocked(prev)) continue;
       for (Map.Entry<String, Integer> nextEntry : prevEntry.getValue().entrySet())
       {
-        bigramSet.add(prev + ":" + nextEntry.getKey() + ":" + nextEntry.getValue());
+        String next = normalizeWord(nextEntry.getKey());
+        if (next == null || isBlocked(next)) continue;
+        bigramSet.add(prev + ":" + next + ":" + nextEntry.getValue());
       }
     }
 
@@ -116,6 +204,37 @@ public class UserDictionary
       .putStringSet(PREF_BIGRAM_KEY, bigramSet)
       .putStringSet(PREF_BLOCKLIST_KEY, new HashSet<String>(blocklist))
       .apply();
+  }
+
+  /** Removes all duplicate or repeated words, consolidating frequencies and saving immediately. */
+  public synchronized int removeDuplicatesAndSave()
+  {
+    Map<String, Integer> cleaned = new HashMap<String, Integer>();
+    int removedCount = 0;
+    for (Map.Entry<String, Integer> e : wordFrequencies.entrySet())
+    {
+      String clean = normalizeWord(e.getKey());
+      if (clean != null && !isBlocked(clean))
+      {
+        if (cleaned.containsKey(clean))
+        {
+          removedCount++;
+          cleaned.put(clean, Math.min(500, cleaned.get(clean) + e.getValue()));
+        }
+        else
+        {
+          cleaned.put(clean, e.getValue());
+        }
+      }
+      else
+      {
+        removedCount++;
+      }
+    }
+    wordFrequencies.clear();
+    wordFrequencies.putAll(cleaned);
+    save();
+    return removedCount;
   }
 
   public synchronized boolean isBlocked(String word) {
@@ -168,13 +287,12 @@ public class UserDictionary
 
   public synchronized void learnWord(String word)
   {
-    if (word == null || word.length() < 2)
-      return;
     if (!isLearnEnabled()) return;
-    String lower = word.toLowerCase(Locale.ROOT);
-    if (isBlocked(lower)) return;
-    int current = wordFrequencies.containsKey(lower) ? wordFrequencies.get(lower) : 0;
-    wordFrequencies.put(lower, Math.min(current + 1, 500));
+    String clean = normalizeWord(word);
+    if (clean == null || clean.length() < 2 || isBlocked(clean)) return;
+
+    int current = wordFrequencies.containsKey(clean) ? wordFrequencies.get(clean) : 0;
+    wordFrequencies.put(clean, Math.min(current + 1, 500));
 
     if (wordFrequencies.size() > MAX_USER_WORDS)
     {
@@ -185,12 +303,10 @@ public class UserDictionary
 
   public synchronized void learnBigram(String prevWord, String nextWord)
   {
-    if (prevWord == null || nextWord == null || prevWord.isEmpty() || nextWord.isEmpty())
-      return;
     if (!isLearnEnabled()) return;
-    String prev = prevWord.toLowerCase(Locale.ROOT);
-    String next = nextWord.toLowerCase(Locale.ROOT);
-    if (isBlocked(prev) || isBlocked(next)) return;
+    String prev = normalizeWord(prevWord);
+    String next = normalizeWord(nextWord);
+    if (prev == null || next == null || isBlocked(prev) || isBlocked(next)) return;
 
     Map<String, Integer> nextMap = bigrams.get(prev);
     if (nextMap == null)
