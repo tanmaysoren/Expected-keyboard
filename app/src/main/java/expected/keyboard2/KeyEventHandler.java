@@ -1234,7 +1234,7 @@ public final class KeyEventHandler
         CharSequence before = (conn != null) ? conn.getTextBeforeCursor(1, 0) : null;
         if (before != null && before.length() > 0 && before.charAt(0) == ' ')
         {
-          send_key_down_up(KeyEvent.KEYCODE_DEL);
+          send_key_down_up(KeyEvent.KEYCODE_DEL, 0);
         }
         else if (last_replaced_word != null)
         {
@@ -1242,14 +1242,14 @@ public final class KeyEventHandler
         }
         else
         {
-          send_key_down_up(KeyEvent.KEYCODE_DEL);
+          send_key_down_up(KeyEvent.KEYCODE_DEL, 0);
         }
         last_replaced_word = null;
         _last_action = LastAction.OTHER;
       }
       else
       {
-        send_key_down_up(KeyEvent.KEYCODE_DEL);
+        send_key_down_up(KeyEvent.KEYCODE_DEL, 0);
         last_autocorrect_original = null;
         last_replaced_word = null;
         _last_action = LastAction.OTHER;
