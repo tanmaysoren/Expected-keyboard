@@ -506,8 +506,11 @@ public class Keyboard2View extends View
             if (r != null) _dotKeyRect.set(r);
             // Cancel previous
             if (_dotLongPressRunnable != null) _dotHandler.removeCallbacks(_dotLongPressRunnable);
+            long dotTimeout = (_config != null && _config.longPressTimeout > 0)
+                ? Math.max(300, _config.longPressTimeout)
+                : 350;
             _dotLongPressRunnable = () -> showDotPopup(key);
-            _dotHandler.postDelayed(_dotLongPressRunnable, 90);
+            _dotHandler.postDelayed(_dotLongPressRunnable, dotTimeout);
           }
           _pointers.onTouchDown(tx, ty, event.getPointerId(p), key);
           KeyValue val = _pointers.getPointerValue(event.getPointerId(p));

@@ -32,7 +32,7 @@ public class CandidatesView extends LinearLayout
 {
   public static final int NUM_WORDS = 5;
   static final int NUM_CANDIDATES = NUM_WORDS + 1;
-  private static final int ANIMATION_DURATION = 150;
+  private static final int ANIMATION_DURATION = 220;
 
   /** Candidates currently visible. Entries can be [null] when there are less
       than [NUM_CANDIDATES] suggestions.

@@ -18,6 +18,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.view.HapticFeedbackConstants;
+import android.view.MotionEvent;
+import android.view.animation.DecelerateInterpolator;
 import java.util.ArrayList;
 import java.util.List;
 import expected.keyboard2.dict.DictionariesActivity;
@@ -65,6 +68,8 @@ public class LauncherActivity extends Activity
       @Override
       public void afterTextChanged(Editable s) {}
     });
+
+    setupSmoothPressFeedback();
   }
 
   @Override
@@ -199,62 +204,155 @@ public class LauncherActivity extends Activity
     super.onStop();
   }
 
+  private void setupSmoothPressFeedback()
+  {
+    int[] clickableIds = new int[] {
+      R.id.btn_step_enable,
+      R.id.btn_step_select,
+      R.id.btn_step_dict,
+      R.id.btn_open_all,
+      R.id.btn_menu_prediction,
+      R.id.btn_menu_layouts,
+      R.id.btn_menu_theme,
+      R.id.btn_menu_typing,
+      R.id.btn_menu_clipboard,
+      R.id.btn_clear_test
+    };
+    for (int id : clickableIds)
+    {
+      View v = findViewById(id);
+      if (v != null)
+      {
+        applySmoothPressEffect(v);
+      }
+    }
+  }
+
+  public static void applySmoothPressEffect(View view)
+  {
+    if (view == null) return;
+    view.setOnTouchListener((v, event) -> {
+      switch (event.getAction())
+      {
+        case MotionEvent.ACTION_DOWN:
+          v.animate()
+            .scaleX(0.975f)
+            .scaleY(0.975f)
+            .setDuration(80)
+            .setInterpolator(new DecelerateInterpolator())
+            .start();
+          v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+          break;
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_CANCEL:
+          v.animate()
+            .scaleX(1.0f)
+            .scaleY(1.0f)
+            .setDuration(120)
+            .setInterpolator(new DecelerateInterpolator())
+            .start();
+          break;
+      }
+      return false;
+    });
+  }
+
+  private long _lastMenuLaunchTime = 0;
+
+  private void safeLaunch(View v, Runnable action)
+  {
+    long now = android.os.SystemClock.uptimeMillis();
+    if (now - _lastMenuLaunchTime < 350)
+    {
+      return;
+    }
+    _lastMenuLaunchTime = now;
+    if (v != null)
+    {
+      v.postDelayed(() -> {
+        if (!isFinishing() && !isDestroyed())
+        {
+          action.run();
+        }
+      }, 35);
+    }
+    else
+    {
+      action.run();
+    }
+  }
+
   public void launch_imesettings(View _btn)
   {
-    startActivity(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
+    safeLaunch(_btn, () -> startActivity(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)));
   }
 
   public void launch_imepicker(View v)
   {
-    InputMethodManager imm =
-      (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-    imm.showInputMethodPicker();
+    safeLaunch(v, () -> {
+      InputMethodManager imm =
+        (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+      if (imm != null)
+        imm.showInputMethodPicker();
+    });
   }
 
   public void launch_dictionaries_activity(View v)
   {
-    startActivity(new Intent(this, DictionariesActivity.class));
+    safeLaunch(v, () -> startActivity(new Intent(this, DictionariesActivity.class)));
   }
 
   public void launch_all_settings(View v)
   {
-    Intent intent = new Intent(this, SettingsActivity.class);
-    startActivity(intent);
+    safeLaunch(v, () -> {
+      Intent intent = new Intent(this, SettingsActivity.class);
+      startActivity(intent);
+    });
   }
 
   public void launch_settings_prediction(View v)
   {
-    Intent intent = new Intent(this, SectionSettingsActivity.class);
-    intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_PREDICTION);
-    startActivity(intent);
+    safeLaunch(v, () -> {
+      Intent intent = new Intent(this, SectionSettingsActivity.class);
+      intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_PREDICTION);
+      startActivity(intent);
+    });
   }
 
   public void launch_settings_layouts(View v)
   {
-    Intent intent = new Intent(this, SectionSettingsActivity.class);
-    intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_LAYOUTS);
-    startActivity(intent);
+    safeLaunch(v, () -> {
+      Intent intent = new Intent(this, SectionSettingsActivity.class);
+      intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_LAYOUTS);
+      startActivity(intent);
+    });
   }
 
   public void launch_settings_theme(View v)
   {
-    Intent intent = new Intent(this, SectionSettingsActivity.class);
-    intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_THEME);
-    startActivity(intent);
+    safeLaunch(v, () -> {
+      Intent intent = new Intent(this, SectionSettingsActivity.class);
+      intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_THEME);
+      startActivity(intent);
+    });
   }
 
   public void launch_settings_typing(View v)
   {
-    Intent intent = new Intent(this, SectionSettingsActivity.class);
-    intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_TYPING);
-    startActivity(intent);
+    safeLaunch(v, () -> {
+      Intent intent = new Intent(this, SectionSettingsActivity.class);
+      intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_TYPING);
+      startActivity(intent);
+    });
   }
 
   public void launch_settings_clipboard(View v)
   {
-    Intent intent = new Intent(this, SectionSettingsActivity.class);
-    intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_CLIPBOARD);
-    startActivity(intent);
+    safeLaunch(v, () -> {
+      Intent intent = new Intent(this, SectionSettingsActivity.class);
+      intent.putExtra(SectionSettingsActivity.EXTRA_SECTION, SectionSettingsActivity.SECTION_CLIPBOARD);
+      startActivity(intent);
+    });
   }
 
   public void clear_test_area(View v)

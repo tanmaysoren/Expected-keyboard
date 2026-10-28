@@ -118,7 +118,8 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:foreground="@drawable/cyber_card_ripple"
         android:onClick="launch_imesettings">
 
       <ImageView
@@ -180,7 +181,8 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:foreground="@drawable/cyber_card_ripple"
         android:onClick="launch_imepicker">
 
       <ImageView
@@ -242,7 +244,8 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:foreground="@drawable/cyber_card_ripple"
         android:onClick="launch_dictionaries_activity">
 
       <ImageView
@@ -308,6 +311,7 @@
           android:letterSpacing="0.08"/>
 
       <TextView
+          android:id="@+id/btn_open_all"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="OPEN ALL"
@@ -319,12 +323,14 @@
           android:paddingVertical="6dp"
           android:clickable="true"
           android:focusable="true"
-          android:foreground="?android:attr/selectableItemBackground"
+          android:clipToOutline="true"
+          android:foreground="@drawable/cyber_card_ripple"
           android:onClick="launch_all_settings"/>
     </LinearLayout>
 
     <!-- Category 1: Prediction & Autocorrection -->
     <LinearLayout
+        android:id="@+id/btn_menu_prediction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -335,7 +341,8 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:foreground="@drawable/cyber_card_ripple"
         android:onClick="launch_settings_prediction">
 
       <ImageView
@@ -380,6 +387,7 @@
 
     <!-- Category 2: Layouts & Keys -->
     <LinearLayout
+        android:id="@+id/btn_menu_layouts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -390,7 +398,8 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:foreground="@drawable/cyber_card_ripple"
         android:onClick="launch_settings_layouts">
 
       <ImageView
@@ -435,6 +444,7 @@
 
     <!-- Category 3: Theme & Appearance -->
     <LinearLayout
+        android:id="@+id/btn_menu_theme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -445,7 +455,8 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:foreground="@drawable/cyber_card_ripple"
         android:onClick="launch_settings_theme">
 
       <ImageView
@@ -490,6 +501,7 @@
 
     <!-- Category 4: Typing & Gestures -->
     <LinearLayout
+        android:id="@+id/btn_menu_typing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -500,7 +512,8 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:foreground="@drawable/cyber_card_ripple"
         android:onClick="launch_settings_typing">
 
       <ImageView
@@ -545,6 +558,7 @@
 
     <!-- Category 5: Clipboard Manager -->
     <LinearLayout
+        android:id="@+id/btn_menu_clipboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -555,7 +569,8 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:foreground="@drawable/cyber_card_ripple"
         android:onClick="launch_settings_clipboard">
 
       <ImageView
@@ -635,7 +650,8 @@
             android:padding="6dp"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:clipToOutline="true"
+            android:foreground="@drawable/cyber_card_ripple"
             android:onClick="clear_test_area"
             android:contentDescription="Clear text"/>
       </LinearLayout>

@@ -130,9 +130,8 @@ public class IntSlideBarPreference extends DialogPreference
     _seekBar.setProgressDrawable(context.getDrawable(R.drawable.cyber_seekbar_progress));
     _seekBar.setThumb(context.getDrawable(R.drawable.cyber_seekbar_thumb));
     _seekBar.setMax(Math.max(1, _max - _min));
-    // Leave the default thumb offset (half the thumb width). AbsSeekBar uses
-    // it to keep the thumb centre exactly on the progress point, so the thumb
-    // stays under the finger and flush with both ends of the rail.
+    // AbsSeekBar's default offset (half the thumb width) keeps the thumb
+    // centred exactly on the progress point and under the finger.
     _seekBar.setPadding((int)(12 * dp), 0, (int)(12 * dp), 0);
     _seekBar.setOnSeekBarChangeListener(this);
     LinearLayout.LayoutParams seekLp = new LinearLayout.LayoutParams(
