@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-  <!-- Slim recessed rail -->
-  <item android:id="@android:id/background">
+  <!-- Slim recessed rail. The gravity keeps each layer at its 4dp intrinsic
+       height instead of stretching it over the SeekBar's 44dp touch area. -->
+  <item android:id="@android:id/background" android:gravity="center_vertical">
     <shape android:shape="rectangle">
       <corners android:radius="2dp"/>
       <solid android:color="#0D0D0D"/>
@@ -10,7 +11,7 @@
     </shape>
   </item>
   <!-- Secondary progress -->
-  <item android:id="@android:id/secondaryProgress">
+  <item android:id="@android:id/secondaryProgress" android:gravity="center_vertical">
     <clip>
       <shape android:shape="rectangle">
         <corners android:radius="2dp"/>
@@ -20,7 +21,7 @@
     </clip>
   </item>
   <!-- Filled progress -->
-  <item android:id="@android:id/progress">
+  <item android:id="@android:id/progress" android:gravity="center_vertical">
     <clip>
       <shape android:shape="rectangle">
         <corners android:radius="2dp"/>
