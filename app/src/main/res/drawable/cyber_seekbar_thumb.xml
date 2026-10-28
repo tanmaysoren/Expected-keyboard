@@ -2,42 +2,36 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:state_pressed="true">
     <layer-list>
-      <!-- Outer Glass Glow -->
-      <item>
-        <shape android:shape="oval">
-          <solid android:color="#4D8B5CF6"/>
-          <size android:width="32dp" android:height="32dp"/>
-        </shape>
-      </item>
-      <!-- Frosted Ring -->
-      <item android:top="4dp" android:left="4dp" android:right="4dp" android:bottom="4dp">
-        <shape android:shape="oval">
-          <solid android:color="#8B5CF6"/>
-          <stroke android:width="2dp" android:color="#FFFFFF"/>
-        </shape>
-      </item>
-      <!-- Pure White Core -->
-      <item android:top="10dp" android:left="10dp" android:right="10dp" android:bottom="10dp">
+      <!-- White ring with a black outline: visible on both the white fill
+           and the dark rail. The black centre dot marks the exact value. -->
+      <item android:gravity="center">
         <shape android:shape="oval">
           <solid android:color="#FFFFFF"/>
+          <stroke android:width="2dp" android:color="#000000"/>
+          <size android:width="20dp" android:height="20dp"/>
+        </shape>
+      </item>
+      <item android:gravity="center">
+        <shape android:shape="oval">
+          <solid android:color="#000000"/>
+          <size android:width="11dp" android:height="11dp"/>
         </shape>
       </item>
     </layer-list>
   </item>
   <item>
     <layer-list>
-      <!-- Outer Ring -->
-      <item>
+      <item android:gravity="center">
         <shape android:shape="oval">
-          <solid android:color="#121524"/>
-          <stroke android:width="2.5dp" android:color="#8B5CF6"/>
-          <size android:width="24dp" android:height="24dp"/>
+          <solid android:color="#FFFFFF"/>
+          <stroke android:width="2dp" android:color="#000000"/>
+          <size android:width="20dp" android:height="20dp"/>
         </shape>
       </item>
-      <!-- Inner Core -->
-      <item android:top="6dp" android:left="6dp" android:right="6dp" android:bottom="6dp">
+      <item android:gravity="center">
         <shape android:shape="oval">
-          <solid android:color="#A78BFA"/>
+          <solid android:color="#000000"/>
+          <size android:width="8dp" android:height="8dp"/>
         </shape>
       </item>
     </layer-list>

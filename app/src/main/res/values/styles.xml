@@ -117,26 +117,30 @@
   <!-- DARK FROSTED OBSIDIAN THEME & STYLES -->
   <!-- ============================================== -->
 
-  <!-- App Theme (Frosted Obsidian & Electric Indigo/Violet) -->
+  <!-- App Theme (Pure Black & White) -->
   <style name="appTheme" parent="@android:style/Theme.Material">
     <item name="android:windowBackground">@drawable/cyber_app_bg</item>
-    <item name="android:colorBackground">#0B0D14</item>
-    <item name="android:colorPrimary">#8B5CF6</item>
-    <item name="android:colorPrimaryDark">#07080D</item>
-    <item name="android:colorAccent">#8B5CF6</item>
-    <item name="android:colorControlActivated">#8B5CF6</item>
-    <item name="android:colorControlHighlight">#268B5CF6</item>
-    <item name="android:colorControlNormal">#64748B</item>
-    <item name="android:colorButtonNormal">#1E2235</item>
-    <item name="android:textColorPrimary">#F1F5F9</item>
-    <item name="android:textColorSecondary">#94A3B8</item>
-    <item name="android:textColorTertiary">#C4B5FD</item>
+    <item name="android:colorBackground">#000000</item>
+    <item name="android:colorPrimary">#000000</item>
+    <item name="android:colorPrimaryDark">#000000</item>
+    <item name="android:colorAccent">#FFFFFF</item>
+    <item name="android:colorControlActivated">#FFFFFF</item>
+    <item name="android:colorControlHighlight">#33FFFFFF</item>
+    <item name="android:colorControlNormal">#A3A3A3</item>
+    <item name="android:colorButtonNormal">#141414</item>
+    <item name="android:textColorPrimary">#FFFFFF</item>
+    <item name="android:textColorSecondary">#A3A3A3</item>
+    <item name="android:textColorTertiary">#D4D4D4</item>
     <item name="android:listChoiceIndicatorMultiple">@drawable/cyber_checkbox_selector</item>
     <item name="android:listChoiceIndicatorSingle">@drawable/cyber_checkbox_selector</item>
-    <item name="android:editTextColor">#F1F5F9</item>
+    <item name="android:editTextColor">#FFFFFF</item>
     <item name="android:seekBarStyle">@style/CyberSeekBar</item>
     <item name="android:alertDialogTheme">@style/CyberAlertDialog</item>
     <item name="android:dialogTheme">@style/CyberDialog</item>
+    <item name="android:statusBarColor">#000000</item>
+    <item name="android:navigationBarColor">#000000</item>
+    <item name="android:windowLightStatusBar">false</item>
+    <item name="android:windowLightNavigationBar">false</item>
   </style>
 
   <!-- Settings Activity Theme -->
@@ -147,7 +151,7 @@
 
   <!-- Modern Preference Category Header -->
   <style name="CyberPreferenceCategory">
-    <item name="android:textColor">#A78BFA</item>
+    <item name="android:textColor">#E5E5E5</item>
     <item name="android:textSize">12sp</item>
     <item name="android:textStyle">bold</item>
     <item name="android:paddingTop">16dp</item>
@@ -158,34 +162,40 @@
     <item name="android:letterSpacing">0.08</item>
   </style>
 
-  <!-- Modern SeekBar Style -->
+  <!-- Modern SeekBar Style (slim rail, centred contrast thumb) -->
   <style name="CyberSeekBar" parent="@android:style/Widget.Material.SeekBar">
     <item name="android:progressDrawable">@drawable/cyber_seekbar_progress</item>
     <item name="android:thumb">@drawable/cyber_seekbar_thumb</item>
-    <item name="android:minHeight">28dp</item>
-    <item name="android:maxHeight">28dp</item>
+    <item name="android:minHeight">44dp</item>
+    <item name="android:maxHeight">44dp</item>
     <item name="android:splitTrack">false</item>
     <item name="android:paddingStart">12dp</item>
     <item name="android:paddingEnd">12dp</item>
   </style>
 
-  <!-- Cyber Dialog Themes -->
+  <!-- Fast, clean fade/rise for every app menu and dialog -->
+  <style name="CyberMenuAnimation">
+    <item name="android:windowEnterAnimation">@anim/cyber_menu_enter</item>
+    <item name="android:windowExitAnimation">@anim/cyber_menu_exit</item>
+  </style>
+
+  <!-- Black & White Dialog Themes -->
   <style name="CyberSectionDialogTheme" parent="@android:style/Theme.Material.Dialog">
     <item name="android:windowBackground">@drawable/cyber_dialog_bg</item>
-    <item name="android:colorBackground">#121522</item>
-    <item name="android:colorPrimary">#8B5CF6</item>
-    <item name="android:colorPrimaryDark">#07080D</item>
-    <item name="android:colorAccent">#8B5CF6</item>
-    <item name="android:colorControlActivated">#8B5CF6</item>
-    <item name="android:colorControlHighlight">#268B5CF6</item>
-    <item name="android:colorControlNormal">#64748B</item>
-    <item name="android:colorButtonNormal">#1E2235</item>
-    <item name="android:textColorPrimary">#F1F5F9</item>
-    <item name="android:textColorSecondary">#94A3B8</item>
-    <item name="android:textColorTertiary">#C4B5FD</item>
+    <item name="android:colorBackground">#000000</item>
+    <item name="android:colorPrimary">#000000</item>
+    <item name="android:colorPrimaryDark">#000000</item>
+    <item name="android:colorAccent">#FFFFFF</item>
+    <item name="android:colorControlActivated">#FFFFFF</item>
+    <item name="android:colorControlHighlight">#33FFFFFF</item>
+    <item name="android:colorControlNormal">#A3A3A3</item>
+    <item name="android:colorButtonNormal">#141414</item>
+    <item name="android:textColorPrimary">#FFFFFF</item>
+    <item name="android:textColorSecondary">#A3A3A3</item>
+    <item name="android:textColorTertiary">#D4D4D4</item>
     <item name="android:listChoiceIndicatorMultiple">@drawable/cyber_checkbox_selector</item>
     <item name="android:listChoiceIndicatorSingle">@drawable/cyber_checkbox_selector</item>
-    <item name="android:editTextColor">#F1F5F9</item>
+    <item name="android:editTextColor">#FFFFFF</item>
     <item name="android:listSeparatorTextViewStyle">@style/CyberPreferenceCategory</item>
     <item name="android:seekBarStyle">@style/CyberSeekBar</item>
     <item name="android:alertDialogTheme">@style/CyberAlertDialog</item>
@@ -193,37 +203,49 @@
     <item name="android:windowIsFloating">true</item>
     <item name="android:windowCloseOnTouchOutside">true</item>
     <item name="android:windowElevation">16dp</item>
+    <item name="android:windowAnimationStyle">@style/CyberMenuAnimation</item>
+    <!-- Don't draw a starting-window preview: it flashed at a different size
+         before the real dialog window appeared. -->
+    <item name="android:windowDisablePreview">true</item>
   </style>
 
   <style name="CyberAlertDialog" parent="@android:style/Theme.Material.Dialog.Alert">
     <item name="android:windowBackground">@drawable/cyber_dialog_bg</item>
-    <item name="android:colorBackground">#121522</item>
-    <item name="android:colorAccent">#8B5CF6</item>
-    <item name="android:textColorPrimary">#F1F5F9</item>
-    <item name="android:textColorSecondary">#94A3B8</item>
-    <item name="android:textColor">#F1F5F9</item>
+    <item name="android:colorBackground">#000000</item>
+    <item name="android:colorAccent">#FFFFFF</item>
+    <item name="android:colorControlActivated">#FFFFFF</item>
+    <item name="android:colorControlHighlight">#33FFFFFF</item>
+    <item name="android:colorControlNormal">#A3A3A3</item>
+    <item name="android:textColorPrimary">#FFFFFF</item>
+    <item name="android:textColorSecondary">#A3A3A3</item>
+    <item name="android:textColor">#FFFFFF</item>
     <item name="android:listChoiceIndicatorMultiple">@drawable/cyber_checkbox_selector</item>
     <item name="android:listChoiceIndicatorSingle">@drawable/cyber_checkbox_selector</item>
     <item name="android:buttonBarPositiveButtonStyle">@style/CyberDialogButtonPositive</item>
     <item name="android:buttonBarNegativeButtonStyle">@style/CyberDialogButtonNegative</item>
     <item name="android:buttonBarNeutralButtonStyle">@style/CyberDialogButtonNeutral</item>
     <item name="android:seekBarStyle">@style/CyberSeekBar</item>
+    <item name="android:windowAnimationStyle">@style/CyberMenuAnimation</item>
   </style>
 
   <style name="CyberDialog" parent="@android:style/Theme.Material.Dialog">
     <item name="android:windowBackground">@drawable/cyber_dialog_bg</item>
-    <item name="android:colorBackground">#121522</item>
-    <item name="android:colorAccent">#8B5CF6</item>
-    <item name="android:textColorPrimary">#F1F5F9</item>
-    <item name="android:textColorSecondary">#94A3B8</item>
+    <item name="android:colorBackground">#000000</item>
+    <item name="android:colorAccent">#FFFFFF</item>
+    <item name="android:colorControlActivated">#FFFFFF</item>
+    <item name="android:colorControlHighlight">#33FFFFFF</item>
+    <item name="android:colorControlNormal">#A3A3A3</item>
+    <item name="android:textColorPrimary">#FFFFFF</item>
+    <item name="android:textColorSecondary">#A3A3A3</item>
     <item name="android:buttonBarPositiveButtonStyle">@style/CyberDialogButtonPositive</item>
     <item name="android:buttonBarNegativeButtonStyle">@style/CyberDialogButtonNegative</item>
     <item name="android:buttonBarNeutralButtonStyle">@style/CyberDialogButtonNeutral</item>
     <item name="android:seekBarStyle">@style/CyberSeekBar</item>
+    <item name="android:windowAnimationStyle">@style/CyberMenuAnimation</item>
   </style>
 
   <style name="CyberDialogButtonPositive" parent="@android:style/Widget.Material.Button.Borderless">
-    <item name="android:textColor">#A78BFA</item>
+    <item name="android:textColor">#FFFFFF</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textSize">14sp</item>
@@ -231,14 +253,14 @@
   </style>
 
   <style name="CyberDialogButtonNegative" parent="@android:style/Widget.Material.Button.Borderless">
-    <item name="android:textColor">#94A3B8</item>
+    <item name="android:textColor">#A3A3A3</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textSize">14sp</item>
     <item name="android:paddingHorizontal">16dp</item>
   </style>
 
   <style name="CyberDialogButtonNeutral" parent="@android:style/Widget.Material.Button.Borderless">
-    <item name="android:textColor">#F43F5E</item>
+    <item name="android:textColor">#D4D4D4</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textSize">14sp</item>
     <item name="android:paddingHorizontal">16dp</item>
@@ -250,7 +272,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginVertical">8dp</item>
     <item name="android:layout_marginHorizontal">20dp</item>
-    <item name="android:textColor">#94A3B8</item>
+    <item name="android:textColor">#A3A3A3</item>
     <item name="android:textSize">14sp</item>
     <item name="android:lineSpacingExtra">3dp</item>
   </style>
@@ -268,7 +290,7 @@
     <item name="android:layout_marginStart">14dp</item>
     <item name="android:layout_weight">1</item>
     <item name="android:layout_width">0dp</item>
-    <item name="android:textColor">#F1F5F9</item>
+    <item name="android:textColor">#FFFFFF</item>
     <item name="android:textSize">14sp</item>
     <item name="android:textStyle">bold</item>
   </style>
@@ -308,7 +330,7 @@
     <item name="android:layout_width">0dp</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">15sp</item>
-    <item name="android:textColor">#F1F5F9</item>
+    <item name="android:textColor">#FFFFFF</item>
     <item name="android:textStyle">bold</item>
   </style>
 
@@ -318,17 +340,17 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginEnd">12dp</item>
     <item name="android:textSize">12sp</item>
-    <item name="android:textColor">#C4B5FD</item>
+    <item name="android:textColor">#D4D4D4</item>
     <item name="android:background">@drawable/cyber_badge_bg</item>
     <item name="android:paddingHorizontal">8dp</item>
     <item name="android:paddingVertical">3dp</item>
   </style>
 
   <style name="dictionary_download_button">
-    <item name="android:layout_width">36dp</item>
-    <item name="android:layout_height">36dp</item>
-    <item name="android:padding">6dp</item>
-    <item name="android:background">@drawable/cyber_btn_cyan</item>
+    <item name="android:layout_width">40dp</item>
+    <item name="android:layout_height">40dp</item>
+    <item name="android:padding">8dp</item>
+    <item name="android:background">@drawable/app_icon_button_bg</item>
     <item name="android:tint">#FFFFFF</item>
     <item name="android:scaleType">fitCenter</item>
   </style>

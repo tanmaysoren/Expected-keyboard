@@ -3,6 +3,7 @@ package expected.keyboard2.prefs;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.Preference;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import expected.keyboard2.R;
 
 public class TerminalCommandsPreference extends Preference {
   
@@ -53,16 +55,18 @@ public class TerminalCommandsPreference extends Preference {
     TextView hint = new TextView(ctx);
     hint.setText("Tap to edit, long-press to delete. Commands appear scrollable in terminal apps.");
     hint.setTextSize(12);
-    hint.setTextColor(0xFF94A3B8);
+    hint.setTextColor(0xFFA3A3A3);
     hint.setPadding(0,0,0,16);
     root.addView(hint);
 
     ListView lv = new ListView(ctx);
+    lv.setDivider(new ColorDrawable(0xFF2A2A2A));
+    lv.setDividerHeight(1);
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx, android.R.layout.simple_list_item_1, list) {
       @Override
       public View getView(int pos, View convertView, ViewGroup parent) {
         TextView tv = (TextView) super.getView(pos, convertView, parent);
-        tv.setTextColor(0xFFF1F5F9);
+        tv.setTextColor(0xFFFFFFFF);
         tv.setPadding(24,24,24,24);
         tv.setTextSize(14);
         return tv;
@@ -137,10 +141,12 @@ public class TerminalCommandsPreference extends Preference {
     LinearLayout l = new LinearLayout(ctx);
     l.setOrientation(LinearLayout.VERTICAL);
     l.setPadding(40,30,40,10);
-    TextView tv = new TextView(ctx); tv.setText("Command / script:"); tv.setTextColor(0xFFF1F5F9); l.addView(tv);
+    TextView tv = new TextView(ctx); tv.setText("Command / script:"); tv.setTextColor(0xFFFFFFFF); l.addView(tv);
     EditText et = new EditText(ctx);
     et.setHint("e.g. git log --oneline");
-    et.setTextColor(0xFFF1F5F9); et.setHintTextColor(0xFF94A3B8);
+    et.setTextColor(0xFFFFFFFF); et.setHintTextColor(0xFFA3A3A3);
+    et.setBackgroundResource(R.drawable.cyber_edittext_bg);
+    et.setPadding(16,12,16,12);
     et.setInputType(InputType.TYPE_CLASS_TEXT);
     et.setSingleLine(true);
     l.addView(et);
@@ -156,10 +162,12 @@ public class TerminalCommandsPreference extends Preference {
     LinearLayout l = new LinearLayout(ctx);
     l.setOrientation(LinearLayout.VERTICAL);
     l.setPadding(40,30,40,10);
-    TextView tv = new TextView(ctx); tv.setText("Edit command:"); tv.setTextColor(0xFFF1F5F9); l.addView(tv);
+    TextView tv = new TextView(ctx); tv.setText("Edit command:"); tv.setTextColor(0xFFFFFFFF); l.addView(tv);
     EditText et = new EditText(ctx);
     et.setText(old);
-    et.setTextColor(0xFFF1F5F9);
+    et.setTextColor(0xFFFFFFFF);
+    et.setBackgroundResource(R.drawable.cyber_edittext_bg);
+    et.setPadding(16,12,16,12);
     et.setSelectAllOnFocus(true);
     et.setInputType(InputType.TYPE_CLASS_TEXT);
     et.setSingleLine(true);

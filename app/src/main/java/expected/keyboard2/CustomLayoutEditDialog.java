@@ -86,10 +86,10 @@ public class CustomLayoutEditDialog
     {
       super(ctx);
       setTypeface(Typeface.MONOSPACE);
-      setTextColor(0xFFF1F5F9);
-      setBackgroundColor(0xFF0F1322);
+      setTextColor(0xFFFFFFFF);
+      setBackgroundColor(0xFF0A0A0A);
       _ln_paint = new Paint(getPaint());
-      _ln_paint.setColor(0xFFA78BFA);
+      _ln_paint.setColor(0xFF737373);
       _ln_paint.setTextSize(_ln_paint.getTextSize() * 0.8f);
       _ln_paint.setTypeface(Typeface.MONOSPACE);
       setHorizontallyScrolling(true);
@@ -121,7 +121,7 @@ public class CustomLayoutEditDialog
         _prev_padding = padding;
       }
       super.onDraw(canvas);
-      _ln_paint.setColor(0xFF00F0FF);
+      _ln_paint.setColor(0xFF737373);
       canvas.getClipBounds(_clip_bounds);
       Layout layout = getLayout();
       if (layout == null) return;

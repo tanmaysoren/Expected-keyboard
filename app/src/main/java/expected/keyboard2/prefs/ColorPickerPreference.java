@@ -72,7 +72,7 @@ public class ColorPickerPreference extends DialogPreference {
     LinearLayout root = new LinearLayout(context);
     root.setOrientation(LinearLayout.VERTICAL);
     root.setPadding((int)(20 * dp), (int)(16 * dp), (int)(20 * dp), (int)(16 * dp));
-    root.setBackgroundColor(0xFF0F172A);
+    root.setBackgroundColor(0xFF0A0A0A);
 
     // Color Preview Box
     mDialogPreview = new View(context);
@@ -85,7 +85,7 @@ public class ColorPickerPreference extends DialogPreference {
     // Hex Code Readout
     mHexText = new TextView(context);
     mHexText.setText(String.format("#%06X", (0xFFFFFF & mColor)));
-    mHexText.setTextColor(0xFFF8FAFC);
+    mHexText.setTextColor(0xFFFFFFFF);
     mHexText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
     mHexText.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
     mHexText.setGravity(Gravity.CENTER);
@@ -99,9 +99,9 @@ public class ColorPickerPreference extends DialogPreference {
     int g = Color.green(mColor);
     int b = Color.blue(mColor);
 
-    mSeekR = createColorChannelRow(root, context, "Red", 0xFFEF4444, r, dp);
-    mSeekG = createColorChannelRow(root, context, "Green", 0xFF10B981, g, dp);
-    mSeekB = createColorChannelRow(root, context, "Blue", 0xFF3B82F6, b, dp);
+    mSeekR = createColorChannelRow(root, context, "Red", 0xFFFFFFFF, r, dp);
+    mSeekG = createColorChannelRow(root, context, "Green", 0xFFFFFFFF, g, dp);
+    mSeekB = createColorChannelRow(root, context, "Blue", 0xFFFFFFFF, b, dp);
 
     SeekBar.OnSeekBarChangeListener listener = new SeekBar.OnSeekBarChangeListener() {
       @Override
@@ -141,7 +141,7 @@ public class ColorPickerPreference extends DialogPreference {
       GradientDrawable sgd = new GradientDrawable();
       sgd.setShape(GradientDrawable.OVAL);
       sgd.setColor(pColor);
-      sgd.setStroke((int)(1.5f * dp), 0xFF64748B);
+      sgd.setStroke((int)(1.5f * dp), 0xFF737373);
       swatch.setBackground(sgd);
       swatch.setOnClickListener(v -> {
         mSeekR.setProgress(Color.red(pColor));
@@ -162,7 +162,7 @@ public class ColorPickerPreference extends DialogPreference {
     gd.setShape(GradientDrawable.RECTANGLE);
     gd.setCornerRadius(8 * dp);
     gd.setColor(color);
-    gd.setStroke((int)(2 * dp), 0xFF64748B);
+    gd.setStroke((int)(2 * dp), 0xFF737373);
     mDialogPreview.setBackground(gd);
   }
 

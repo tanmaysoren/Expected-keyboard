@@ -43,7 +43,7 @@ public class PredictionEngine
   public PredictionEngine(Context context)
   {
     this.context = context;
-    this.userDict = new UserDictionary(context);
+    this.userDict = UserDictionary.getInstance(context);
     initBuiltinLexicon();
   }
 

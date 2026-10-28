@@ -26,6 +26,19 @@ public class UserDictionary
   private static final String PREF_LEARN_ENABLED_KEY = "learn_words_enabled";
   private static final int MAX_USER_WORDS = 2000;
 
+  private static UserDictionary sInstance = null;
+
+  /** Shared instance so the IME and the settings screen always operate on the
+      same in-memory state. Without this, a stale instance would overwrite the
+      saved dictionary on its next [save()], resurrecting deleted words and
+      wiping the blocklist. */
+  public static synchronized UserDictionary getInstance(Context context)
+  {
+    if (sInstance == null && context != null)
+      sInstance = new UserDictionary(context.getApplicationContext());
+    return sInstance;
+  }
+
   private final SharedPreferences prefs;
   private final Map<String, Integer> wordFrequencies = new HashMap<String, Integer>();
   private final Map<String, Map<String, Integer>> bigrams = new HashMap<String, Map<String, Integer>>();
@@ -76,7 +89,9 @@ public class UserDictionary
     if (!hasLetter || s.length() < 2)
       return null;
 
-    return s;
+    // Keys are stored lowercased so that lookups, deletions and the blocklist
+    // are all case-insensitive. The suggestion bar re-capitalizes as needed.
+    return s.toLowerCase(Locale.ROOT);
   }
 
   public UserDictionary(Context context)
@@ -87,6 +102,17 @@ public class UserDictionary
 
   private void load()
   {
+    // Load the blocklist first so blocked words are never re-added to the
+    // in-memory dictionary below.
+    Set<String> blockSet = prefs.getStringSet(PREF_BLOCKLIST_KEY, null);
+    if (blockSet != null)
+    {
+      for (String w : blockSet) {
+        String clean = normalizeWord(w);
+        if (clean != null && !clean.isEmpty()) blocklist.add(clean);
+      }
+    }
+
     Set<String> wordsSet = prefs.getStringSet(PREF_WORDS_KEY, null);
     boolean needsResave = false;
     if (wordsSet != null)
@@ -139,7 +165,7 @@ public class UserDictionary
         {
           String prev = normalizeWord(parts[0]);
           String next = normalizeWord(parts[1]);
-          if (prev != null && next != null)
+          if (prev != null && next != null && !isBlocked(prev) && !isBlocked(next))
           {
             try
             {
@@ -155,16 +181,11 @@ public class UserDictionary
             }
             catch (NumberFormatException ignored) {}
           }
+          else
+          {
+            needsResave = true;
+          }
         }
-      }
-    }
-
-    Set<String> blockSet = prefs.getStringSet(PREF_BLOCKLIST_KEY, null);
-    if (blockSet != null)
-    {
-      for (String w : blockSet) {
-        String clean = normalizeWord(w);
-        if (clean != null && !clean.isEmpty()) blocklist.add(clean);
       }
     }
 
@@ -284,6 +305,17 @@ public class UserDictionary
   }
 
   public synchronized java.util.Set<String> getBlocklist() { return new HashSet<>(blocklist); }
+
+  public synchronized void removeFromBlocklist(String word) {
+    if (word == null) return;
+    blocklist.remove(word.toLowerCase(Locale.ROOT));
+    save();
+  }
+
+  public synchronized void clearBlocklist() {
+    blocklist.clear();
+    save();
+  }
 
   public synchronized void learnWord(String word)
   {

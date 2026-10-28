@@ -2,9 +2,9 @@
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
   <aapt:attr name="android:drawable">
     <vector android:name="vector" android:width="35dp" android:height="40dp" android:viewportWidth="35" android:viewportHeight="40">
-      <path android:name="trace" android:pathData="M 17.5 20 C 20 3 26 7 27.5 10" android:strokeColor="#09b3f1" android:strokeWidth="2" android:strokeLineCap="round"/>
+      <path android:name="trace" android:pathData="M 17.5 20 C 20 3 26 7 27.5 10" android:strokeColor="#FFFFFF" android:strokeWidth="2" android:strokeLineCap="round"/>
       <group android:name="pointer_g" android:translateX="27" android:translateY="10">
-        <path android:name="pointer" android:pathData="m 2,0 a 2,2 0 1,1 -4,0 a 2,2 0 1,1 4,0" android:fillColor="#09b3f1" android:strokeColor="#09b3f1" android:strokeWidth="2"/>
+        <path android:name="pointer" android:pathData="m 2,0 a 2,2 0 1,1 -4,0 a 2,2 0 1,1 4,0" android:fillColor="#FFFFFF" android:strokeColor="#FFFFFF" android:strokeWidth="2"/>
       </group>
     </vector>
   </aapt:attr>

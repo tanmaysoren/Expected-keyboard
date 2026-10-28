@@ -53,6 +53,8 @@ android {
     release {
       isMinifyEnabled = true
       isShrinkResources = true
+      // Disabled: the only PNG (legacy launcher icon) is corrupted in-repo and
+      // aapt2 crunching fails on it. R8 + resource shrinking still apply.
       isCrunchPngs = false
       isDebuggable = false
       isJniDebuggable = false

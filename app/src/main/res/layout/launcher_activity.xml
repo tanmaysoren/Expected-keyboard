@@ -35,14 +35,14 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:src="@drawable/ic_futo_layout"
-            android:tint="#A78BFA"
+            android:tint="#FFFFFF"
             android:contentDescription="@string/app_name"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="EXPECTED KEYBOARD"
-            android:textColor="#A78BFA"
+            android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
@@ -53,7 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="#208B5CF6"
+            android:background="#33FFFFFF"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"/>
 
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/futo_status_active"
-            android:textColor="#34D399"
+            android:textColor="#FFFFFF"
             android:textSize="11sp"
             android:textStyle="bold"
             android:background="@drawable/futo_badge_green"
@@ -74,7 +74,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="@string/app_name"
-          android:textColor="#F8FAFC"
+          android:textColor="#FFFFFF"
           android:textSize="22sp"
           android:textStyle="bold"
           android:fontFamily="sans-serif-medium"
@@ -85,7 +85,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="@string/launcher_description"
-          android:textColor="#94A3B8"
+          android:textColor="#A3A3A3"
           android:textSize="13sp"
           android:lineSpacingExtra="3dp"/>
     </LinearLayout>
@@ -97,7 +97,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SETUP &amp; ACTIVATION"
-        android:textColor="#A78BFA"
+        android:textColor="#FFFFFF"
         android:textSize="12sp"
         android:textStyle="bold"
         android:fontFamily="sans-serif-medium"
@@ -118,6 +118,7 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:onClick="launch_imesettings">
 
       <ImageView
@@ -140,7 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_step_enable_title"
-            android:textColor="#F1F5F9"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -148,7 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_step_enable_sub"
-            android:textColor="#94A3B8"
+            android:textColor="#A3A3A3"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
       </LinearLayout>
@@ -158,7 +159,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/futo_status_enabled"
-          android:textColor="#34D399"
+          android:textColor="#FFFFFF"
           android:textSize="11sp"
           android:textStyle="bold"
           android:background="@drawable/futo_badge_green"
@@ -179,6 +180,7 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:onClick="launch_imepicker">
 
       <ImageView
@@ -201,7 +203,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_step_select_title"
-            android:textColor="#F1F5F9"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -209,7 +211,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_step_select_sub"
-            android:textColor="#94A3B8"
+            android:textColor="#A3A3A3"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
       </LinearLayout>
@@ -219,7 +221,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="SWITCH"
-          android:textColor="#A78BFA"
+          android:textColor="#FFFFFF"
           android:textSize="11sp"
           android:textStyle="bold"
           android:background="@drawable/futo_chip_bg"
@@ -240,6 +242,7 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:onClick="launch_dictionaries_activity">
 
       <ImageView
@@ -262,7 +265,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_step_dict_title"
-            android:textColor="#F1F5F9"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -270,7 +273,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_step_dict_sub"
-            android:textColor="#94A3B8"
+            android:textColor="#A3A3A3"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
       </LinearLayout>
@@ -278,7 +281,7 @@
       <ImageView
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:src="@drawable/ic_futo_arrow"
+          android:src="@drawable/app_ic_arrow"
           android:contentDescription="Open"/>
     </LinearLayout>
 
@@ -298,7 +301,7 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:text="SETTINGS &amp; FEATURES"
-          android:textColor="#A78BFA"
+          android:textColor="#FFFFFF"
           android:textSize="12sp"
           android:textStyle="bold"
           android:fontFamily="sans-serif-medium"
@@ -308,11 +311,15 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="OPEN ALL"
-          android:textColor="#38BDF8"
+          android:textColor="#FFFFFF"
           android:textSize="11sp"
           android:textStyle="bold"
+          android:background="@drawable/app_pill_button"
+          android:paddingHorizontal="12dp"
+          android:paddingVertical="6dp"
           android:clickable="true"
           android:focusable="true"
+          android:foreground="?android:attr/selectableItemBackground"
           android:onClick="launch_all_settings"/>
     </LinearLayout>
 
@@ -328,6 +335,7 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:onClick="launch_settings_prediction">
 
       <ImageView
@@ -350,7 +358,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_prediction_title"
-            android:textColor="#F1F5F9"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -358,7 +366,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_prediction_sub"
-            android:textColor="#94A3B8"
+            android:textColor="#A3A3A3"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
       </LinearLayout>
@@ -366,7 +374,7 @@
       <ImageView
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:src="@drawable/ic_futo_arrow"
+          android:src="@drawable/app_ic_arrow"
           android:contentDescription="Open"/>
     </LinearLayout>
 
@@ -382,6 +390,7 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:onClick="launch_settings_layouts">
 
       <ImageView
@@ -404,7 +413,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_layouts_title"
-            android:textColor="#F1F5F9"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -412,7 +421,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_layouts_sub"
-            android:textColor="#94A3B8"
+            android:textColor="#A3A3A3"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
       </LinearLayout>
@@ -420,7 +429,7 @@
       <ImageView
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:src="@drawable/ic_futo_arrow"
+          android:src="@drawable/app_ic_arrow"
           android:contentDescription="Open"/>
     </LinearLayout>
 
@@ -436,6 +445,7 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:onClick="launch_settings_theme">
 
       <ImageView
@@ -458,7 +468,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_theme_title"
-            android:textColor="#F1F5F9"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -466,7 +476,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_theme_sub"
-            android:textColor="#94A3B8"
+            android:textColor="#A3A3A3"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
       </LinearLayout>
@@ -474,7 +484,7 @@
       <ImageView
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:src="@drawable/ic_futo_arrow"
+          android:src="@drawable/app_ic_arrow"
           android:contentDescription="Open"/>
     </LinearLayout>
 
@@ -490,6 +500,7 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:onClick="launch_settings_typing">
 
       <ImageView
@@ -512,7 +523,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_typing_title"
-            android:textColor="#F1F5F9"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -520,7 +531,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_typing_sub"
-            android:textColor="#94A3B8"
+            android:textColor="#A3A3A3"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
       </LinearLayout>
@@ -528,7 +539,7 @@
       <ImageView
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:src="@drawable/ic_futo_arrow"
+          android:src="@drawable/app_ic_arrow"
           android:contentDescription="Open"/>
     </LinearLayout>
 
@@ -544,6 +555,7 @@
         android:padding="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:onClick="launch_settings_clipboard">
 
       <ImageView
@@ -566,7 +578,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_clipboard_title"
-            android:textColor="#F1F5F9"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -574,7 +586,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/futo_sec_clipboard_sub"
-            android:textColor="#94A3B8"
+            android:textColor="#A3A3A3"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
       </LinearLayout>
@@ -582,7 +594,7 @@
       <ImageView
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:src="@drawable/ic_futo_arrow"
+          android:src="@drawable/app_ic_arrow"
           android:contentDescription="Open"/>
     </LinearLayout>
 
@@ -610,7 +622,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/futo_sandbox_title"
-            android:textColor="#F1F5F9"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -618,11 +630,12 @@
             android:id="@+id/btn_clear_test"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:src="@drawable/ic_futo_clear"
+            android:src="@drawable/app_ic_clear"
             android:background="@drawable/futo_chip_bg"
             android:padding="6dp"
             android:clickable="true"
             android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:onClick="clear_test_area"
             android:contentDescription="Clear text"/>
       </LinearLayout>
@@ -634,8 +647,8 @@
           android:minHeight="54dp"
           android:inputType="textMultiLine"
           android:hint="@string/launcher_tryhere_hint"
-          android:textColorHint="#64748B"
-          android:textColor="#F1F5F9"
+          android:textColorHint="#737373"
+          android:textColor="#FFFFFF"
           android:textSize="15sp"
           android:background="@drawable/cyber_edittext_bg"
           android:paddingHorizontal="14dp"
@@ -647,7 +660,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="Keystroke Event: None"
-          android:textColor="#C4B5FD"
+          android:textColor="#D4D4D4"
           android:textSize="12sp"
           android:layout_marginTop="8dp"/>
     </LinearLayout>
@@ -659,7 +672,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="GESTURE GUIDE"
-        android:textColor="#A78BFA"
+        android:textColor="#FFFFFF"
         android:textSize="12sp"
         android:textStyle="bold"
         android:fontFamily="sans-serif-medium"
@@ -726,14 +739,14 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_futo_shield"
-            android:tint="#34D399"
+            android:tint="#FFFFFF"
             android:contentDescription="Privacy"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/futo_privacy_badge"
-            android:textColor="#34D399"
+            android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textStyle="bold"
             android:letterSpacing="0.06"
@@ -744,7 +757,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="@string/futo_privacy_desc"
-          android:textColor="#94A3B8"
+          android:textColor="#A3A3A3"
           android:textSize="12sp"
           android:lineSpacingExtra="2dp"/>
 
@@ -752,7 +765,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="@string/launcher_sourcecode"
-          android:textColor="#64748B"
+          android:textColor="#737373"
           android:textSize="11sp"
           android:layout_marginTop="10dp"/>
 
@@ -760,7 +773,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="@string/launcher_repo_url"
-          android:textColor="#A78BFA"
+          android:textColor="#FFFFFF"
           android:textSize="12sp"
           android:autoLink="web"
           android:linksClickable="true"

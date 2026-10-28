@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -40,8 +39,10 @@ public class SectionSettingsActivity extends PreferenceActivity
       int maxWidth = (int) (620 * density);
       params.width = Math.min(width, maxWidth);
 
-      int maxHeight = (int) (screenHeight * 0.88f);
-      params.height = Math.min(ViewGroup.LayoutParams.WRAP_CONTENT, maxHeight);
+      // Use a fixed height instead of WRAP_CONTENT. The preferences are added
+      // after the window is shown, so a wrapping window visibly jumped and
+      // flickered once the list finished inflating.
+      params.height = (int) (screenHeight * 0.86f);
       params.gravity = Gravity.CENTER;
       window.setAttributes(params);
     }

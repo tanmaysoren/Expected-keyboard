@@ -69,14 +69,14 @@ public class MacroKeysPreference extends Preference
     TextView hint = new TextView(ctx);
     hint.setText("Add shortcuts like @, a-z, 0-9, or words. When typed, swipe bottom-left (↙) on letter 'I' to expand into text.\n\nTap to edit, long-press to delete.");
     hint.setTextSize(12);
-    hint.setTextColor(0xFF94A3B8);
+    hint.setTextColor(0xFFA3A3A3);
     hint.setPadding(0, 0, 0, 16);
     root.addView(hint);
 
     TextView emptyView = new TextView(ctx);
     emptyView.setText("No macros added yet. Tap \"Add\" to create your first macro.");
     emptyView.setTextSize(14);
-    emptyView.setTextColor(0xFF64748B);
+    emptyView.setTextColor(0xFF737373);
     emptyView.setGravity(Gravity.CENTER);
     emptyView.setPadding(16, 48, 16, 48);
 
@@ -93,28 +93,28 @@ public class MacroKeysPreference extends Preference
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setGravity(Gravity.CENTER_VERTICAL);
         row.setPadding(20, 18, 20, 18);
-        row.setBackgroundColor(0xFF1E293B);
+        row.setBackgroundResource(R.drawable.cyber_card_bg);
 
         MacroItem item = getItem(pos);
 
         TextView triggerTv = new TextView(ctx);
         triggerTv.setText(item.trigger);
-        triggerTv.setTextColor(0xFF38BDF8);
+        triggerTv.setTextColor(0xFFFFFFFF);
         triggerTv.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
         triggerTv.setTextSize(14);
         triggerTv.setPadding(12, 6, 12, 6);
-        triggerTv.setBackgroundColor(0xFF0F172A);
+        triggerTv.setBackgroundResource(R.drawable.cyber_badge_bg);
         row.addView(triggerTv);
 
         TextView arrowTv = new TextView(ctx);
         arrowTv.setText(" → ");
-        arrowTv.setTextColor(0xFF94A3B8);
+        arrowTv.setTextColor(0xFFA3A3A3);
         arrowTv.setTextSize(14);
         row.addView(arrowTv);
 
         TextView expTv = new TextView(ctx);
         expTv.setText(item.expansion);
-        expTv.setTextColor(0xFFF1F5F9);
+        expTv.setTextColor(0xFFFFFFFF);
         expTv.setTextSize(14);
         expTv.setSingleLine(true);
         expTv.setEllipsize(android.text.TextUtils.TruncateAt.END);
@@ -245,29 +245,31 @@ public class MacroKeysPreference extends Preference
 
     TextView t1 = new TextView(ctx);
     t1.setText("Trigger Shortcut (e.g. @, gpo, sh, 1):");
-    t1.setTextColor(0xFF38BDF8);
+    t1.setTextColor(0xFFFFFFFF);
     t1.setTextSize(13);
     l.addView(t1);
 
     EditText etTrigger = new EditText(ctx);
     etTrigger.setHint("e.g. @ or gpo");
-    etTrigger.setTextColor(0xFFF1F5F9);
-    etTrigger.setHintTextColor(0xFF94A3B8);
+    etTrigger.setTextColor(0xFFFFFFFF);
+    etTrigger.setHintTextColor(0xFF737373);
+    etTrigger.setBackgroundResource(R.drawable.cyber_edittext_bg);
     etTrigger.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
     etTrigger.setSingleLine(true);
     l.addView(etTrigger);
 
     TextView t2 = new TextView(ctx);
     t2.setText("Expands To (any text, code, or command):");
-    t2.setTextColor(0xFF38BDF8);
+    t2.setTextColor(0xFFFFFFFF);
     t2.setTextSize(13);
     t2.setPadding(0, 20, 0, 0);
     l.addView(t2);
 
     EditText etExp = new EditText(ctx);
     etExp.setHint("e.g. git push");
-    etExp.setTextColor(0xFFF1F5F9);
-    etExp.setHintTextColor(0xFF94A3B8);
+    etExp.setTextColor(0xFFFFFFFF);
+    etExp.setHintTextColor(0xFF737373);
+    etExp.setBackgroundResource(R.drawable.cyber_edittext_bg);
     etExp.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
     etExp.setMaxLines(4);
     l.addView(etExp);
@@ -290,27 +292,29 @@ public class MacroKeysPreference extends Preference
 
     TextView t1 = new TextView(ctx);
     t1.setText("Trigger Shortcut:");
-    t1.setTextColor(0xFF38BDF8);
+    t1.setTextColor(0xFFFFFFFF);
     t1.setTextSize(13);
     l.addView(t1);
 
     EditText etTrigger = new EditText(ctx);
     etTrigger.setText(oldTrigger);
-    etTrigger.setTextColor(0xFFF1F5F9);
+    etTrigger.setTextColor(0xFFFFFFFF);
+    etTrigger.setBackgroundResource(R.drawable.cyber_edittext_bg);
     etTrigger.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
     etTrigger.setSingleLine(true);
     l.addView(etTrigger);
 
     TextView t2 = new TextView(ctx);
     t2.setText("Expands To:");
-    t2.setTextColor(0xFF38BDF8);
+    t2.setTextColor(0xFFFFFFFF);
     t2.setTextSize(13);
     t2.setPadding(0, 20, 0, 0);
     l.addView(t2);
 
     EditText etExp = new EditText(ctx);
     etExp.setText(oldExp);
-    etExp.setTextColor(0xFFF1F5F9);
+    etExp.setTextColor(0xFFFFFFFF);
+    etExp.setBackgroundResource(R.drawable.cyber_edittext_bg);
     etExp.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
     etExp.setMaxLines(4);
     l.addView(etExp);

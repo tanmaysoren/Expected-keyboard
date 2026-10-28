@@ -3,6 +3,9 @@ package expected.keyboard2.suggestions;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build.VERSION;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -14,6 +17,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import java.util.Locale;
 import expected.keyboard2.Config;
@@ -22,6 +26,7 @@ import expected.keyboard2.KeyValue;
 import expected.keyboard2.Pointers;
 import expected.keyboard2.R;
 import expected.keyboard2.VibratorCompat;
+import expected.keyboard2.prediction.UserDictionary;
 
 public class CandidatesView extends LinearLayout
 {
@@ -49,6 +54,8 @@ public class CandidatesView extends LinearLayout
   private boolean _userManualToggle = false;
   private boolean _lastWasTerminal = false;
   private View _lastVisibleBeforeUtility = null;
+
+  private PopupWindow _wordActionsPopup = null;
 
   /** Message when no dictionary is installed. Visible when no candidates are
       shown. Might be [null]. */
@@ -578,9 +585,131 @@ public class CandidatesView extends LinearLayout
                 Config.globalConfig().handler.suggestion_entered(it);
             }
           });
+      if (item_index < NUM_WORDS)
+      {
+        v.setOnLongClickListener(_v -> {
+          String it = _items[item_index];
+          if (it == null)
+            return false;
+          VibratorCompat.vibrate(_v);
+          show_word_actions(_v, it);
+          return true;
+        });
+      }
       v.setVisibility(View.GONE);
     }
     _item_views[item_index] = v;
+  }
+
+  /** Long-press action sheet: delete a learned word or block/unblock it. */
+  private void show_word_actions(View anchor, String word)
+  {
+    Context ctx = getContext();
+    UserDictionary dict = UserDictionary.getInstance(ctx);
+    if (dict == null)
+      return;
+
+    boolean learned = dict.getWordFrequency(word) > 0;
+    boolean blocked = dict.isBlocked(word);
+
+    dismiss_word_actions();
+
+    LinearLayout box = new LinearLayout(ctx);
+    box.setOrientation(LinearLayout.VERTICAL);
+    float density = ctx.getResources().getDisplayMetrics().density;
+    GradientDrawable boxBg = new GradientDrawable();
+    boxBg.setShape(GradientDrawable.RECTANGLE);
+    boxBg.setColor(0xFF1E293B);
+    boxBg.setCornerRadius(16 * density);
+    boxBg.setStroke((int)(1 * density), 0xFF334155);
+    box.setBackground(boxBg);
+    int pad = (int)(10 * density);
+    box.setPadding(pad, pad, pad, pad);
+
+    TextView title = new TextView(ctx);
+    title.setText(word);
+    title.setTextColor(0xFFF1F5F9);
+    title.setTextSize(14);
+    title.setTypeface(null, android.graphics.Typeface.BOLD);
+    title.setPadding(pad, pad, pad, pad);
+    box.addView(title);
+
+    if (learned)
+    {
+      TextView del = make_action_view(ctx, "Delete from learned words", 0xFFF87171);
+      del.setOnClickListener(v -> {
+        dict.deleteWord(word);
+        refresh_after_dictionary_change();
+        dismiss_word_actions();
+      });
+      box.addView(del);
+    }
+
+    TextView block = make_action_view(ctx,
+        blocked ? "Unblock word" : "Block word (never learn)", 0xFFFBBF24);
+    block.setOnClickListener(v -> {
+      if (blocked)
+        dict.removeFromBlocklist(word);
+      else
+        dict.addToBlocklist(word);
+      refresh_after_dictionary_change();
+      dismiss_word_actions();
+    });
+    box.addView(block);
+
+    // Non-focusable: a focusable popup steals focus from the editor, which
+    // makes the IME hide and reopen. With a background set, outside touches
+    // still dismiss it.
+    _wordActionsPopup = new PopupWindow(box,
+        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
+    _wordActionsPopup.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    _wordActionsPopup.setOutsideTouchable(true);
+    _wordActionsPopup.setTouchable(true);
+    _wordActionsPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);
+    _wordActionsPopup.setElevation(12);
+    _wordActionsPopup.setOnDismissListener(() -> _wordActionsPopup = null);
+
+    try {
+      _wordActionsPopup.showAsDropDown(anchor, 0, 0);
+    } catch (Throwable t) {
+      _wordActionsPopup = null;
+    }
+  }
+
+  private TextView make_action_view(Context ctx, String text, int color)
+  {
+    TextView tv = new TextView(ctx);
+    tv.setText(text);
+    tv.setTextColor(color);
+    tv.setTextSize(14);
+    int pad = (int)(10 * ctx.getResources().getDisplayMetrics().density);
+    tv.setPadding(pad, pad, pad, pad);
+    return tv;
+  }
+
+  private void dismiss_word_actions()
+  {
+    if (_wordActionsPopup != null)
+    {
+      try { _wordActionsPopup.dismiss(); } catch (Throwable ignored) {}
+      _wordActionsPopup = null;
+    }
+  }
+
+  private void refresh_after_dictionary_change()
+  {
+    try {
+      Config cfg = Config.globalConfig();
+      if (cfg != null && cfg.handler != null)
+        cfg.handler.dictionary_changed();
+    } catch (Throwable ignored) {}
+  }
+
+  @Override
+  protected void onDetachedFromWindow()
+  {
+    dismiss_word_actions();
+    super.onDetachedFromWindow();
   }
 
   /** Whether the candidates view should be shown for a given editor. */

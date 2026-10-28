@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,7 +23,7 @@ import java.util.List;
 import expected.keyboard2.dict.DictionariesActivity;
 import expected.keyboard2.R;
 
-public class LauncherActivity extends Activity implements Handler.Callback
+public class LauncherActivity extends Activity
 {
   /** Text is replaced when receiving key events. */
   TextView _tryhere_text;
@@ -34,9 +32,9 @@ public class LauncherActivity extends Activity implements Handler.Callback
   TextView _pill_enable;
   TextView _pill_select;
 
-  /** Periodically restart the animations. */
+  /** Gesture animations, played once when the activity becomes visible. */
   List<Animatable> _animations;
-  Handler _handler;
+  boolean _animations_played;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
@@ -67,8 +65,6 @@ public class LauncherActivity extends Activity implements Handler.Callback
       @Override
       public void afterTextChanged(Editable s) {}
     });
-
-    _handler = new Handler(getMainLooper(), this);
   }
 
   @Override
@@ -90,13 +86,13 @@ public class LauncherActivity extends Activity implements Handler.Callback
         if (enabled)
         {
           _pill_enable.setText(R.string.futo_status_enabled);
-          _pill_enable.setTextColor(0xFF34D399);
+          _pill_enable.setTextColor(0xFFFFFFFF);
           _pill_enable.setBackgroundResource(R.drawable.futo_badge_green);
         }
         else
         {
           _pill_enable.setText(R.string.futo_status_not_enabled);
-          _pill_enable.setTextColor(0xFFFBBF24);
+          _pill_enable.setTextColor(0xFFA3A3A3);
           _pill_enable.setBackgroundResource(R.drawable.futo_badge_amber);
         }
       }
@@ -106,13 +102,13 @@ public class LauncherActivity extends Activity implements Handler.Callback
         if (selected)
         {
           _pill_select.setText("ACTIVE");
-          _pill_select.setTextColor(0xFF34D399);
+          _pill_select.setTextColor(0xFFFFFFFF);
           _pill_select.setBackgroundResource(R.drawable.futo_badge_green);
         }
         else
         {
           _pill_select.setText("SWITCH");
-          _pill_select.setTextColor(0xFFA78BFA);
+          _pill_select.setTextColor(0xFFFFFFFF);
           _pill_select.setBackgroundResource(R.drawable.futo_chip_bg);
         }
       }
@@ -122,13 +118,13 @@ public class LauncherActivity extends Activity implements Handler.Callback
         if (enabled && selected)
         {
           _status_badge.setText(R.string.futo_status_active);
-          _status_badge.setTextColor(0xFF34D399);
+          _status_badge.setTextColor(0xFFFFFFFF);
           _status_badge.setBackgroundResource(R.drawable.futo_badge_green);
         }
         else
         {
           _status_badge.setText(R.string.futo_status_setup_needed);
-          _status_badge.setTextColor(0xFFFBBF24);
+          _status_badge.setTextColor(0xFFA3A3A3);
           _status_badge.setBackgroundResource(R.drawable.futo_badge_amber);
         }
       }
@@ -170,24 +166,37 @@ public class LauncherActivity extends Activity implements Handler.Callback
   public void onStart()
   {
     super.onStart();
+    if (_animations_played)
+      return;
+
+    // Play each gesture preview once per activity instance. Restarting them
+    // on a timer caused visible flicker and kept the GPU busy while a
+    // settings menu was open.
+    _animations_played = true;
     _animations = new ArrayList<Animatable>();
     _animations.add(find_anim(R.id.launcher_anim_swipe));
     _animations.add(find_anim(R.id.launcher_anim_round_trip));
     _animations.add(find_anim(R.id.launcher_anim_circle));
-    _handler.removeMessages(0);
-    _handler.sendEmptyMessageDelayed(0, 500);
-  }
-
-  @Override
-  public boolean handleMessage(Message _msg)
-  {
     for (Animatable anim : _animations)
     {
       if (anim != null)
         anim.start();
     }
-    _handler.sendEmptyMessageDelayed(0, 3000);
-    return true;
+  }
+
+  @Override
+  public void onStop()
+  {
+    if (_animations != null)
+    {
+      for (Animatable anim : _animations)
+      {
+        if (anim != null && anim.isRunning())
+          anim.stop();
+      }
+      _animations = null;
+    }
+    super.onStop();
   }
 
   public void launch_imesettings(View _btn)

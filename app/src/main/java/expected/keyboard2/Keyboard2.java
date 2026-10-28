@@ -1065,6 +1065,16 @@ public class Keyboard2 extends InputMethodService
       if (themeName == null || themeName.isEmpty()) return;
       SharedPreferences prefs = Config.globalPrefs();
       prefs.edit().putString("theme", themeName).apply();
+      // SettingsActivity/SectionSettingsActivity copy their credential-protected
+      // preferences over the device-protected ones in onStop(). Keep the theme
+      // there in sync so that stale copy can't revert this change.
+      try
+      {
+        android.preference.PreferenceManager
+          .getDefaultSharedPreferences(Keyboard2.this)
+          .edit().putString("theme", themeName).apply();
+      }
+      catch (Throwable ignored) {}
       _config.theme = _config.getThemeId(getResources(), themeName);
       clearLayoutCaches();
       _layoutPane = null;

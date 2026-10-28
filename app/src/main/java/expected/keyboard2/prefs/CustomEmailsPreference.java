@@ -3,6 +3,7 @@ package expected.keyboard2.prefs;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.Preference;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+import expected.keyboard2.R;
 
 public class CustomEmailsPreference extends Preference {
   
@@ -51,15 +53,17 @@ public class CustomEmailsPreference extends Preference {
     TextView hint = new TextView(ctx);
     hint.setText("Tap to edit, long-press to delete. Emails appear scrollable in email/phone fields and on 3-letter match elsewhere.");
     hint.setTextSize(11);
-    hint.setTextColor(0xFF94A3B8);
+    hint.setTextColor(0xFFA3A3A3);
     hint.setPadding(0,0,0,16);
     root.addView(hint);
 
     ListView lv = new ListView(ctx);
+    lv.setDivider(new ColorDrawable(0xFF2A2A2A));
+    lv.setDividerHeight(1);
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx, android.R.layout.simple_list_item_1, list) {
       @Override public View getView(int pos, View cv, ViewGroup p) {
         TextView tv = (TextView) super.getView(pos, cv, p);
-        tv.setTextColor(0xFFF1F5F9);
+        tv.setTextColor(0xFFFFFFFF);
         tv.setPadding(24,24,24,24);
         tv.setTextSize(14);
         return tv;
@@ -128,14 +132,14 @@ public class CustomEmailsPreference extends Preference {
   private interface Cb { void onResult(String v); }
   private void showAddDialog(Context ctx, Cb cb) {
     LinearLayout l = new LinearLayout(ctx); l.setOrientation(LinearLayout.VERTICAL); l.setPadding(40,30,40,10);
-    TextView tv = new TextView(ctx); tv.setText("Email (e.g. name@example.com):"); tv.setTextColor(0xFFF1F5F9); l.addView(tv);
-    EditText et = new EditText(ctx); et.setHint("user@example.com"); et.setTextColor(0xFFF1F5F9); et.setHintTextColor(0xFF94A3B8); et.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS); et.setSingleLine(true); l.addView(et);
+    TextView tv = new TextView(ctx); tv.setText("Email (e.g. name@example.com):"); tv.setTextColor(0xFFFFFFFF); l.addView(tv);
+    EditText et = new EditText(ctx); et.setHint("user@example.com"); et.setTextColor(0xFFFFFFFF); et.setHintTextColor(0xFFA3A3A3); et.setBackgroundResource(R.drawable.cyber_edittext_bg); et.setPadding(16,12,16,12); et.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS); et.setSingleLine(true); l.addView(et);
     new AlertDialog.Builder(ctx).setTitle("Add Email").setView(l).setPositiveButton("Add", (d,w) -> cb.onResult(et.getText().toString())).setNegativeButton("Cancel", null).show();
   }
   private void showEditDialog(Context ctx, String old, Cb cb) {
     LinearLayout l = new LinearLayout(ctx); l.setOrientation(LinearLayout.VERTICAL); l.setPadding(40,30,40,10);
-    TextView tv = new TextView(ctx); tv.setText("Edit email:"); tv.setTextColor(0xFFF1F5F9); l.addView(tv);
-    EditText et = new EditText(ctx); et.setText(old); et.setTextColor(0xFFF1F5F9); et.setSelectAllOnFocus(true); et.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS); et.setSingleLine(true); l.addView(et);
+    TextView tv = new TextView(ctx); tv.setText("Edit email:"); tv.setTextColor(0xFFFFFFFF); l.addView(tv);
+    EditText et = new EditText(ctx); et.setText(old); et.setTextColor(0xFFFFFFFF); et.setBackgroundResource(R.drawable.cyber_edittext_bg); et.setPadding(16,12,16,12); et.setSelectAllOnFocus(true); et.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS); et.setSingleLine(true); l.addView(et);
     new AlertDialog.Builder(ctx).setTitle("Edit").setView(l).setPositiveButton("Save", (d,w) -> cb.onResult(et.getText().toString())).setNegativeButton("Cancel", null).show();
   }
 

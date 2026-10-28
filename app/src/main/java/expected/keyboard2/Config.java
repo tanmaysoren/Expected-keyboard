@@ -438,6 +438,7 @@ public final class Config
     public void key_up(KeyValue value, Pointers.Modifiers mods);
     public void mods_changed(Pointers.Modifiers mods);
     public void suggestion_entered(String text);
+    public void dictionary_changed();
   }
 
   /** Config migrations. */

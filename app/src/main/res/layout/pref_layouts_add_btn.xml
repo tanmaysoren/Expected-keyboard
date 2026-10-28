@@ -9,9 +9,9 @@
       android:layout_height="wrap_content"
       android:gravity="center"
       android:text="@string/pref_layouts_add"
-      android:textColor="#FFFFFF"
+      android:textColor="#000000"
       android:textSize="13sp"
       android:textStyle="bold"
-      android:background="@drawable/cyber_btn_cyan"
+      android:background="@drawable/app_btn_primary"
       android:paddingVertical="12dp"/>
 </LinearLayout>
